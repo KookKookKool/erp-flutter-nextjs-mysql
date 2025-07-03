@@ -18,15 +18,21 @@ import 'modules/accounting_module_screen.dart';
 import 'modules/reports_module_screen.dart';
 import 'modules/settings_module_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 900;
-        final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
         return BlocProvider(
           create: (_) => ModuleCubit(),
           child: Scaffold(
@@ -85,7 +91,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeContent extends StatelessWidget {
-  const _HomeContent({Key? key}) : super(key: key);
+  const _HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +100,7 @@ class _HomeContent extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             EmployeeCard(),
             SizedBox(height: 24),
             AttendanceButtons(),

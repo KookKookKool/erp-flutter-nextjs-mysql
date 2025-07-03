@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../theme/sun_theme.dart';
 
 class TaskList extends StatelessWidget {
-  const TaskList({Key? key}) : super(key: key);
+  const TaskList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class TaskList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'งานที่เกี่ยวข้องกับคุณ',
+          AppLocalizations.of(context)!.taskTitle,
           style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -22,8 +23,8 @@ class TaskList extends StatelessWidget {
           ),
           child: ListTile(
             leading: const Icon(Icons.task, color: SunTheme.sunOrange),
-            title: const Text('Task: อัปเดตข้อมูลลูกค้า'),
-            subtitle: const Text('โปรเจ็ค: CRM System'),
+            title: Text(AppLocalizations.of(context)!.taskItem),
+            subtitle: Text(AppLocalizations.of(context)!.projectDetail),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {},
           ),

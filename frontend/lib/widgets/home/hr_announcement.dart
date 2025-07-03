@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../theme/sun_theme.dart';
 
 class HrAnnouncement extends StatelessWidget {
-  const HrAnnouncement({Key? key}) : super(key: key);
+  const HrAnnouncement({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class HrAnnouncement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'ประกาศจาก HR',
+          AppLocalizations.of(context)!.hrAnnouncement,
           style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -25,8 +26,10 @@ class HrAnnouncement extends StatelessWidget {
               Icons.announcement,
               color: SunTheme.sunDeepOrange,
             ),
-            title: const Text('แจ้งวันหยุดประจำปี'),
-            subtitle: const Text('บริษัทจะหยุดทำการวันที่ 12-15 เมษายน'),
+            title: Text(AppLocalizations.of(context)!.hrAnnouncementTitle),
+            subtitle: Text(
+              AppLocalizations.of(context)!.hrAnnouncementSubtitle,
+            ),
           ),
         ),
       ],

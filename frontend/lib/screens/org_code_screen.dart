@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/sun_theme.dart';
 
 class OrgCodeScreen extends StatefulWidget {
-  const OrgCodeScreen({Key? key}) : super(key: key);
+  const OrgCodeScreen({super.key});
 
   @override
   State<OrgCodeScreen> createState() => _OrgCodeScreenState();
@@ -26,17 +28,26 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
     });
     // TODO: ตรวจสอบรหัสองค์กรกับ backend
     await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      _isLoading = false;
-      if (_orgCodeController.text.trim().isEmpty) {
+    if (_orgCodeController.text.trim().isEmpty) {
+      setState(() {
+        _isLoading = false;
         _errorText = 'กรุณากรอกรหัสองค์กร';
-      } else if (_orgCodeController.text.trim().length < 4) {
+      });
+    } else if (_orgCodeController.text.trim().length < 4) {
+      setState(() {
+        _isLoading = false;
         _errorText = 'รหัสองค์กรไม่ถูกต้อง';
-      } else {
-        // ไปหน้า login
-        Navigator.of(context).pushReplacementNamed('/login');
-      }
-    });
+      });
+    } else {
+      // Save org code to SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('org_code', _orgCodeController.text.trim());
+      setState(() {
+        _isLoading = false;
+      });
+      // ไปหน้า login
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   void _registerOrg() {
@@ -49,6 +60,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -64,7 +76,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'กรุณากรอกรหัสองค์กร',
+                      localizations.orgCodePrompt,
                       style: textTheme.displaySmall?.copyWith(
                         color: SunTheme.textOnGradient,
                         fontWeight: FontWeight.bold,
@@ -88,7 +100,8 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                         ),
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        labelText: 'Organization Code',
+                        labelText:
+                            localizations.orgCodeLabel ?? 'Organization Code',
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
@@ -96,7 +109,6 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                           vertical: 20,
                           horizontal: 16,
                         ),
-                        // เพิ่มเงาให้กรอบ input
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -120,14 +132,17 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Text('เข้าสู่ระบบ', style: textTheme.labelLarge),
+                            : Text(
+                                localizations.login,
+                                style: textTheme.labelLarge,
+                              ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: _isLoading ? null : _registerOrg,
                       child: Text(
-                        'สมัครการใช้งานองค์กร',
+                        localizations.registerOrg,
                         style: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.sunDeepOrange,
                           fontWeight: FontWeight.bold,
@@ -142,9 +157,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
           return Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: SunTheme.sunGradientDiagonal,
-            ),
+            decoration: const BoxDecoration(gradient: SunTheme.sunGradient),
             child: content,
           );
         },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReportsModuleScreen extends StatelessWidget {
-  const ReportsModuleScreen({Key? key}) : super(key: key);
+  const ReportsModuleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

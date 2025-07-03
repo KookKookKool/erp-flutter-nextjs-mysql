@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingsModuleScreen extends StatelessWidget {
-  const SettingsModuleScreen({Key? key}) : super(key: key);
+  const SettingsModuleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

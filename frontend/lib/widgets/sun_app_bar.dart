@@ -4,8 +4,7 @@ import '../theme/sun_theme.dart';
 class SunAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDesktop;
   final VoidCallback? onMenuPressed;
-  const SunAppBar({Key? key, required this.isDesktop, this.onMenuPressed})
-    : super(key: key);
+  const SunAppBar({super.key, required this.isDesktop, this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {

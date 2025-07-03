@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../theme/sun_theme.dart';
 
 class LeaveButton extends StatelessWidget {
-  const LeaveButton({Key? key}) : super(key: key);
+  const LeaveButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class LeaveButton extends StatelessWidget {
       onPressed: () {},
       icon: const Icon(Icons.beach_access, color: SunTheme.sunDeepOrange),
       label: Text(
-        'ขอลา',
+        AppLocalizations.of(context)!.leave,
         style: textTheme.labelLarge?.copyWith(color: SunTheme.sunDeepOrange),
       ),
     );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../theme/sun_theme.dart';
 import '../widgets/sun_logo.dart';
-import 'org_code_screen.dart'; // <-- นำเข้า OrgCodeScreen
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -23,9 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
     )..repeat();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const OrgCodeScreen()),
-        );
+        Navigator.of(context).pushReplacementNamed('/language');
       }
     });
   }

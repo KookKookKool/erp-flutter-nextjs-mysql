@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../theme/sun_theme.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -44,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -78,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'เข้าสู่ระบบ',
+                      localizations.login,
                       style: textTheme.displaySmall?.copyWith(
                         color: SunTheme.textOnGradient,
                         fontWeight: FontWeight.bold,
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        labelText: 'Username',
+                        labelText: localizations.username,
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
@@ -110,7 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           vertical: 20,
                           horizontal: 16,
                         ),
-                        // เงา
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none,
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        labelText: 'Password',
+                        labelText: localizations.password,
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
@@ -206,14 +207,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Text('เข้าสู่ระบบ', style: textTheme.labelLarge),
+                            : Text(
+                                localizations.login,
+                                style: textTheme.labelLarge,
+                              ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: _isLoading ? null : () {},
                       child: Text(
-                        'ลืมรหัสผ่าน?',
+                        localizations.forgotPassword,
                         style: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.sunDeepOrange,
                           fontWeight: FontWeight.bold,
@@ -228,9 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: SunTheme.sunGradientDiagonal,
-            ),
+            decoration: const BoxDecoration(gradient: SunTheme.sunGradient),
             child: content,
           );
         },

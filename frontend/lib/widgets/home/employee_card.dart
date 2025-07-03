@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../theme/sun_theme.dart';
 
 class EmployeeCard extends StatelessWidget {
-  const EmployeeCard({Key? key}) : super(key: key);
+  const EmployeeCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +30,21 @@ class EmployeeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ชื่อพนักงาน',
+                    AppLocalizations.of(context)!.employeeName,
                     style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text('ตำแหน่งงาน', style: textTheme.bodyMedium),
+                  Text(
+                    AppLocalizations.of(context)!.employeePosition,
+                    style: textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 4),
-                  Text('รหัสพนักงาน: EMP001', style: textTheme.bodySmall),
+                  Text(
+                    AppLocalizations.of(context)!.employeeId('EMP001'),
+                    style: textTheme.bodySmall,
+                  ),
                 ],
               ),
             ),

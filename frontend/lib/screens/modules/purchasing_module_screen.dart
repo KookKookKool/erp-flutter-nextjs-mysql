@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PurchasingModuleScreen extends StatelessWidget {
-  const PurchasingModuleScreen({Key? key}) : super(key: key);
+  const PurchasingModuleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

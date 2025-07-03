@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../theme/sun_theme.dart';
 
 class AttendanceButtons extends StatelessWidget {
-  const AttendanceButtons({Key? key}) : super(key: key);
+  const AttendanceButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,9 @@ class AttendanceButtons extends StatelessWidget {
           ),
           onPressed: () {},
           icon: const Icon(Icons.login, color: Colors.white),
-          label: const Text(
-            'ลงเวลาเข้า',
-            style: TextStyle(color: Colors.white),
+          label: Text(
+            AppLocalizations.of(context)!.checkIn,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         ElevatedButton.icon(
@@ -34,7 +35,10 @@ class AttendanceButtons extends StatelessWidget {
           ),
           onPressed: () {},
           icon: const Icon(Icons.logout, color: Colors.white),
-          label: const Text('ลงเวลาออก', style: TextStyle(color: Colors.white)),
+          label: Text(
+            AppLocalizations.of(context)!.checkOut,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );

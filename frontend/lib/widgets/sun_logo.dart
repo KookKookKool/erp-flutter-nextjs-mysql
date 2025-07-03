@@ -3,7 +3,7 @@ import '../theme/sun_theme.dart';
 
 class SunLogo extends StatelessWidget {
   final double size;
-  const SunLogo({Key? key, this.size = 100}) : super(key: key);
+  const SunLogo({super.key, this.size = 100});
 
   @override
   Widget build(BuildContext context) {
