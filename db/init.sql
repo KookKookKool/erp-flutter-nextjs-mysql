@@ -1,0 +1,12 @@
+-- TiDB ERP APP Initial Schema
+CREATE DATABASE IF NOT EXISTS erp_app;
+USE erp_app;
+
+-- ตัวอย่างตารางผู้ใช้
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
