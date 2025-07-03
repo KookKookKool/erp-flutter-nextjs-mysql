@@ -10,10 +10,26 @@ enum ModuleType {
   accounting,
   reports,
   settings,
+  crm, // เพิ่ม crm
 }
 
-class ModuleCubit extends Cubit<ModuleType> {
-  ModuleCubit() : super(ModuleType.home);
+class ModuleState {
+  final ModuleType module;
+  final String? submodule; // null ถ้าไม่ใช่ HRM หรือไม่มี submodule
+  const ModuleState(this.module, {this.submodule});
 
-  void select(ModuleType module) => emit(module);
+  ModuleState copyWith({ModuleType? module, String? submodule}) {
+    return ModuleState(
+      module ?? this.module,
+      submodule: submodule ?? this.submodule,
+    );
+  }
+}
+
+class ModuleCubit extends Cubit<ModuleState> {
+  ModuleCubit() : super(const ModuleState(ModuleType.home));
+
+  void select(ModuleType module, {String? submodule}) {
+    emit(ModuleState(module, submodule: submodule));
+  }
 }

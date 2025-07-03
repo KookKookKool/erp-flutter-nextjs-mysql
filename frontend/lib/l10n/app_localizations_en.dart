@@ -117,4 +117,190 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hrAnnouncementSubtitle => 'Company will be closed on 12-15 April';
+
+  @override
+  String get employeeModule => 'Employee';
+
+  @override
+  String get attendanceModule => 'Attendance';
+
+  @override
+  String get payrollModule => 'Payroll';
+
+  @override
+  String get leaveModule => 'Leave';
+
+  @override
+  String get leaveApprovalModule => 'Leave Approval';
+
+  @override
+  String get employeeListTitle => 'Employee List';
+
+  @override
+  String get employeeListContent => 'Employee list content here';
+
+  @override
+  String get attendanceTitle => 'Time Attendance';
+
+  @override
+  String get attendanceContent => 'Attendance content here';
+
+  @override
+  String get payrollTitle => 'Payroll';
+
+  @override
+  String get payrollContent => 'Payroll content here';
+
+  @override
+  String get leaveTitle => 'Leave Management';
+
+  @override
+  String get leaveContent => 'Leave management content here';
+
+  @override
+  String get leaveApprovalTitle => 'Leave Approval';
+
+  @override
+  String get leaveApprovalContent => 'Leave approval content here';
+
+  @override
+  String get projectTaskModule => 'Project Task';
+
+  @override
+  String get projectTaskContent => 'Project task content here';
+
+  @override
+  String get projectStatusModule => 'Project Status';
+
+  @override
+  String get projectStatusContent => 'Project status content here';
+
+  @override
+  String get projectNotificationModule => 'Project Notification';
+
+  @override
+  String get projectNotificationContent => 'Project notification content here';
+
+  @override
+  String get salesCustomerModule => 'Customer';
+
+  @override
+  String get salesCustomerContent => 'Customer content here';
+
+  @override
+  String get salesQuotationModule => 'Quotation/Order';
+
+  @override
+  String get salesQuotationContent => 'Quotation/Order content here';
+
+  @override
+  String get salesReportModule => 'Sales Report';
+
+  @override
+  String get salesReportContent => 'Sales report content here';
+
+  @override
+  String get purchasingOrderModule => 'Purchase Order';
+
+  @override
+  String get purchasingOrderContent => 'Purchase order content here';
+
+  @override
+  String get purchasingSupplierModule => 'Supplier';
+
+  @override
+  String get purchasingSupplierContent => 'Supplier content here';
+
+  @override
+  String get purchasingReportModule => 'Purchasing Report';
+
+  @override
+  String get purchasingReportContent => 'Purchasing report content here';
+
+  @override
+  String get inventoryProductModule => 'Product/Material';
+
+  @override
+  String get inventoryProductContent => 'Product/material content here';
+
+  @override
+  String get inventoryStockModule => 'Stock';
+
+  @override
+  String get inventoryStockContent => 'Stock content here';
+
+  @override
+  String get inventoryTransactionModule => 'Transaction';
+
+  @override
+  String get inventoryTransactionContent => 'Transaction content here';
+
+  @override
+  String get accountingIncomeModule => 'Income/Expense';
+
+  @override
+  String get accountingIncomeContent => 'Income/expense content here';
+
+  @override
+  String get accountingFinanceModule => 'Finance';
+
+  @override
+  String get accountingFinanceContent => 'Finance content here';
+
+  @override
+  String get accountingReportModule => 'Accounting Report';
+
+  @override
+  String get accountingReportContent => 'Accounting report content here';
+
+  @override
+  String get crmCustomerModule => 'CRM Customer';
+
+  @override
+  String get crmCustomerContent => 'CRM customer content here';
+
+  @override
+  String get crmHistoryModule => 'Contact History';
+
+  @override
+  String get crmHistoryContent => 'Contact history content here';
+
+  @override
+  String get crmActivityModule => 'Sales Activity';
+
+  @override
+  String get crmActivityContent => 'Sales activity content here';
+
+  @override
+  String get reportsDashboardModule => 'Dashboard';
+
+  @override
+  String get reportsDashboardContent => 'Dashboard analytics content here';
+
+  @override
+  String get settingsUserModule => 'User Management';
+
+  @override
+  String get settingsUserContent => 'User management content here';
+
+  @override
+  String get settingsPermissionModule => 'Permission';
+
+  @override
+  String get settingsPermissionContent => 'Permission content here';
+
+  @override
+  String get settingsConfigModule => 'System Config';
+
+  @override
+  String get settingsConfigContent => 'System config content here';
+
+  @override
+  String get settingsNotificationModule => 'Notification Center';
+
+  @override
+  String get settingsNotificationContent => 'Notification center content here';
+
+  @override
+  String get rememberMe => 'Remember me';
 }

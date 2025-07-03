@@ -310,6 +310,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Company will be closed on 12-15 April'**
   String get hrAnnouncementSubtitle;
+
+  /// No description provided for @employeeModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get employeeModule;
+
+  /// No description provided for @attendanceModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance'**
+  String get attendanceModule;
+
+  /// No description provided for @payrollModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Payroll'**
+  String get payrollModule;
+
+  /// No description provided for @leaveModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get leaveModule;
+
+  /// No description provided for @leaveApprovalModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Approval'**
+  String get leaveApprovalModule;
+
+  /// No description provided for @employeeListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee List'**
+  String get employeeListTitle;
+
+  /// No description provided for @employeeListContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee list content here'**
+  String get employeeListContent;
+
+  /// No description provided for @attendanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Attendance'**
+  String get attendanceTitle;
+
+  /// No description provided for @attendanceContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance content here'**
+  String get attendanceContent;
+
+  /// No description provided for @payrollTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payroll'**
+  String get payrollTitle;
+
+  /// No description provided for @payrollContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Payroll content here'**
+  String get payrollContent;
+
+  /// No description provided for @leaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Management'**
+  String get leaveTitle;
+
+  /// No description provided for @leaveContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave management content here'**
+  String get leaveContent;
+
+  /// No description provided for @leaveApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Approval'**
+  String get leaveApprovalTitle;
+
+  /// No description provided for @leaveApprovalContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave approval content here'**
+  String get leaveApprovalContent;
+
+  /// No description provided for @projectTaskModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Task'**
+  String get projectTaskModule;
+
+  /// No description provided for @projectTaskContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Project task content here'**
+  String get projectTaskContent;
+
+  /// No description provided for @projectStatusModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Status'**
+  String get projectStatusModule;
+
+  /// No description provided for @projectStatusContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Project status content here'**
+  String get projectStatusContent;
+
+  /// No description provided for @projectNotificationModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Notification'**
+  String get projectNotificationModule;
+
+  /// No description provided for @projectNotificationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Project notification content here'**
+  String get projectNotificationContent;
+
+  /// No description provided for @salesCustomerModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get salesCustomerModule;
+
+  /// No description provided for @salesCustomerContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer content here'**
+  String get salesCustomerContent;
+
+  /// No description provided for @salesQuotationModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Quotation/Order'**
+  String get salesQuotationModule;
+
+  /// No description provided for @salesQuotationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Quotation/Order content here'**
+  String get salesQuotationContent;
+
+  /// No description provided for @salesReportModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales Report'**
+  String get salesReportModule;
+
+  /// No description provided for @salesReportContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales report content here'**
+  String get salesReportContent;
+
+  /// No description provided for @purchasingOrderModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Order'**
+  String get purchasingOrderModule;
+
+  /// No description provided for @purchasingOrderContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase order content here'**
+  String get purchasingOrderContent;
+
+  /// No description provided for @purchasingSupplierModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier'**
+  String get purchasingSupplierModule;
+
+  /// No description provided for @purchasingSupplierContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier content here'**
+  String get purchasingSupplierContent;
+
+  /// No description provided for @purchasingReportModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchasing Report'**
+  String get purchasingReportModule;
+
+  /// No description provided for @purchasingReportContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchasing report content here'**
+  String get purchasingReportContent;
+
+  /// No description provided for @inventoryProductModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Product/Material'**
+  String get inventoryProductModule;
+
+  /// No description provided for @inventoryProductContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Product/material content here'**
+  String get inventoryProductContent;
+
+  /// No description provided for @inventoryStockModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock'**
+  String get inventoryStockModule;
+
+  /// No description provided for @inventoryStockContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock content here'**
+  String get inventoryStockContent;
+
+  /// No description provided for @inventoryTransactionModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get inventoryTransactionModule;
+
+  /// No description provided for @inventoryTransactionContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction content here'**
+  String get inventoryTransactionContent;
+
+  /// No description provided for @accountingIncomeModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Income/Expense'**
+  String get accountingIncomeModule;
+
+  /// No description provided for @accountingIncomeContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Income/expense content here'**
+  String get accountingIncomeContent;
+
+  /// No description provided for @accountingFinanceModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get accountingFinanceModule;
+
+  /// No description provided for @accountingFinanceContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance content here'**
+  String get accountingFinanceContent;
+
+  /// No description provided for @accountingReportModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounting Report'**
+  String get accountingReportModule;
+
+  /// No description provided for @accountingReportContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounting report content here'**
+  String get accountingReportContent;
+
+  /// No description provided for @crmCustomerModule.
+  ///
+  /// In en, this message translates to:
+  /// **'CRM Customer'**
+  String get crmCustomerModule;
+
+  /// No description provided for @crmCustomerContent.
+  ///
+  /// In en, this message translates to:
+  /// **'CRM customer content here'**
+  String get crmCustomerContent;
+
+  /// No description provided for @crmHistoryModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact History'**
+  String get crmHistoryModule;
+
+  /// No description provided for @crmHistoryContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact history content here'**
+  String get crmHistoryContent;
+
+  /// No description provided for @crmActivityModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales Activity'**
+  String get crmActivityModule;
+
+  /// No description provided for @crmActivityContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales activity content here'**
+  String get crmActivityContent;
+
+  /// No description provided for @reportsDashboardModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get reportsDashboardModule;
+
+  /// No description provided for @reportsDashboardContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard analytics content here'**
+  String get reportsDashboardContent;
+
+  /// No description provided for @settingsUserModule.
+  ///
+  /// In en, this message translates to:
+  /// **'User Management'**
+  String get settingsUserModule;
+
+  /// No description provided for @settingsUserContent.
+  ///
+  /// In en, this message translates to:
+  /// **'User management content here'**
+  String get settingsUserContent;
+
+  /// No description provided for @settingsPermissionModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission'**
+  String get settingsPermissionModule;
+
+  /// No description provided for @settingsPermissionContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission content here'**
+  String get settingsPermissionContent;
+
+  /// No description provided for @settingsConfigModule.
+  ///
+  /// In en, this message translates to:
+  /// **'System Config'**
+  String get settingsConfigModule;
+
+  /// No description provided for @settingsConfigContent.
+  ///
+  /// In en, this message translates to:
+  /// **'System config content here'**
+  String get settingsConfigContent;
+
+  /// No description provided for @settingsNotificationModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Center'**
+  String get settingsNotificationModule;
+
+  /// No description provided for @settingsNotificationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification center content here'**
+  String get settingsNotificationContent;
+
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember me'**
+  String get rememberMe;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

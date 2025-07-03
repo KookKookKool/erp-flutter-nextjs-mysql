@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   String? _errorText;
   bool _obscurePassword = true;
+  bool _rememberMe = false;
 
   @override
   void dispose() {
@@ -186,6 +187,43 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ],
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            unselectedWidgetColor: SunTheme.textSecondary,
+                          ),
+                          child: Checkbox(
+                            value: _rememberMe,
+                            activeColor: SunTheme.textSecondary,
+                            checkColor: Colors.white,
+                            onChanged: _isLoading
+                                ? null
+                                : (val) {
+                                    setState(() {
+                                      _rememberMe = val ?? false;
+                                    });
+                                  },
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _isLoading
+                              ? null
+                              : () {
+                                  setState(() {
+                                    _rememberMe = !_rememberMe;
+                                  });
+                                },
+                          child: Text(
+                            localizations.rememberMe,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: SunTheme.textSecondary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
@@ -224,6 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 12),
                   ],
                 ),
               ),

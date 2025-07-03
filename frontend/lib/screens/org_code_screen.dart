@@ -101,7 +101,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         labelText:
-                            localizations.orgCodeLabel ?? 'Organization Code',
+                            localizations.orgCodeLabel,
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),

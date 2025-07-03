@@ -9,14 +9,15 @@ import '../widgets/home/leave_button.dart';
 import '../widgets/home/task_list.dart';
 import '../widgets/home/hr_announcement.dart';
 import '../bloc/module_cubit.dart';
-import 'modules/hrm_module_screen.dart';
-import 'modules/project_module_screen.dart';
-import 'modules/purchasing_module_screen.dart';
-import 'modules/sales_module_screen.dart';
-import 'modules/inventory_module_screen.dart';
-import 'modules/accounting_module_screen.dart';
-import 'modules/reports_module_screen.dart';
-import 'modules/settings_module_screen.dart';
+import '../modules/hrm/hrm_module_screen.dart';
+import '../modules/crm/crm_module_screen.dart';
+import '../modules/project/project_module_screen.dart';
+import '../modules/purchasing/purchasing_module_screen.dart';
+import '../modules/sales/sales_module_screen.dart';
+import '../modules/inventory/inventory_module_screen.dart';
+import '../modules/accounting/accounting_module_screen.dart';
+import '../modules/reports/reports_module_screen.dart';
+import '../modules/settings/settings_module_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,56 +34,64 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 900;
-        return BlocProvider(
-          create: (_) => ModuleCubit(),
-          child: Scaffold(
-            key: scaffoldKey,
-            drawer: isDesktop ? null : const SunDrawer(),
-            body: Row(
-              children: [
-                if (isDesktop) const SizedBox(width: 260, child: SunDrawer()),
-                Expanded(
-                  child: Scaffold(
-                    appBar: SunAppBar(
-                      isDesktop: isDesktop,
-                      onMenuPressed: () =>
-                          scaffoldKey.currentState?.openDrawer(),
-                    ),
-                    body: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: const BoxDecoration(
-                        gradient: SunTheme.sunGradient,
-                      ),
-                      child: BlocBuilder<ModuleCubit, ModuleType>(
-                        builder: (context, module) {
-                          switch (module) {
-                            case ModuleType.home:
-                              return const _HomeContent();
-                            case ModuleType.hrm:
-                              return const HRMModuleScreen();
-                            case ModuleType.project:
-                              return const ProjectModuleScreen();
-                            case ModuleType.purchasing:
-                              return const PurchasingModuleScreen();
-                            case ModuleType.sales:
-                              return const SalesModuleScreen();
-                            case ModuleType.inventory:
-                              return const InventoryModuleScreen();
-                            case ModuleType.accounting:
-                              return const AccountingModuleScreen();
-                            case ModuleType.reports:
-                              return const ReportsModuleScreen();
-                            case ModuleType.settings:
-                              return const SettingsModuleScreen();
-                          }
-                        },
-                      ),
-                    ),
+        return Scaffold(
+          key: scaffoldKey,
+          drawer: isDesktop ? null : SunDrawer(),
+          appBar: SunAppBar(
+            isDesktop: isDesktop,
+            onMenuPressed: () => scaffoldKey.currentState?.openDrawer(),
+          ),
+          body: Row(
+            children: [
+              if (isDesktop) SizedBox(width: 260, child: SunDrawer()),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    gradient: SunTheme.sunGradient,
+                  ),
+                  child: BlocBuilder<ModuleCubit, ModuleState>(
+                    builder: (context, state) {
+                      switch (state.module) {
+                        case ModuleType.home:
+                          return _HomeContent();
+                        case ModuleType.hrm:
+                          return HRMModuleScreen(submodule: state.submodule);
+                        case ModuleType.project:
+                          return ProjectModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.purchasing:
+                          return PurchasingModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.sales:
+                          return SalesModuleScreen(submodule: state.submodule);
+                        case ModuleType.inventory:
+                          return InventoryModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.accounting:
+                          return AccountingModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.reports:
+                          return ReportsModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.settings:
+                          return SettingsModuleScreen(
+                            submodule: state.submodule,
+                          );
+                        case ModuleType.crm:
+                          return CrmModuleScreen(submodule: state.submodule);
+                      }
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -91,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _HomeContent extends StatelessWidget {
-  const _HomeContent({super.key});
+  const _HomeContent();
 
   @override
   Widget build(BuildContext context) {

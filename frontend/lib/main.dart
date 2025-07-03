@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/sun_theme.dart';
 import 'bloc/simple_bloc_observer.dart';
@@ -9,10 +9,16 @@ import 'screens/org_code_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/language_select_screen.dart';
+import 'bloc/module_cubit.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
-  runApp(const SunErpApp());
+  runApp(
+    BlocProvider<ModuleCubit>(
+      create: (_) => ModuleCubit(),
+      child: const SunErpApp(),
+    ),
+  );
 }
 
 class SunErpApp extends StatefulWidget {

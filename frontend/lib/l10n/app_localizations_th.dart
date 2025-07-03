@@ -117,4 +117,190 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get hrAnnouncementSubtitle => 'บริษัทจะหยุดทำการวันที่ 12-15 เมษายน';
+
+  @override
+  String get employeeModule => 'พนักงาน';
+
+  @override
+  String get attendanceModule => 'บันทึกเวลา';
+
+  @override
+  String get payrollModule => 'เงินเดือน';
+
+  @override
+  String get leaveModule => 'การลา';
+
+  @override
+  String get leaveApprovalModule => 'อนุมัติการลา';
+
+  @override
+  String get employeeListTitle => 'รายชื่อพนักงาน';
+
+  @override
+  String get employeeListContent => 'เนื้อหารายชื่อพนักงาน';
+
+  @override
+  String get attendanceTitle => 'บันทึกเวลาเข้า-ออก';
+
+  @override
+  String get attendanceContent => 'เนื้อหาบันทึกเวลาเข้า-ออก';
+
+  @override
+  String get payrollTitle => 'เงินเดือน';
+
+  @override
+  String get payrollContent => 'เนื้อหาเงินเดือน';
+
+  @override
+  String get leaveTitle => 'การลา';
+
+  @override
+  String get leaveContent => 'เนื้อหาการลา';
+
+  @override
+  String get leaveApprovalTitle => 'อนุมัติการลา';
+
+  @override
+  String get leaveApprovalContent => 'เนื้อหาอนุมัติการลา';
+
+  @override
+  String get projectTaskModule => 'งานโปรเจ็ค';
+
+  @override
+  String get projectTaskContent => 'เนื้อหางานโปรเจ็ค';
+
+  @override
+  String get projectStatusModule => 'สถานะงาน';
+
+  @override
+  String get projectStatusContent => 'เนื้อหาสถานะงาน';
+
+  @override
+  String get projectNotificationModule => 'แจ้งเตือนงาน';
+
+  @override
+  String get projectNotificationContent => 'เนื้อหาแจ้งเตือนงาน';
+
+  @override
+  String get salesCustomerModule => 'ข้อมูลลูกค้า';
+
+  @override
+  String get salesCustomerContent => 'เนื้อหาข้อมูลลูกค้า';
+
+  @override
+  String get salesQuotationModule => 'ใบเสนอราคา/ใบสั่งขาย';
+
+  @override
+  String get salesQuotationContent => 'เนื้อหาใบเสนอราคา/ใบสั่งขาย';
+
+  @override
+  String get salesReportModule => 'รายงานการขาย';
+
+  @override
+  String get salesReportContent => 'เนื้อหารายงานการขาย';
+
+  @override
+  String get purchasingOrderModule => 'ใบสั่งซื้อ';
+
+  @override
+  String get purchasingOrderContent => 'เนื้อหาใบสั่งซื้อ';
+
+  @override
+  String get purchasingSupplierModule => 'ซัพพลายเออร์';
+
+  @override
+  String get purchasingSupplierContent => 'เนื้อหาซัพพลายเออร์';
+
+  @override
+  String get purchasingReportModule => 'รายงานการจัดซื้อ';
+
+  @override
+  String get purchasingReportContent => 'เนื้อหารายงานการจัดซื้อ';
+
+  @override
+  String get inventoryProductModule => 'สินค้า/วัตถุดิบ';
+
+  @override
+  String get inventoryProductContent => 'เนื้อหาสินค้า/วัตถุดิบ';
+
+  @override
+  String get inventoryStockModule => 'สต็อกคงเหลือ';
+
+  @override
+  String get inventoryStockContent => 'เนื้อหาสต็อกคงเหลือ';
+
+  @override
+  String get inventoryTransactionModule => 'รับ-จ่ายสินค้า';
+
+  @override
+  String get inventoryTransactionContent => 'เนื้อหารับ-จ่ายสินค้า';
+
+  @override
+  String get accountingIncomeModule => 'บัญชีรายรับ-รายจ่าย';
+
+  @override
+  String get accountingIncomeContent => 'เนื้อหาบัญชีรายรับ-รายจ่าย';
+
+  @override
+  String get accountingFinanceModule => 'งบการเงิน';
+
+  @override
+  String get accountingFinanceContent => 'เนื้อหางบการเงิน';
+
+  @override
+  String get accountingReportModule => 'รายงานบัญชี';
+
+  @override
+  String get accountingReportContent => 'เนื้อหารายงานบัญชี';
+
+  @override
+  String get crmCustomerModule => 'ข้อมูลลูกค้า CRM';
+
+  @override
+  String get crmCustomerContent => 'เนื้อหาข้อมูลลูกค้า CRM';
+
+  @override
+  String get crmHistoryModule => 'ประวัติการติดต่อ';
+
+  @override
+  String get crmHistoryContent => 'เนื้อหาประวัติการติดต่อ';
+
+  @override
+  String get crmActivityModule => 'กิจกรรมการขาย';
+
+  @override
+  String get crmActivityContent => 'เนื้อหากิจกรรมการขาย';
+
+  @override
+  String get reportsDashboardModule => 'แดชบอร์ด';
+
+  @override
+  String get reportsDashboardContent => 'เนื้อหาแดชบอร์ดวิเคราะห์ข้อมูล';
+
+  @override
+  String get settingsUserModule => 'จัดการผู้ใช้';
+
+  @override
+  String get settingsUserContent => 'เนื้อหาจัดการผู้ใช้';
+
+  @override
+  String get settingsPermissionModule => 'สิทธิ์ผู้ใช้';
+
+  @override
+  String get settingsPermissionContent => 'เนื้อหาสิทธิ์ผู้ใช้';
+
+  @override
+  String get settingsConfigModule => 'ตั้งค่าระบบ';
+
+  @override
+  String get settingsConfigContent => 'เนื้อหาตั้งค่าระบบ';
+
+  @override
+  String get settingsNotificationModule => 'ศูนย์แจ้งเตือน';
+
+  @override
+  String get settingsNotificationContent => 'เนื้อหาศูนย์แจ้งเตือน';
+
+  @override
+  String get rememberMe => 'จดจำการเข้าสู่ระบบ';
 }
