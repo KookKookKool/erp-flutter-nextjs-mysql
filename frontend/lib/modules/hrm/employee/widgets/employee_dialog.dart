@@ -1,0 +1,173 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'employee_image_picker.dart';
+import 'employee_form_fields.dart';
+import '../employee_list_screen.dart';
+
+class EmployeeDialog extends StatefulWidget {
+  final Employee? employee;
+  final VoidCallback? onDelete;
+  const EmployeeDialog({this.employee, this.onDelete, super.key});
+  @override
+  State<EmployeeDialog> createState() => _EmployeeDialogState();
+}
+
+class _EmployeeDialogState extends State<EmployeeDialog> {
+  File? _image;
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _firstName;
+  late TextEditingController _lastName;
+  late TextEditingController _employeeId;
+  String _level = 'Junior';
+  late TextEditingController _position;
+  late TextEditingController _email;
+  late TextEditingController _phone;
+  late TextEditingController _startDate;
+  late TextEditingController _password;
+  bool _obscurePassword = true;
+
+  final List<String> _levels = ['Junior', 'Senior', 'Manager', 'Director'];
+
+  @override
+  void initState() {
+    final emp = widget.employee;
+    _image = emp?.image;
+    _firstName = TextEditingController(text: emp?.firstName ?? '');
+    _lastName = TextEditingController(text: emp?.lastName ?? '');
+    _employeeId = TextEditingController(text: emp?.employeeId ?? '');
+    _level = emp?.level ?? 'Junior';
+    _position = TextEditingController(text: emp?.position ?? '');
+    _email = TextEditingController(text: emp?.email ?? '');
+    _phone = TextEditingController(text: emp?.phone ?? '');
+    _startDate = TextEditingController(text: emp?.startDate ?? '');
+    _password = TextEditingController(text: emp?.password ?? '');
+    super.initState();
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(source: ImageSource.gallery);
+      if (picked != null) {
+        setState(() {
+          _image = File(picked.path);
+        });
+      }
+    } catch (e) {
+      // handle error
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        widget.employee == null ? 'เพิ่มพนักงาน' : 'แก้ไขข้อมูลพนักงาน',
+      ),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              EmployeeImagePicker(image: _image, onPick: _pickImage),
+              const SizedBox(height: 16),
+              EmployeeFormFields(
+                firstName: _firstName,
+                lastName: _lastName,
+                employeeId: _employeeId,
+                level: _level,
+                onLevelChanged: (val) {
+                  if (val != null) setState(() => _level = val);
+                },
+                levels: _levels,
+                position: _position,
+                email: _email,
+                phone: _phone,
+                startDate: _startDate,
+                onPickDate: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _startDate.text.isNotEmpty
+                        ? DateTime.tryParse(_startDate.text) ?? DateTime.now()
+                        : DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    _startDate.text = picked.toIso8601String().split('T').first;
+                  }
+                },
+                password: _password,
+                obscurePassword: _obscurePassword,
+                onTogglePassword: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        if (widget.employee != null && widget.onDelete != null)
+          TextButton(
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('ยืนยันการลบ'),
+                  content: const Text('คุณแน่ใจหรือไม่ที่จะลบพนักงานคนนี้?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('ยกเลิก'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('ใช่, ลบ'),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true) {
+                Navigator.pop(context, 'delete');
+                widget.onDelete?.call();
+              }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('ลบ'),
+          ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('ยกเลิก'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              Navigator.pop(
+                context,
+                Employee(
+                  image: _image,
+                  firstName: _firstName.text,
+                  lastName: _lastName.text,
+                  employeeId: _employeeId.text,
+                  level: _level,
+                  position: _position.text,
+                  email: _email.text,
+                  phone: _phone.text,
+                  startDate: _startDate.text,
+                  password: _password.text,
+                ),
+              );
+            }
+          },
+          child: const Text('บันทึก'),
+        ),
+      ],
+    );
+  }
+}
