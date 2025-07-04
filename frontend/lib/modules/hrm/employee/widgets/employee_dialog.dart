@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'employee_image_picker.dart';
 import 'employee_form_fields.dart';
 import '../employee_list_screen.dart';
@@ -61,9 +62,10 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(
-        widget.employee == null ? 'เพิ่มพนักงาน' : 'แก้ไขข้อมูลพนักงาน',
+        widget.employee == null ? l10n.addEmployee : l10n.editEmployee,
       ),
       content: SingleChildScrollView(
         child: Form(
@@ -71,7 +73,11 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              EmployeeImagePicker(image: _image, onPick: _pickImage),
+              EmployeeImagePicker(
+                image: _image,
+                onPick: _pickImage,
+                tooltip: l10n.changeImage,
+              ),
               const SizedBox(height: 16),
               EmployeeFormFields(
                 firstName: _firstName,
@@ -94,6 +100,7 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
                         : DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
+                    helpText: l10n.pickStartDate,
                   );
                   if (picked != null) {
                     _startDate.text = picked.toIso8601String().split('T').first;
@@ -103,6 +110,7 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
                 obscurePassword: _obscurePassword,
                 onTogglePassword: () =>
                     setState(() => _obscurePassword = !_obscurePassword),
+                l10n: l10n,
               ),
             ],
           ),
@@ -115,12 +123,12 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('ยืนยันการลบ'),
-                  content: const Text('คุณแน่ใจหรือไม่ที่จะลบพนักงานคนนี้?'),
+                  title: Text(l10n.confirmDelete),
+                  content: Text(l10n.confirmDeleteMessage),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, false),
-                      child: const Text('ยกเลิก'),
+                      child: Text(l10n.cancel),
                     ),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context, true),
@@ -128,7 +136,7 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text('ใช่, ลบ'),
+                      child: Text(l10n.delete),
                     ),
                   ],
                 ),
@@ -139,11 +147,11 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
               }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('ลบ'),
+            child: Text(l10n.delete),
           ),
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('ยกเลิก'),
+          child: Text(l10n.cancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -165,7 +173,7 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
               );
             }
           },
-          child: const Text('บันทึก'),
+          child: Text(l10n.save),
         ),
       ],
     );

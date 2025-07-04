@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../employee_list_screen.dart';
 import 'employee_card.dart';
 
 class EmployeeList extends StatelessWidget {
   final List<Employee> employees;
   final void Function(Employee emp) onEdit;
+  final String? positionLabel;
   const EmployeeList({
     super.key,
     required this.employees,
     required this.onEdit,
+    this.positionLabel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Expanded(
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: employees.length,
         itemBuilder: (context, i) {
           final emp = employees[i];
-          return EmployeeCard(employee: emp, onEdit: () => onEdit(emp));
+          return EmployeeCard(
+            employee: emp,
+            onEdit: () => onEdit(emp),
+            positionLabel: positionLabel ?? l10n?.position ?? 'ตำแหน่ง',
+          );
         },
       ),
     );

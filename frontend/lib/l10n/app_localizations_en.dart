@@ -303,4 +303,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rememberMe => 'Remember me';
+
+  @override
+  String get addEmployee => 'Add Employee';
+
+  @override
+  String get editEmployee => 'Edit Employee';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirmDelete => 'Confirm Delete';
+
+  @override
+  String get confirmDeleteMessage => 'Are you sure you want to delete this employee?';
+
+  @override
+  String get changeImage => 'Change Image';
+
+  @override
+  String get pickStartDate => 'Pick Start Date';
+
+  @override
+  String get searchHint => 'Search name or employee ID';
+
+  @override
+  String get position => 'Position';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get surname => 'Surname';
+
+  @override
+  String get employeeIdLabel => 'Employee ID';
+
+  @override
+  String get level => 'Level';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get startDate => 'Start Date';
+
+  @override
+  String get showPassword => 'Show Password';
+
+  @override
+  String get hidePassword => 'Hide Password';
 }

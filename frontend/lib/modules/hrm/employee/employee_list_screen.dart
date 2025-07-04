@@ -98,7 +98,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'เพิ่มพนักงาน',
+            tooltip: l10n.addEmployee,
             onPressed: () => _addOrEditEmployee(),
           ),
         ],
@@ -108,6 +108,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           EmployeeSearchBar(
             value: _search,
             onChanged: (v) => setState(() => _search = v),
+            hintText: l10n.searchHint,
           ),
           EmployeeList(
             employees: _filteredEmployees,
@@ -115,6 +116,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               employee: emp,
               index: employees.indexOf(emp),
             ),
+            positionLabel: l10n.position,
           ),
         ],
       ),

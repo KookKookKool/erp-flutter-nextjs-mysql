@@ -303,4 +303,64 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get rememberMe => 'จดจำการเข้าสู่ระบบ';
+
+  @override
+  String get addEmployee => 'เพิ่มพนักงาน';
+
+  @override
+  String get editEmployee => 'แก้ไขข้อมูลพนักงาน';
+
+  @override
+  String get delete => 'ลบ';
+
+  @override
+  String get save => 'บันทึก';
+
+  @override
+  String get cancel => 'ยกเลิก';
+
+  @override
+  String get confirmDelete => 'ยืนยันการลบ';
+
+  @override
+  String get confirmDeleteMessage => 'คุณแน่ใจหรือไม่ที่จะลบพนักงานคนนี้?';
+
+  @override
+  String get changeImage => 'เปลี่ยนรูปภาพ';
+
+  @override
+  String get pickStartDate => 'เลือกวันที่เริ่มงาน';
+
+  @override
+  String get searchHint => 'ค้นหาชื่อหรือรหัสพนักงาน';
+
+  @override
+  String get position => 'ตำแหน่ง';
+
+  @override
+  String get name => 'ชื่อ';
+
+  @override
+  String get surname => 'นามสกุล';
+
+  @override
+  String get employeeIdLabel => 'รหัสพนักงาน';
+
+  @override
+  String get level => 'ระดับ';
+
+  @override
+  String get email => 'อีเมล';
+
+  @override
+  String get phone => 'เบอร์โทร';
+
+  @override
+  String get startDate => 'วันที่เริ่มงาน';
+
+  @override
+  String get showPassword => 'แสดงรหัสผ่าน';
+
+  @override
+  String get hidePassword => 'ซ่อนรหัสผ่าน';
 }

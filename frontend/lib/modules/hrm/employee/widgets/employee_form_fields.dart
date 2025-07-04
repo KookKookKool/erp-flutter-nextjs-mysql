@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 class EmployeeFormFields extends StatelessWidget {
   final TextEditingController firstName;
@@ -15,6 +16,7 @@ class EmployeeFormFields extends StatelessWidget {
   final TextEditingController password;
   final bool obscurePassword;
   final VoidCallback onTogglePassword;
+  final AppLocalizations l10n;
 
   const EmployeeFormFields({
     super.key,
@@ -32,6 +34,7 @@ class EmployeeFormFields extends StatelessWidget {
     required this.password,
     required this.obscurePassword,
     required this.onTogglePassword,
+    required this.l10n,
   });
 
   @override
@@ -41,17 +44,19 @@ class EmployeeFormFields extends StatelessWidget {
       children: [
         TextFormField(
           controller: firstName,
-          decoration: const InputDecoration(labelText: 'ชื่อ'),
-          validator: (v) => v == null || v.isEmpty ? 'กรุณากรอกชื่อ' : null,
+          decoration: InputDecoration(labelText: l10n.name),
+          validator: (v) =>
+              v == null || v.isEmpty ? l10n.name + ' ' + l10n.error : null,
         ),
         TextFormField(
           controller: lastName,
-          decoration: const InputDecoration(labelText: 'นามสกุล'),
-          validator: (v) => v == null || v.isEmpty ? 'กรุณากรอกนามสกุล' : null,
+          decoration: InputDecoration(labelText: l10n.surname),
+          validator: (v) =>
+              v == null || v.isEmpty ? l10n.surname + ' ' + l10n.error : null,
         ),
         TextFormField(
           controller: employeeId,
-          decoration: const InputDecoration(labelText: 'รหัสพนักงาน'),
+          decoration: InputDecoration(labelText: l10n.employeeIdLabel),
         ),
         DropdownButtonFormField<String>(
           value: level,
@@ -59,35 +64,36 @@ class EmployeeFormFields extends StatelessWidget {
               .map((lv) => DropdownMenuItem(value: lv, child: Text(lv)))
               .toList(),
           onChanged: onLevelChanged,
-          decoration: const InputDecoration(labelText: 'ระดับ'),
+          decoration: InputDecoration(labelText: l10n.level),
         ),
         TextFormField(
           controller: position,
-          decoration: const InputDecoration(labelText: 'ตำแหน่ง'),
+          decoration: InputDecoration(labelText: l10n.position),
         ),
         TextFormField(
           controller: email,
-          decoration: const InputDecoration(labelText: 'อีเมล'),
+          decoration: InputDecoration(labelText: l10n.email),
         ),
         TextFormField(
           controller: phone,
-          decoration: const InputDecoration(labelText: 'เบอร์โทร'),
+          decoration: InputDecoration(labelText: l10n.phone),
         ),
         TextFormField(
           controller: startDate,
           readOnly: true,
-          decoration: const InputDecoration(labelText: 'วันที่เริ่มงาน'),
+          decoration: InputDecoration(labelText: l10n.startDate),
           onTap: onPickDate,
         ),
         TextFormField(
           controller: password,
           decoration: InputDecoration(
-            labelText: 'รหัสผ่าน',
+            labelText: l10n.password,
             suffixIcon: IconButton(
               icon: Icon(
                 obscurePassword ? Icons.visibility_off : Icons.visibility,
               ),
               onPressed: onTogglePassword,
+              tooltip: obscurePassword ? l10n.showPassword : l10n.hidePassword,
             ),
           ),
           obscureText: obscurePassword,
