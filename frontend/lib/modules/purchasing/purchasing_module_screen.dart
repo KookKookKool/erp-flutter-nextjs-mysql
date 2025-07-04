@@ -4,7 +4,7 @@ import '../../bloc/module_cubit.dart';
 import 'order/order_screen.dart';
 import 'supplier/supplier_screen.dart';
 import 'report/report_screen.dart';
-import '../../l10n/app_localizations.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class PurchasingModuleScreen extends StatelessWidget {
   final String? submodule;

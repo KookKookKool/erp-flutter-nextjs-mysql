@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/module_cubit.dart';
+import 'package:frontend/bloc/module_cubit.dart';
 import 'customer/customer_screen.dart';
 import 'history/history_screen.dart';
 import 'activity/activity_screen.dart';
-import '../../l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class CrmModuleScreen extends StatelessWidget {
   final String? submodule;

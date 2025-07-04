@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 import 'widgets/employee_dialog.dart';
 import 'widgets/employee_search_bar.dart';
 import 'widgets/employee_list.dart';

@@ -5,7 +5,7 @@ import 'user/user_screen.dart';
 import 'permission/permission_screen.dart';
 import 'config/config_screen.dart';
 import 'notification/notification_screen.dart';
-import '../../l10n/app_localizations.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class SettingsModuleScreen extends StatelessWidget {
   final String? submodule;

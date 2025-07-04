@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '/theme/sun_theme.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class EmployeeImagePicker extends StatelessWidget {
   final File? image;

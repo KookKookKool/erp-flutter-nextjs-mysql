@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/main.dart';
-import 'package:frontend/l10n/app_localizations.dart';
-import '../bloc/module_cubit.dart';
-import '../theme/sun_theme.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
+import 'package:frontend/bloc/module_cubit.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class SunDrawer extends StatefulWidget {
   const SunDrawer({super.key});
@@ -263,10 +263,7 @@ class _ControlledExpansionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isExpanded = selected.module == module['type'];
     return ExpansionTile(
-      leading: Icon(
-        module['icon'] as IconData,
-        color: SunTheme.sunDeepOrange,
-      ),
+      leading: Icon(module['icon'] as IconData, color: SunTheme.sunDeepOrange),
       title: Text(
         _getModuleLabel(localizations, module['labelKey'] as String),
         style: textTheme.bodyLarge,

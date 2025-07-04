@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../theme/sun_theme.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class OrgCodeScreen extends StatefulWidget {
   const OrgCodeScreen({super.key});
@@ -100,8 +100,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                         ),
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        labelText:
-                            localizations.orgCodeLabel,
+                        labelText: localizations.orgCodeLabel,
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),

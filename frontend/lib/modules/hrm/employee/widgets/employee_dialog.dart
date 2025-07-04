@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:frontend/l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 import 'employee_image_picker.dart';
 import 'employee_form_fields.dart';
 import '../employee_list_screen.dart';
-import '/theme/sun_theme.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class EmployeeDialog extends StatefulWidget {
   final Employee? employee;

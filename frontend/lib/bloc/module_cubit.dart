@@ -10,12 +10,12 @@ enum ModuleType {
   accounting,
   reports,
   settings,
-  crm, // เพิ่ม crm
+  crm, 
 }
 
 class ModuleState {
   final ModuleType module;
-  final String? submodule; // null ถ้าไม่ใช่ HRM หรือไม่มี submodule
+  final String? submodule; 
   const ModuleState(this.module, {this.submodule});
 
   ModuleState copyWith({ModuleType? module, String? submodule}) {

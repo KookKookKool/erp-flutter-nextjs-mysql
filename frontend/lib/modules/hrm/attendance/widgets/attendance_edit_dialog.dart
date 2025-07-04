@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '/l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 import '../attendance_screen.dart';
-import '/theme/sun_theme.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class AttendanceEditDialog extends StatefulWidget {
   final EmployeeAttendance employee;

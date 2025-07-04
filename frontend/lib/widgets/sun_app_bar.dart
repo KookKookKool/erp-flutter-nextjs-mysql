@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/sun_theme.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 
 class SunAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDesktop;

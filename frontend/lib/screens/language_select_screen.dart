@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
-import 'package:frontend/l10n/app_localizations.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class LanguageSelectScreen extends StatelessWidget {
   const LanguageSelectScreen({super.key});

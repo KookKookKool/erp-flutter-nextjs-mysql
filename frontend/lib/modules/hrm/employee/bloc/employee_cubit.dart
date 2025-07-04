@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../services/employee_service.dart';
+import 'package:frontend/modules/hrm/employee/services/employee_service.dart';
 
 abstract class EmployeeState {}
 

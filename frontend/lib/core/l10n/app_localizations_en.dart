@@ -320,7 +320,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmDelete => 'Confirm Delete';
 
   @override
-  String get confirmDeleteMessage => 'Are you sure you want to delete this employee?';
+  String get confirmDeleteMessage =>
+      'Are you sure you want to delete this employee?';
 
   @override
   String get changeImage => 'Change Image';

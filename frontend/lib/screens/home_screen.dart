@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../theme/sun_theme.dart';
+import '../core/theme/sun_theme.dart';
 import '../widgets/sun_app_bar.dart';
 import '../widgets/sun_drawer.dart';
 import '../widgets/home/employee_card.dart';
