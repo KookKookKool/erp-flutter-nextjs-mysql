@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import '/theme/sun_theme.dart';
 
 class EmployeeImagePicker extends StatelessWidget {
   final File? image;
@@ -26,24 +27,25 @@ class EmployeeImagePicker extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: SunTheme.cardColor,
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(4),
                     child: const Icon(
                       Icons.camera_alt,
                       size: 20,
-                      color: Colors.grey,
+                      color: SunTheme.onPrimary,
                     ),
                   ),
                 ),
               )
             : CircleAvatar(
                 radius: 40,
+                backgroundColor: SunTheme.primary,
                 child: const Icon(
                   Icons.camera_alt,
                   size: 40,
-                  color: Colors.grey,
+                  color: SunTheme.onPrimary,
                 ),
               ),
       ),

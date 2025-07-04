@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import '/l10n/app_localizations.dart';
 import '/theme/sun_theme.dart';
 
-class EmployeeSearchBar extends StatelessWidget {
+class AttendanceSearchBar extends StatelessWidget {
   final String value;
   final ValueChanged<String> onChanged;
-  final String? hintText;
-  const EmployeeSearchBar({
+  const AttendanceSearchBar({
     super.key,
     required this.value,
     required this.onChanged,
-    this.hintText,
   });
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: SunTheme.cardColor,
@@ -26,14 +24,14 @@ class EmployeeSearchBar extends StatelessWidget {
             color: Colors.black.withOpacity(0.10),
             blurRadius: 4,
             spreadRadius: 0.5,
-            offset: const Offset(0, 1),
+            offset: const Offset(0, 1), // เงาแนบกับ input
           ),
         ],
       ),
       child: TextField(
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search, color: SunTheme.primary),
-          hintText: l10n?.searchHint ?? hintText,
+          hintText: l10n.searchHint,
           filled: true,
           fillColor: SunTheme.cardColor,
           border: OutlineInputBorder(

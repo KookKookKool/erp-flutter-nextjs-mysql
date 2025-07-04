@@ -1,4 +1,5 @@
 {
+  "@@locale": "th",
   "appTitle": "ซัน อีอาร์พี",
   "orgCodePrompt": "กรุณากรอกรหัสองค์กร",
   "login": "เข้าสู่ระบบ",
@@ -20,7 +21,6 @@
   "selectLanguage": "เลือกภาษา",
   "orgCodeLabel": "รหัสองค์กร",
   "username": "ชื่อผู้ใช้",
-  "password": "รหัสผ่าน",
   "forgotPassword": "ลืมรหัสผ่าน?",
   "employeeName": "ชื่อพนักงาน",
   "employeePosition": "ตำแหน่งงาน",
@@ -123,5 +123,8 @@
   "startDate": "วันที่เริ่มงาน",
   "password": "รหัสผ่าน",
   "showPassword": "แสดงรหัสผ่าน",
-  "hidePassword": "ซ่อนรหัสผ่าน"
+  "hidePassword": "ซ่อนรหัสผ่าน",
+  "otStart": "เวลา OT เข้า",
+  "otEnd": "เวลา OT ออก",
+  "otRate": "เรท OT"
 }

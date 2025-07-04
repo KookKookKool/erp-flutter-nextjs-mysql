@@ -221,12 +221,6 @@ abstract class AppLocalizations {
   /// **'Username'**
   String get username;
 
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
@@ -791,6 +785,12 @@ abstract class AppLocalizations {
   /// **'Start Date'**
   String get startDate;
 
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
   /// No description provided for @showPassword.
   ///
   /// In en, this message translates to:
@@ -802,6 +802,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide Password'**
   String get hidePassword;
+
+  /// No description provided for @otStart.
+  ///
+  /// In en, this message translates to:
+  /// **'OT Start'**
+  String get otStart;
+
+  /// No description provided for @otEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'OT End'**
+  String get otEnd;
+
+  /// No description provided for @otRate.
+  ///
+  /// In en, this message translates to:
+  /// **'OT Rate'**
+  String get otRate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

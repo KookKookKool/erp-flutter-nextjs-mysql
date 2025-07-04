@@ -72,9 +72,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get username => 'ชื่อผู้ใช้';
 
   @override
-  String get password => 'รหัสผ่าน';
-
-  @override
   String get forgotPassword => 'ลืมรหัสผ่าน?';
 
   @override
@@ -359,8 +356,20 @@ class AppLocalizationsTh extends AppLocalizations {
   String get startDate => 'วันที่เริ่มงาน';
 
   @override
+  String get password => 'รหัสผ่าน';
+
+  @override
   String get showPassword => 'แสดงรหัสผ่าน';
 
   @override
   String get hidePassword => 'ซ่อนรหัสผ่าน';
+
+  @override
+  String get otStart => 'เวลา OT เข้า';
+
+  @override
+  String get otEnd => 'เวลา OT ออก';
+
+  @override
+  String get otRate => 'เรท OT';
 }

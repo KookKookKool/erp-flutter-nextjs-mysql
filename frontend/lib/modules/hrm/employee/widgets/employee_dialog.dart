@@ -5,6 +5,7 @@ import 'package:frontend/l10n/app_localizations.dart';
 import 'employee_image_picker.dart';
 import 'employee_form_fields.dart';
 import '../employee_list_screen.dart';
+import '/theme/sun_theme.dart';
 
 class EmployeeDialog extends StatefulWidget {
   final Employee? employee;
@@ -64,8 +65,10 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
+      backgroundColor: SunTheme.cardColor,
       title: Text(
         widget.employee == null ? l10n.addEmployee : l10n.editEmployee,
+        style: TextStyle(color: SunTheme.textPrimary),
       ),
       content: SingleChildScrollView(
         child: Form(
@@ -123,20 +126,33 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text(l10n.confirmDelete),
-                  content: Text(l10n.confirmDeleteMessage),
+                  backgroundColor: SunTheme.cardColor,
+                  title: Text(
+                    l10n.confirmDelete,
+                    style: TextStyle(color: SunTheme.textPrimary),
+                  ),
+                  content: Text(
+                    l10n.confirmDeleteMessage,
+                    style: TextStyle(color: SunTheme.textPrimary),
+                  ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, false),
-                      child: Text(l10n.cancel),
+                      child: Text(
+                        l10n.cancel,
+                        style: TextStyle(color: SunTheme.primary),
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context, true),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: SunTheme.error,
+                        foregroundColor: SunTheme.onPrimary,
                       ),
-                      child: Text(l10n.delete),
+                      child: Text(
+                        l10n.delete,
+                        style: TextStyle(color: SunTheme.onPrimary),
+                      ),
                     ),
                   ],
                 ),
@@ -146,12 +162,12 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
                 widget.onDelete?.call();
               }
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(l10n.delete),
+            style: TextButton.styleFrom(foregroundColor: SunTheme.error),
+            child: Text(l10n.delete, style: TextStyle(color: SunTheme.error)),
           ),
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
+          child: Text(l10n.cancel, style: TextStyle(color: SunTheme.primary)),
         ),
         ElevatedButton(
           onPressed: () {
@@ -173,7 +189,11 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
               );
             }
           },
-          child: Text(l10n.save),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: SunTheme.primary,
+            foregroundColor: SunTheme.onPrimary,
+          ),
+          child: Text(l10n.save, style: TextStyle(color: SunTheme.onPrimary)),
         ),
       ],
     );

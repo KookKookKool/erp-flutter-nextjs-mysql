@@ -72,9 +72,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username => 'Username';
 
   @override
-  String get password => 'Password';
-
-  @override
   String get forgotPassword => 'Forgot password?';
 
   @override
@@ -359,8 +356,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startDate => 'Start Date';
 
   @override
+  String get password => 'Password';
+
+  @override
   String get showPassword => 'Show Password';
 
   @override
   String get hidePassword => 'Hide Password';
+
+  @override
+  String get otStart => 'OT Start';
+
+  @override
+  String get otEnd => 'OT End';
+
+  @override
+  String get otRate => 'OT Rate';
 }

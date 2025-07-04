@@ -20,7 +20,6 @@
   "selectLanguage": "Select Language",
   "orgCodeLabel": "Organization Code",
   "username": "Username",
-  "password": "Password",
   "forgotPassword": "Forgot password?",
   "employeeName": "Employee Name",
   "employeePosition": "Position",
@@ -123,5 +122,9 @@
   "startDate": "Start Date",
   "password": "Password",
   "showPassword": "Show Password",
-  "hidePassword": "Hide Password"
+  "hidePassword": "Hide Password",
+  "otStart": "OT Start",
+  "otEnd": "OT End",
+  "otRate": "OT Rate",
+  "@@locale": "en"
 }

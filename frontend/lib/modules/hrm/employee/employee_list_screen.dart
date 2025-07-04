@@ -103,22 +103,28 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          EmployeeSearchBar(
-            value: _search,
-            onChanged: (v) => setState(() => _search = v),
-            hintText: l10n.searchHint,
-          ),
-          EmployeeList(
-            employees: _filteredEmployees,
-            onEdit: (emp) => _addOrEditEmployee(
-              employee: emp,
-              index: employees.indexOf(emp),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            EmployeeSearchBar(
+              value: _search,
+              onChanged: (v) => setState(() => _search = v),
+              hintText: l10n.searchHint,
             ),
-            positionLabel: l10n.position,
-          ),
-        ],
+            const SizedBox(height: 12),
+            Expanded(
+              child: EmployeeList(
+                employees: _filteredEmployees,
+                onEdit: (emp) => _addOrEditEmployee(
+                  employee: emp,
+                  index: employees.indexOf(emp),
+                ),
+                positionLabel: l10n.position,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

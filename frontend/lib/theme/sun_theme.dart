@@ -36,6 +36,13 @@ class SunTheme {
     stops: [0.0, 0.18, 0.38, 0.6, 0.82, 1.0],
   );
 
+  // สีสำหรับ widget/card/ปุ่ม ตามที่ใช้ในระบบ
+  static const Color cardColor = sunLight;
+  static const Color primary = sunOrange;
+  static const Color primaryLight = sunYellow;
+  static const Color onPrimary = Colors.white;
+  static const Color error = Colors.redAccent;
+
   static ThemeData get themeData => ThemeData(
     primaryColor: sunOrange,
     scaffoldBackgroundColor: sunWhite,
@@ -101,5 +108,19 @@ class SunTheme {
       buttonColor: sunOrange,
       textTheme: ButtonTextTheme.primary,
     ),
+  );
+
+  static BoxDecoration get sunSearchBoxDecoration => BoxDecoration(
+    color: cardColor,
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(color: primary, width: 1.2),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.10),
+        blurRadius: 4,
+        spreadRadius: 0.5,
+        offset: const Offset(0, 1),
+      ),
+    ],
   );
 }

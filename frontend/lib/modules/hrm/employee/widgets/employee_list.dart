@@ -18,9 +18,10 @@ class EmployeeList extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Expanded(
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16),
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
         itemCount: employees.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, i) {
           final emp = employees[i];
           return EmployeeCard(
