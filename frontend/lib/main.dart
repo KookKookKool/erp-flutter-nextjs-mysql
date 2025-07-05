@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/l10n/app_localizations.dart';
 import 'core/theme/sun_theme.dart';
-import 'bloc/module_cubit.dart';
+import 'core/bloc/module_cubit.dart';
 import 'core/bloc/simple_bloc_observer.dart';
 import 'screens/splash_screen.dart';
 import 'screens/org_code_screen.dart';

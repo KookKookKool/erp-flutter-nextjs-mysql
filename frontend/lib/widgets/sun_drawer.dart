@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
-import 'package:frontend/bloc/module_cubit.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 
 class SunDrawer extends StatefulWidget {

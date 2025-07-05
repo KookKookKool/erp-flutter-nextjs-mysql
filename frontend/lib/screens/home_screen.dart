@@ -8,7 +8,7 @@ import '../widgets/home/attendance_buttons.dart';
 import '../widgets/home/leave_button.dart';
 import '../widgets/home/task_list.dart';
 import '../widgets/home/hr_announcement.dart';
-import '../bloc/module_cubit.dart';
+import '../core/bloc/module_cubit.dart';
 import '../modules/hrm/hrm_module_screen.dart';
 import '../modules/crm/crm_module_screen.dart';
 import '../modules/project/project_module_screen.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/module_cubit.dart';
+import '../../core/bloc/module_cubit.dart';
 import 'order/order_screen.dart';
 import 'supplier/supplier_screen.dart';
 import 'report/report_screen.dart';

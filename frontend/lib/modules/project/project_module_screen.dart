@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/bloc/module_cubit.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
 import 'task/task_screen.dart';
 import 'status/status_screen.dart';
 import 'notification/notification_screen.dart';

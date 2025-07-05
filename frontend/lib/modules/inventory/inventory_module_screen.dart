@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/bloc/module_cubit.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
 import 'product/product_screen.dart';
 import 'stock/stock_screen.dart';
 import 'transaction/transaction_screen.dart';

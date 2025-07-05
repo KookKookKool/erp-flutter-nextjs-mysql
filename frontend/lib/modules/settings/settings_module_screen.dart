@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/module_cubit.dart';
+import '../../core/bloc/module_cubit.dart';
 import 'user/user_screen.dart';
 import 'permission/permission_screen.dart';
 import 'config/config_screen.dart';
