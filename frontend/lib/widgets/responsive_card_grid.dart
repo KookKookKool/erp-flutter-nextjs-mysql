@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
-/// ResponsiveCardGrid: ใช้สำหรับแบ่ง column ตามขนาดหน้าจอ
-/// - 2 columns สำหรับ width 1080-1600
-/// - 4 columns สำหรับ width 1601 ขึ้นไป
-/// - 1 column สำหรับจอเล็ก/mobile
+/// ResponsiveCardGrid: ใช้สำหรับแบ่ง column ตามขนาดหน้าจอ และกำหนดความสูง card ได้
 class ResponsiveCardGrid extends StatelessWidget {
   final List<Widget> children;
   final double spacing;
   final EdgeInsetsGeometry? padding;
+  final double? cardHeight; // เพิ่ม parameter สำหรับความสูง card
 
   const ResponsiveCardGrid({
     Key? key,
     required this.children,
     this.spacing = 16,
     this.padding,
+    this.cardHeight,
   }) : super(key: key);
 
   int _getColumnCount(double width) {
@@ -28,11 +27,12 @@ class ResponsiveCardGrid extends StatelessWidget {
       builder: (context, constraints) {
         final columns = _getColumnCount(constraints.maxWidth);
         return GridView.builder(
-          padding: padding ?? const EdgeInsets.all(16),
+          //padding: padding ?? const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
             crossAxisSpacing: spacing,
             mainAxisSpacing: spacing,
+            mainAxisExtent: cardHeight, // ใช้ความสูงที่กำหนด
           ),
           itemCount: children.length,
           itemBuilder: (context, index) => children[index],

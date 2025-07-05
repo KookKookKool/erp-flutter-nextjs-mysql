@@ -5,6 +5,7 @@ import 'core/l10n/app_localizations.dart';
 import 'core/theme/sun_theme.dart';
 import 'core/bloc/module_cubit.dart';
 import 'core/bloc/simple_bloc_observer.dart';
+import 'core/bloc/app_state_cubit.dart';
 import 'screens/splash_screen.dart';
 import 'screens/org_code_screen.dart';
 import 'screens/login_screen.dart';
@@ -14,8 +15,11 @@ import 'screens/language_select_screen.dart';
 void main() {
   Bloc.observer = SimpleBlocObserver();
   runApp(
-    BlocProvider<ModuleCubit>(
-      create: (_) => ModuleCubit(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<ModuleCubit>(create: (_) => ModuleCubit()),
+        BlocProvider<AppStateCubit>(create: (_) => AppStateCubit()),
+      ],
       child: const SunErpApp(),
     ),
   );

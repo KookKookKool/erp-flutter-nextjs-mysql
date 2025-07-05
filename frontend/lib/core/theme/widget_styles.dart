@@ -11,7 +11,7 @@ class WidgetStyles {
   static const double cardBorderRadius = 16;
 
   // Card Padding
-  static const EdgeInsets cardPadding = EdgeInsets.all(16);
+  //static const EdgeInsets cardPadding = EdgeInsets.all(16);
 
   // สามารถเพิ่ม style อื่นๆ ได้ที่นี่
 }

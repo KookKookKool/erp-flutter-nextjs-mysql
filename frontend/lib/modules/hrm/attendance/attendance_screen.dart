@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
+import 'package:frontend/widgets/responsive_card_grid.dart';
+import 'package:frontend/core/theme/widget_styles.dart';
+import 'bloc/attendance_cubit.dart';
 import 'widgets/attendance_card.dart';
 import 'widgets/attendance_edit_dialog.dart';
 import 'widgets/attendance_search_bar.dart';
@@ -104,57 +108,84 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         },
       ),
     ];
+
+    // หลังจากโหลด mock data ให้ load เข้า cubit
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AttendanceCubit>().loadAttendances(employees);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final todayKey = DateTime(today.year, today.month, today.day);
-    final filtered = _search.isEmpty
-        ? employees
-        : employees
-              .where(
-                (e) =>
-                    e.name.toLowerCase().contains(_search.toLowerCase()) ||
-                    e.id.toLowerCase().contains(_search.toLowerCase()),
-              )
-              .toList();
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Expanded(child: Text(l10n.attendanceTitle)),
-            Text(
-              _formatDate(today),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            AttendanceSearchBar(
-              value: _search,
-              onChanged: (v) => setState(() => _search = v.trim()),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: ListView.separated(
-                itemCount: filtered.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, i) {
-                  final emp = filtered[i];
-                  return AttendanceCard(
-                    emp: emp,
-                    todayKey: todayKey,
-                    onEdit: () => _showEditDialog(emp),
-                  );
-                },
+    return BlocProvider(
+      create: (_) => AttendanceCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Expanded(child: Text(l10n.attendanceTitle)),
+              Text(
+                _formatDate(today),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              AttendanceSearchBar(
+                value: _search,
+                onChanged: (v) => setState(() => _search = v.trim()),
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: BlocBuilder<AttendanceCubit, AttendanceState>(
+                  builder: (context, state) {
+                    if (state is AttendanceLoaded) {
+                      final filtered = _search.isEmpty
+                          ? state.attendances
+                          : state.attendances
+                                .where(
+                                  (e) =>
+                                      e.name.toLowerCase().contains(
+                                        _search.toLowerCase(),
+                                      ) ||
+                                      e.id.toLowerCase().contains(
+                                        _search.toLowerCase(),
+                                      ),
+                                )
+                                .toList();
+                      return ResponsiveCardGrid(
+                        cardHeight: WidgetStyles.cardHeightSmall,
+                        children: filtered
+                            .map(
+                              (emp) => GestureDetector(
+                                onTap: () => _showEditDialog(emp),
+                                child: AttendanceCard(
+                                  emp: emp,
+                                  todayKey: todayKey,
+                                  onEdit: () => _showEditDialog(emp),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      );
+                    } else if (state is AttendanceError) {
+                      return Center(child: Text(state.message));
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

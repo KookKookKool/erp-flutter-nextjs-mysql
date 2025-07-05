@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
+import 'package:frontend/widgets/responsive_card_grid.dart';
+import 'package:frontend/core/theme/widget_styles.dart';
 import 'widgets/employee_dialog.dart';
 import 'widgets/employee_search_bar.dart';
-import 'widgets/employee_list.dart';
+import 'widgets/employee_card.dart';
 
 class Employee {
   File? image;
@@ -114,13 +116,20 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: EmployeeList(
-                employees: _filteredEmployees,
-                onEdit: (emp) => _addOrEditEmployee(
-                  employee: emp,
-                  index: employees.indexOf(emp),
-                ),
-                positionLabel: l10n.position,
+              child: ResponsiveCardGrid(
+                cardHeight: WidgetStyles.cardHeightSmall,
+                children: _filteredEmployees
+                    .map(
+                      (emp) => EmployeeCard(
+                        employee: emp,
+                        onEdit: () => _addOrEditEmployee(
+                          employee: emp,
+                          index: employees.indexOf(emp),
+                        ),
+                        positionLabel: l10n.position,
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],
