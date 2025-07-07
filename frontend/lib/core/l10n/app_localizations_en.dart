@@ -95,6 +95,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leave => 'Request Leave';
 
   @override
+  String get leaveAdd => 'Add Leave';
+
+  @override
   String get taskTitle => 'Your Tasks';
 
   @override
@@ -373,4 +376,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otRate => 'OT Rate';
+
+  @override
+  String get leaveTypeSick => 'Sick Leave';
+
+  @override
+  String get leaveTypePersonal => 'Personal Leave';
+
+  @override
+  String get leaveTypeVacation => 'Vacation Leave';
+
+  @override
+  String get leaveStatusPending => 'Pending';
+
+  @override
+  String get leaveStatusApproved => 'Approved';
+
+  @override
+  String get leaveStatusRejected => 'Rejected';
+
+  @override
+  String get addLeaveTitle => 'Add Leave';
+
+  @override
+  String get leaveDate => 'Leave Date';
+
+  @override
+  String get leaveReason => 'Reason';
+
+  @override
+  String get leaveSave => 'Save';
+
+  @override
+  String get leaveCancel => 'Cancel';
+
+  @override
+  String get pleaseSelectLeaveType => 'Please select leave type';
+
+  @override
+  String get pleaseSelectDate => 'Please select date';
+
+  @override
+  String get pleaseEnterReason => 'Please enter reason';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type';
 }

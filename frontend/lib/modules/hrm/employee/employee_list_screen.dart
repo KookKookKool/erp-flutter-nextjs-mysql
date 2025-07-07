@@ -96,6 +96,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.employeeListTitle),
         actions: [
           IconButton(

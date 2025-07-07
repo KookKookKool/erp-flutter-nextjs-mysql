@@ -8,7 +8,10 @@ class StatusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.projectStatusModule)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.projectStatusModule),
+      ),
       body: Center(child: Text(l10n.projectStatusContent)),
     );
   }

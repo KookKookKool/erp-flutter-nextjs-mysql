@@ -6,11 +6,15 @@ import 'attendance/attendance_screen.dart';
 import 'payroll/payroll_screen.dart';
 import 'leave/leave_screen.dart';
 import 'leave/leave_approval_screen.dart';
+import 'leave/leave_repository.dart';
+import 'leave/bloc/leave_cubit.dart';
 import '../../core/l10n/app_localizations.dart';
 
 class HRMModuleScreen extends StatelessWidget {
   final String? submodule;
   const HRMModuleScreen({super.key, this.submodule});
+
+  static final LeaveRepository leaveRepository = LeaveRepository();
 
   static const List<String> submodules = [
     'employee',
@@ -23,9 +27,16 @@ class HRMModuleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
-    return isDesktop
-        ? _HRMDesktopView(submodule: submodule)
-        : _HRMMobileView(submodule: submodule);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LeaveCubit>(
+          create: (_) => LeaveCubit(leaveRepository),
+        ),
+      ],
+      child: isDesktop
+          ? _HRMDesktopView(submodule: submodule)
+          : _HRMMobileView(submodule: submodule),
+    );
   }
 }
 
@@ -43,7 +54,7 @@ class _HRMDesktopView extends StatelessWidget {
       case 'leave':
         return LeaveScreen();
       case 'leaveApproval':
-        return LeaveApprovalScreen();
+        return LeaveApprovalScreen(repository: HRMModuleScreen.leaveRepository);
       case 'employee':
       default:
         return EmployeeListScreen();
@@ -61,17 +72,18 @@ class _HRMMobileView extends StatefulWidget {
 class _HRMMobileViewState extends State<_HRMMobileView> {
   int _selectedIndex = 0;
   final List<String> _submodules = HRMModuleScreen.submodules;
-  final List<Widget> _screens = [
-    EmployeeListScreen(),
-    AttendanceScreen(),
-    PayrollScreen(),
-    LeaveScreen(),
-    LeaveApprovalScreen(),
-  ];
+  late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
+    _screens = [
+      EmployeeListScreen(),
+      AttendanceScreen(),
+      PayrollScreen(),
+      LeaveScreen(),
+      LeaveApprovalScreen(repository: HRMModuleScreen.leaveRepository),
+    ];
     if (widget.submodule != null) {
       final idx = _submodules.indexOf(widget.submodule!);
       if (idx != -1) {

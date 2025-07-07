@@ -39,8 +39,8 @@ class EmployeeCard extends StatelessWidget {
                         backgroundColor: SunTheme.primaryLight,
                       )
                     : const CircleAvatar(
-                        child: Icon(Icons.person),
                         backgroundColor: SunTheme.primaryLight,
+                        child: Icon(Icons.person),
                       ),
                 const SizedBox(width: 16),
                 Expanded(

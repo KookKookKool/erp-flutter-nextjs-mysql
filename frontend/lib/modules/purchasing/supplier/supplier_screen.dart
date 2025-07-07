@@ -8,7 +8,10 @@ class SupplierScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.purchasingSupplierModule)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.purchasingSupplierModule),
+      ),
       body: Center(child: Text(l10n.purchasingSupplierContent)),
     );
   }

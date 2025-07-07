@@ -4,7 +4,13 @@ import 'package:frontend/core/theme/sun_theme.dart';
 class SunAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDesktop;
   final VoidCallback? onMenuPressed;
-  const SunAppBar({super.key, required this.isDesktop, this.onMenuPressed});
+  final String title;
+  const SunAppBar({
+    super.key,
+    required this.isDesktop,
+    this.onMenuPressed,
+    this.title = 'SUN ERP',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class SunAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onMenuPressed,
             ),
       title: Text(
-        'SUN ERP',
+        title,
         style: Theme.of(
           context,
         ).textTheme.titleMedium?.copyWith(color: Colors.white),

@@ -8,7 +8,10 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.reportsDashboardModule)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.reportsDashboardModule),
+      ),
       body: Center(child: Text(l10n.reportsDashboardContent)),
     );
   }

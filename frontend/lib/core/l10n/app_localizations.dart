@@ -266,6 +266,12 @@ abstract class AppLocalizations {
   /// **'Request Leave'**
   String get leave;
 
+  /// No description provided for @leaveAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Leave'**
+  String get leaveAdd;
+
   /// No description provided for @taskTitle.
   ///
   /// In en, this message translates to:
@@ -823,6 +829,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OT Rate'**
   String get otRate;
+
+  /// No description provided for @leaveTypeSick.
+  ///
+  /// In en, this message translates to:
+  /// **'Sick Leave'**
+  String get leaveTypeSick;
+
+  /// No description provided for @leaveTypePersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Leave'**
+  String get leaveTypePersonal;
+
+  /// No description provided for @leaveTypeVacation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacation Leave'**
+  String get leaveTypeVacation;
+
+  /// No description provided for @leaveStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get leaveStatusPending;
+
+  /// No description provided for @leaveStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get leaveStatusApproved;
+
+  /// No description provided for @leaveStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get leaveStatusRejected;
+
+  /// No description provided for @addLeaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Leave'**
+  String get addLeaveTitle;
+
+  /// No description provided for @leaveDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Date'**
+  String get leaveDate;
+
+  /// No description provided for @leaveReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get leaveReason;
+
+  /// No description provided for @leaveSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get leaveSave;
+
+  /// No description provided for @leaveCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get leaveCancel;
+
+  /// No description provided for @pleaseSelectLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select leave type'**
+  String get pleaseSelectLeaveType;
+
+  /// No description provided for @pleaseSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select date'**
+  String get pleaseSelectDate;
+
+  /// No description provided for @pleaseEnterReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter reason'**
+  String get pleaseEnterReason;
+
+  /// No description provided for @leaveTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Type'**
+  String get leaveTypeLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -51,15 +51,11 @@ class AttendanceCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      l10n.checkIn +
-                          ': ' +
-                          (rec['in'] != null ? _formatTime(rec['in']) : '-'),
+                      '${l10n.checkIn}: ${rec['in'] != null ? _formatTime(rec['in']) : '-'}',
                       style: TextStyle(color: SunTheme.textSecondary),
                     ),
                     Text(
-                      l10n.checkOut +
-                          ': ' +
-                          (rec['out'] != null ? _formatTime(rec['out']) : '-'),
+                      '${l10n.checkOut}: ${rec['out'] != null ? _formatTime(rec['out']) : '-'}',
                       style: TextStyle(color: SunTheme.textSecondary),
                     ),
                   ],

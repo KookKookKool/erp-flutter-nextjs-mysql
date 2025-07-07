@@ -95,6 +95,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get leave => 'ขอลา';
 
   @override
+  String get leaveAdd => 'ขอลา';
+
+  @override
   String get taskTitle => 'งานที่เกี่ยวข้องของคุณ';
 
   @override
@@ -372,4 +375,49 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get otRate => 'เรท OT';
+
+  @override
+  String get leaveTypeSick => 'ลาป่วย';
+
+  @override
+  String get leaveTypePersonal => 'ลากิจ';
+
+  @override
+  String get leaveTypeVacation => 'ลาพักร้อน';
+
+  @override
+  String get leaveStatusPending => 'รออนุมัติ';
+
+  @override
+  String get leaveStatusApproved => 'อนุมัติ';
+
+  @override
+  String get leaveStatusRejected => 'ไม่อนุมัติ';
+
+  @override
+  String get addLeaveTitle => 'เพิ่มการลา';
+
+  @override
+  String get leaveDate => 'วันที่ลา';
+
+  @override
+  String get leaveReason => 'เหตุผล';
+
+  @override
+  String get leaveSave => 'บันทึก';
+
+  @override
+  String get leaveCancel => 'ยกเลิก';
+
+  @override
+  String get pleaseSelectLeaveType => 'กรุณาเลือกประเภทการลา';
+
+  @override
+  String get pleaseSelectDate => 'กรุณาเลือกวันที่ลา';
+
+  @override
+  String get pleaseEnterReason => 'กรุณากรอกเหตุผล';
+
+  @override
+  String get leaveTypeLabel => 'ประเภทการลา';
 }

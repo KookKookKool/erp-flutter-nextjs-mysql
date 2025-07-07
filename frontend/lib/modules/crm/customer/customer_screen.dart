@@ -8,7 +8,10 @@ class CustomerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.crmCustomerModule)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.crmCustomerModule),
+      ),
       body: Center(child: Text(l10n.crmCustomerContent)),
     );
   }

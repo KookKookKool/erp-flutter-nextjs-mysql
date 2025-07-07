@@ -8,7 +8,10 @@ class ReportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.salesReportModule)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.salesReportModule),
+      ),
       body: Center(child: Text(l10n.salesReportContent)),
     );
   }

@@ -8,7 +8,10 @@ class PayrollScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.payrollTitle ?? 'Payroll')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.payrollTitle ?? 'Payroll'),
+      ),
       body: Center(child: Text(l10n.payrollContent ?? 'Payroll content here')),
     );
   }

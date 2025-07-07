@@ -56,7 +56,7 @@ class EmployeeFormFields extends StatelessWidget {
             ),
           ),
           validator: (v) =>
-              v == null || v.isEmpty ? l10n.name + ' ' + l10n.error : null,
+              v == null || v.isEmpty ? '${l10n.name} ${l10n.error}' : null,
         ),
         TextFormField(
           controller: lastName,
@@ -71,7 +71,7 @@ class EmployeeFormFields extends StatelessWidget {
             ),
           ),
           validator: (v) =>
-              v == null || v.isEmpty ? l10n.surname + ' ' + l10n.error : null,
+              v == null || v.isEmpty ? '${l10n.surname} ${l10n.error}' : null,
         ),
         TextFormField(
           controller: employeeId,

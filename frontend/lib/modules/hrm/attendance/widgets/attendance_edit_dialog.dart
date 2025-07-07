@@ -133,7 +133,7 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               children: [
                 Expanded(
                   child: Text(
-                    l10n.checkIn + ':',
+                    '${l10n.checkIn}:',
                     style: TextStyle(color: SunTheme.textPrimary),
                   ),
                 ),
@@ -160,7 +160,7 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               children: [
                 Expanded(
                   child: Text(
-                    l10n.checkOut + ':',
+                    '${l10n.checkOut}:',
                     style: TextStyle(color: SunTheme.textPrimary),
                   ),
                 ),

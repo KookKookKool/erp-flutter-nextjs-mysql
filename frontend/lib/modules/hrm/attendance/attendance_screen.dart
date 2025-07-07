@@ -20,30 +20,18 @@ class EmployeeAttendance {
   });
 }
 
-class AttendanceScreen extends StatefulWidget {
-  const AttendanceScreen({super.key});
-  @override
-  State<AttendanceScreen> createState() => _AttendanceScreenState();
-}
+class AttendanceScreen extends StatelessWidget {
+  AttendanceScreen({super.key});
 
-class _AttendanceScreenState extends State<AttendanceScreen> {
-  List<EmployeeAttendance> employees = [];
-  DateTime today = DateTime.now();
-  String _search = '';
+  final DateTime today = DateTime.now();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadMockData();
-  }
-
-  void _loadMockData() {
+  List<EmployeeAttendance> _mockEmployees(DateTime today) {
     DateTime d(int minus) {
       final t = today.subtract(Duration(days: minus));
       return DateTime(t.year, t.month, t.day);
     }
 
-    employees = [
+    return [
       EmployeeAttendance(
         id: 'EMP001',
         name: 'สมชาย ใจดี',
@@ -108,11 +96,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         },
       ),
     ];
-
-    // หลังจากโหลด mock data ให้ load เข้า cubit
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AttendanceCubit>().loadAttendances(employees);
-    });
   }
 
   @override
@@ -120,80 +103,104 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     final l10n = AppLocalizations.of(context)!;
     final todayKey = DateTime(today.year, today.month, today.day);
     return BlocProvider(
-      create: (_) => AttendanceCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Expanded(child: Text(l10n.attendanceTitle)),
-              Text(
-                _formatDate(today),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
+      create: (_) {
+        final cubit = AttendanceCubit();
+        cubit.loadAttendances(_mockEmployees(today));
+        return cubit;
+      },
+      child: _AttendanceScreenView(
+        today: today,
+        todayKey: todayKey,
+        l10n: l10n,
+      ),
+    );
+  }
+}
+
+class _AttendanceScreenView extends StatefulWidget {
+  final DateTime today;
+  final DateTime todayKey;
+  final AppLocalizations l10n;
+  const _AttendanceScreenView({
+    required this.today,
+    required this.todayKey,
+    required this.l10n,
+  });
+  @override
+  State<_AttendanceScreenView> createState() => _AttendanceScreenViewState();
+}
+
+class _AttendanceScreenViewState extends State<_AttendanceScreenView> {
+  String _search = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Expanded(child: Text(widget.l10n.attendanceTitle)),
+            Text(
+              _formatDate(widget.today),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              AttendanceSearchBar(
-                value: _search,
-                onChanged: (v) => setState(() => _search = v.trim()),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: BlocBuilder<AttendanceCubit, AttendanceState>(
-                  builder: (context, state) {
-                    if (state is AttendanceLoaded) {
-                      final filtered = _search.isEmpty
-                          ? state.attendances
-                          : state.attendances
-                                .where(
-                                  (e) =>
-                                      e.name.toLowerCase().contains(
-                                        _search.toLowerCase(),
-                                      ) ||
-                                      e.id.toLowerCase().contains(
-                                        _search.toLowerCase(),
-                                      ),
-                                )
-                                .toList();
-                      return ResponsiveCardGrid(
-                        cardHeight: WidgetStyles.cardHeightSmall,
-                        children: filtered
-                            .map(
-                              (emp) => GestureDetector(
-                                onTap: () => _showEditDialog(emp),
-                                child: AttendanceCard(
-                                  emp: emp,
-                                  todayKey: todayKey,
-                                  onEdit: () => _showEditDialog(emp),
-                                ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            AttendanceSearchBar(
+              value: _search,
+              onChanged: (v) => setState(() => _search = v.trim()),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: BlocBuilder<AttendanceCubit, AttendanceState>(
+                builder: (context, state) {
+                  if (state is AttendanceLoaded) {
+                    final filtered = _search.isEmpty
+                        ? state.attendances
+                        : state.attendances
+                              .where(
+                                (e) =>
+                                    e.name.toLowerCase().contains(
+                                      _search.toLowerCase(),
+                                    ) ||
+                                    e.id.toLowerCase().contains(
+                                      _search.toLowerCase(),
+                                    ),
+                              )
+                              .toList();
+                    return ResponsiveCardGrid(
+                      cardHeight: WidgetStyles.cardHeightSmall,
+                      children: filtered
+                          .map(
+                            (emp) => GestureDetector(
+                              onTap: () => _showEditDialog(emp),
+                              child: AttendanceCard(
+                                emp: emp,
+                                todayKey: widget.todayKey,
+                                onEdit: () => _showEditDialog(emp),
                               ),
-                            )
-                            .toList(),
-                      );
-                    } else if (state is AttendanceError) {
-                      return Center(child: Text(state.message));
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  } else if (state is AttendanceError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  String _formatTime(DateTime? dt) => dt == null
-      ? '-'
-      : '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 
   String _formatDate(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
@@ -201,7 +208,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   void _showEditDialog(EmployeeAttendance emp) async {
     await showDialog(
       context: context,
-      builder: (context) => AttendanceEditDialog(employee: emp, today: today),
+      builder: (context) =>
+          AttendanceEditDialog(employee: emp, today: widget.today),
     );
   }
 }

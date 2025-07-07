@@ -8,12 +8,12 @@ class ResponsiveCardGrid extends StatelessWidget {
   final double? cardHeight; // เพิ่ม parameter สำหรับความสูง card
 
   const ResponsiveCardGrid({
-    Key? key,
+    super.key,
     required this.children,
     this.spacing = 16,
     this.padding,
     this.cardHeight,
-  }) : super(key: key);
+  });
 
   int _getColumnCount(double width) {
     if (width >= 1601) return 4;
