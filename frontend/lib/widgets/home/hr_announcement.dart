@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/modules/hrm/announcement/bloc/announcement_cubit.dart';
+import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
 import 'home_announcement_card.dart';
 import 'announcement_summary.dart';
 import 'announcement_view_dialog.dart';
@@ -63,6 +64,11 @@ class HrAnnouncement extends StatelessWidget {
 
             final recentAnnouncements = state.announcements
                 .where((announcement) => announcement.isActive)
+                .where(
+                  (announcement) =>
+                      announcement.priority == AnnouncementPriority.medium ||
+                      announcement.priority == AnnouncementPriority.low,
+                )
                 .take(3)
                 .toList();
 
