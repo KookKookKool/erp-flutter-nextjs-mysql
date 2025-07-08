@@ -919,6 +919,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leave Type'**
   String get leaveTypeLabel;
+
+  /// No description provided for @saveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save leave request. Please try again.'**
+  String get saveError;
 }
 
 class _AppLocalizationsDelegate

@@ -35,7 +35,13 @@ class LeaveCubit extends Cubit<LeaveState> {
   }
 
   void editLeave(Leave leave) {
-    repository.editLeave(leave);
-    emit(LeaveState(List.from(repository.leaves)));
+    if (leave.id.startsWith('TEMP_ID') || leave.id.startsWith('EMP')) {
+      // สำหรับการเพิ่มใหม่ ให้สร้าง unique ID
+      addLeave(leave);
+    } else {
+      // สำหรับการแก้ไขข้อมูลเดิม
+      repository.updateLeave(leave);
+      loadLeaves();
+    }
   }
 }

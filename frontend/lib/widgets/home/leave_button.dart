@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/modules/hrm/leave/widgets/add_leave_dialog.dart';
 import 'package:frontend/modules/hrm/leave/bloc/leave_cubit.dart';
-import 'package:frontend/modules/hrm/leave/leave_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LeaveButton extends StatelessWidget {
   const LeaveButton({super.key});
@@ -19,17 +18,37 @@ class LeaveButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       onPressed: () async {
-        final cubit = BlocProvider.of<LeaveCubit>(context);
-        final employees = ['สมชาย ใจดี', 'สมหญิง ขยัน', 'John Doe'];
-        final result = await showDialog<Leave>(
+        final employees = [
+          'EMP001:สมชาย ใจดี',
+          'EMP002:สมหญิง ขยัน',
+          'EMP003:John Doe',
+        ];
+
+        final leaveCubit = context.read<LeaveCubit>();
+        final result = await showDialog(
           context: context,
-          builder: (ctx) => AddLeaveDialog(
-            onSave: (leave) => Navigator.of(ctx).pop(leave),
+          builder: (dialogContext) => AddLeaveDialog(
+            onSave: (leave) async {
+              Navigator.of(dialogContext).pop(leave);
+            },
             employees: employees,
           ),
         );
+
         if (result != null) {
-          cubit.addLeave(result.copyWith(status: 'pending'));
+          leaveCubit.addLeave(result);
+          // แสดงข้อความสำเร็จ
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)?.localeName == 'th'
+                    ? 'ส่งคำขอลาสำเร็จ รอการอนุมัติ'
+                    : 'Leave request submitted successfully. Waiting for approval.',
+              ),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 3),
+            ),
+          );
         }
       },
       icon: const Icon(Icons.beach_access, color: SunTheme.sunDeepOrange),

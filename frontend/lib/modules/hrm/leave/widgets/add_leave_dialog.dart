@@ -3,7 +3,7 @@ import 'package:frontend/core/l10n/app_localizations.dart';
 import '../leave_repository.dart';
 
 class AddLeaveDialog extends StatefulWidget {
-  final void Function(Leave leave) onSave;
+  final Future<void> Function(Leave leave) onSave;
   final void Function()? onDelete;
   final List<String> employees;
   final Leave? initial;
@@ -21,23 +21,42 @@ class AddLeaveDialog extends StatefulWidget {
 
 class _AddLeaveDialogState extends State<AddLeaveDialog> {
   final _formKey = GlobalKey<FormState>();
-  String? _id;
+  String? _employeeId;
+  String? _employeeName;
   DateTime? _startDate;
   DateTime? _endDate;
-  String? _employee;
   String? _leaveType;
   String? _note;
+
+  // สมมติ employees เป็น List<String> เช่น ['EMP001:สมชาย ใจดี', ...]
+  late final Map<String, String> _employeeMap; // id -> name
+  late final Map<String, String> _nameToIdMap; // name -> id
 
   @override
   void initState() {
     super.initState();
+    _employeeMap = {};
+    _nameToIdMap = {};
+    for (var e in widget.employees) {
+      if (e.contains(':')) {
+        final parts = e.split(':');
+        final id = parts[0].trim();
+        final name = parts[1].trim();
+        _employeeMap[id] = name;
+        _nameToIdMap[name] = id;
+      }
+    }
     if (widget.initial != null) {
-      _id = widget.initial!.id;
+      _employeeId = widget.initial!.employeeId;
+      _employeeName = widget.initial!.employeeName;
       _startDate = widget.initial!.startDate;
       _endDate = widget.initial!.endDate;
-      _employee = widget.initial!.employee;
       _leaveType = widget.initial!.type;
       _note = widget.initial!.note;
+    } else {
+      // สำหรับการขอลาใหม่
+      _employeeId = '';
+      _employeeName = '';
     }
   }
 
@@ -60,22 +79,93 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
               children: [
                 Text(l10n.addLeaveTitle, style: theme.textTheme.titleLarge),
                 const SizedBox(height: 16),
-                TextFormField(
-                  initialValue: _id,
-                  decoration: InputDecoration(labelText: l10n.employeeIdLabel),
-                  onChanged: (v) => _id = v,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? l10n.employeeIdLabel : null,
+                // Autocomplete รหัสพนักงาน (id)
+                Autocomplete<String>(
+                  initialValue: TextEditingValue(text: _employeeId ?? ''),
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return _employeeMap.keys;
+                    }
+                    return _employeeMap.keys.where((String option) {
+                      return option.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      );
+                    });
+                  },
+                  onSelected: (String selection) {
+                    setState(() {
+                      _employeeId = selection;
+                      _employeeName = _employeeMap[selection] ?? '';
+                    });
+                  },
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onFieldSubmitted) {
+                        // ไม่ต้องเขียนทับ controller.text ให้ผู้ใช้พิมพ์ได้
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(
+                            labelText: l10n.employeeIdLabel,
+                          ),
+                          validator: (v) => v == null || v.isEmpty
+                              ? l10n.employeeIdLabel
+                              : null,
+                          onChanged: (v) {
+                            setState(() {
+                              _employeeId = v;
+                              if (_employeeMap.containsKey(v)) {
+                                _employeeName = _employeeMap[v]!;
+                              } else {
+                                _employeeName = '';
+                              }
+                            });
+                          },
+                        );
+                      },
                 ),
                 const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  value: _employee,
-                  decoration: InputDecoration(labelText: l10n.employeeName),
-                  items: widget.employees
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  onChanged: (v) => setState(() => _employee = v),
-                  validator: (v) => v == null ? l10n.employeeName : null,
+                // Autocomplete ชื่อพนักงาน (name)
+                Autocomplete<String>(
+                  initialValue: TextEditingValue(text: _employeeName ?? ''),
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return _nameToIdMap.keys;
+                    }
+                    return _nameToIdMap.keys.where((String option) {
+                      return option.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      );
+                    });
+                  },
+                  onSelected: (String selection) {
+                    setState(() {
+                      _employeeName = selection;
+                      _employeeId = _nameToIdMap[selection] ?? '';
+                    });
+                  },
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onFieldSubmitted) {
+                        // ไม่ต้องเขียนทับ controller.text ให้ผู้ใช้พิมพ์ได้
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(
+                            labelText: l10n.employeeName,
+                          ),
+                          validator: (v) =>
+                              v == null || v.isEmpty ? l10n.employeeName : null,
+                          onChanged: (v) {
+                            setState(() {
+                              _employeeName = v;
+                              if (_nameToIdMap.containsKey(v)) {
+                                _employeeId = _nameToIdMap[v]!;
+                              } else {
+                                _employeeId = '';
+                              }
+                            });
+                          },
+                        );
+                      },
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
@@ -105,7 +195,7 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                       child: TextFormField(
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: l10n.leaveDate + ' (Start)',
+                          labelText: '${l10n.leaveDate} (Start)',
                         ),
                         controller: TextEditingController(
                           text: _startDate == null
@@ -119,9 +209,26 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             locale: Locale(l10n.localeName),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  elevatedButtonTheme: ElevatedButtonThemeData(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme
+                                          .colorScheme
+                                          .primary, // ใช้สีของตัวอักษรเดิม
+                                      foregroundColor: Colors
+                                          .white, // เปลี่ยนตัวอักษรเป็นสีขาว
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
                           );
-                          if (picked != null)
+                          if (picked != null) {
                             setState(() => _startDate = picked);
+                          }
                         },
                         validator: (v) =>
                             _startDate == null ? l10n.leaveDate : null,
@@ -132,7 +239,7 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                       child: TextFormField(
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: l10n.leaveDate + ' (End)',
+                          labelText: '${l10n.leaveDate} (End)',
                         ),
                         controller: TextEditingController(
                           text: _endDate == null
@@ -147,6 +254,22 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                             firstDate: _startDate ?? DateTime(2000),
                             lastDate: DateTime(2100),
                             locale: Locale(l10n.localeName),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  elevatedButtonTheme: ElevatedButtonThemeData(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme
+                                          .colorScheme
+                                          .primary, // ใช้สีของตัวอักษรเดิม
+                                      foregroundColor: Colors
+                                          .white, // เปลี่ยนตัวอักษรเป็นสีขาว
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
                           );
                           if (picked != null) setState(() => _endDate = picked);
                         },
@@ -217,20 +340,64 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                         backgroundColor: theme.colorScheme.primary,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          widget.onSave(
-                            Leave(
-                              id: _id!,
+                          // ตรวจสอบข้อมูลที่จำเป็น
+                          if (_employeeId == null || _employeeId!.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('กรุณาเลือกรหัสพนักงาน'),
+                              ),
+                            );
+                            return;
+                          }
+                          if (_employeeName == null || _employeeName!.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('กรุณาเลือกชื่อพนักงาน'),
+                              ),
+                            );
+                            return;
+                          }
+                          if (_startDate == null || _endDate == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('กรุณาเลือกวันที่ลา'),
+                              ),
+                            );
+                            return;
+                          }
+                          if (_leaveType == null || _leaveType!.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('กรุณาเลือกประเภทการลา'),
+                              ),
+                            );
+                            return;
+                          }
+
+                          try {
+                            final leave = Leave(
+                              id: widget.initial?.id ?? 'TEMP_ID', // ปล่อยให้ repository สร้าง unique ID
+                              employeeId: _employeeId!,
+                              employeeName: _employeeName!,
                               startDate: _startDate!,
                               endDate: _endDate!,
-                              employee: _employee!,
                               type: _leaveType!,
                               note: _note ?? '',
-                              status: 'approved', // HR เพิ่ม = อนุมัติทันที
-                            ),
-                          );
-                          Navigator.of(context).pop();
+                              status: widget.initial?.status ?? 'pending',
+                            );
+
+                            await widget.onSave(leave);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'เกิดข้อผิดพลาด: ${e.toString()}',
+                                ),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: Text(l10n.save),

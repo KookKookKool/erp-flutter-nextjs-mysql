@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import 'package:frontend/core/theme/sun_theme.dart';
 import 'widgets/leave_card.dart';
 import 'widgets/leave_search_bar.dart';
 import 'widgets/add_leave_dialog.dart';
@@ -11,7 +10,7 @@ import 'leave_repository.dart';
 import 'bloc/leave_cubit.dart';
 
 class LeaveScreen extends StatelessWidget {
-  LeaveScreen({super.key});
+  const LeaveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +54,10 @@ class _LeaveScreenViewState extends State<_LeaveScreenView> {
                       : state.leaves
                             .where(
                               (leave) =>
-                                  leave.employee.toLowerCase().contains(
+                                  leave.employeeName.toLowerCase().contains(
                                     _search.toLowerCase(),
                                   ) ||
-                                  leave.id.toLowerCase().contains(
+                                  leave.employeeId.toLowerCase().contains(
                                     _search.toLowerCase(),
                                   ),
                             )
@@ -86,34 +85,24 @@ class _LeaveScreenViewState extends State<_LeaveScreenView> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await showDialog(
-            context: context,
-            builder: (context) => AddLeaveDialog(
-              onSave: (leave) {
-                context.read<LeaveCubit>().addLeave(leave);
-                setState(() {});
-              },
-              employees: _mockEmployees(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-        tooltip: widget.l10n.leaveAdd,
-        backgroundColor: SunTheme.sunOrange,
-      ),
     );
   }
 
-  List<String> _mockEmployees() => ['สมชาย ใจดี', 'สมหญิง ขยัน', 'John Doe'];
+  List<String> _mockEmployees() => [
+    'EMP001:สมชาย ใจดี',
+    'EMP002:สมหญิง ขยัน',
+    'EMP003:John Doe',
+  ];
 
   void _showEditDialog(Leave leave) async {
     final result = await showDialog<Leave>(
       context: context,
       builder: (ctx) => AddLeaveDialog(
-        onSave: (edited) => Navigator.of(ctx).pop(edited),
-        onDelete: () => _deleteLeave(leave.id),
+        onSave: (edited) async {
+          Navigator.of(ctx).pop(edited);
+        },
+        onDelete: () =>
+            _deleteLeave(leave.id), // ใช้ leave.id แทน leave.employeeId
         employees: _mockEmployees(),
         initial: leave,
       ),

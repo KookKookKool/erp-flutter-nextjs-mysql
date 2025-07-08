@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../leave_screen.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'leave_status_chip.dart';
@@ -32,7 +31,7 @@ class LeaveCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(child: Text(_getEmployeeInitial(leave.employee))),
+            CircleAvatar(child: Text(_getEmployeeInitial(leave.employeeName))),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -40,7 +39,7 @@ class LeaveCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${leave.id} - ${_getEmployeeName(leave.employee)}',
+                    '${leave.employeeId} - ${_getEmployeeName(leave.employeeName)}',
                     style: TextStyle(
                       color: SunTheme.textPrimary,
                       fontWeight: FontWeight.bold,
@@ -136,10 +135,12 @@ class LeaveCard extends StatelessWidget {
   String _getEmployeeName(dynamic employee) {
     if (employee == null) return '';
     if (employee is String) return employee;
-    if (employee is Map && employee.containsKey('name'))
+    if (employee is Map && employee.containsKey('name')) {
       return employee['name'];
-    if (employee is Map && employee.containsKey('fullName'))
+    }
+    if (employee is Map && employee.containsKey('fullName')) {
       return employee['fullName'];
+    }
     try {
       if (employee.name != null) return employee.name;
     } catch (_) {}

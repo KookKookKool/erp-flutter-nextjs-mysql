@@ -8,6 +8,7 @@ import 'widgets/leave_card.dart';
 import 'widgets/leave_search_bar.dart';
 import 'leave_repository.dart';
 import 'bloc/leave_cubit.dart';
+import 'widgets/add_leave_dialog.dart';
 
 class LeaveApprovalScreen extends StatelessWidget {
   final LeaveRepository repository;
@@ -54,10 +55,10 @@ class _LeaveApprovalScreenViewState extends State<_LeaveApprovalScreenView> {
                       .where(
                         (leave) =>
                             _search.isEmpty ||
-                            leave.employee.toLowerCase().contains(
+                            leave.employeeName.toLowerCase().contains(
                               _search.toLowerCase(),
                             ) ||
-                            leave.id.toLowerCase().contains(
+                            leave.employeeId.toLowerCase().contains(
                               _search.toLowerCase(),
                             ),
                       )
@@ -100,6 +101,43 @@ class _LeaveApprovalScreenViewState extends State<_LeaveApprovalScreenView> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final employees = [
+            'EMP001:สมชาย ใจดี',
+            'EMP002:สมหญิง ขยัน',
+            'EMP003:John Doe',
+          ];
+          final leaveCubit = context.read<LeaveCubit>();
+          final result = await showDialog(
+            context: context,
+            builder: (dialogContext) => AddLeaveDialog(
+              onSave: (leave) async {
+                Navigator.of(dialogContext).pop(leave);
+              },
+              employees: employees,
+            ),
+          );
+          if (result != null) {
+            leaveCubit.addLeave(result);
+            // แสดงข้อความสำเร็จ
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  widget.l10n.localeName == 'th'
+                      ? 'เพิ่มการลาสำเร็จ รอการอนุมัติ'
+                      : 'Leave request added successfully. Waiting for approval.',
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+        },
+        tooltip: widget.l10n.leaveAdd,
+        backgroundColor: SunTheme.sunOrange,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -145,12 +183,32 @@ class _LeaveApprovalScreenViewState extends State<_LeaveApprovalScreenView> {
         true,
         deductSalary: deductSalary,
       );
-      setState(() {});
+      // แสดงข้อความยืนยันการอนุมัติ
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            widget.l10n.localeName == 'th'
+                ? 'อนุมัติการลาเรียบร้อยแล้ว'
+                : 'Leave approved successfully',
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
   }
 
   void _rejectLeave(Leave leave) {
     context.read<LeaveCubit>().approveLeave(leave.id, false);
-    setState(() {});
+    // แสดงข้อความยืนยันการปฏิเสธ
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          widget.l10n.localeName == 'th'
+              ? 'ปฏิเสธการลาเรียบร้อยแล้ว'
+              : 'Leave rejected successfully',
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 }

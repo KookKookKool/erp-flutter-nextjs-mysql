@@ -420,4 +420,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get leaveTypeLabel => 'ประเภทการลา';
+
+  @override
+  String get saveError => 'ไม่สามารถบันทึกคำขอลาได้ กรุณาลองอีกครั้ง.';
 }

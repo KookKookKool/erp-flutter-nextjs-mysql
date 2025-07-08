@@ -142,5 +142,6 @@
   "pleaseSelectDate": "Please select date",
   "pleaseEnterReason": "Please enter reason",
   "leaveTypeLabel": "Leave Type",
+  "saveError": "Failed to save leave request. Please try again.",
   "@@locale": "en"
 }

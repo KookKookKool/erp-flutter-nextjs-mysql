@@ -6,15 +6,12 @@ import 'attendance/attendance_screen.dart';
 import 'payroll/payroll_screen.dart';
 import 'leave/leave_screen.dart';
 import 'leave/leave_approval_screen.dart';
-import 'leave/leave_repository.dart';
-import 'leave/bloc/leave_cubit.dart';
 import '../../core/l10n/app_localizations.dart';
+import '../../main.dart';
 
 class HRMModuleScreen extends StatelessWidget {
   final String? submodule;
   const HRMModuleScreen({super.key, this.submodule});
-
-  static final LeaveRepository leaveRepository = LeaveRepository();
 
   static const List<String> submodules = [
     'employee',
@@ -27,16 +24,9 @@ class HRMModuleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LeaveCubit>(
-          create: (_) => LeaveCubit(leaveRepository),
-        ),
-      ],
-      child: isDesktop
-          ? _HRMDesktopView(submodule: submodule)
-          : _HRMMobileView(submodule: submodule),
-    );
+    return isDesktop
+        ? _HRMDesktopView(submodule: submodule)
+        : _HRMMobileView(submodule: submodule);
   }
 }
 
@@ -54,7 +44,7 @@ class _HRMDesktopView extends StatelessWidget {
       case 'leave':
         return LeaveScreen();
       case 'leaveApproval':
-        return LeaveApprovalScreen(repository: HRMModuleScreen.leaveRepository);
+        return LeaveApprovalScreen(repository: globalLeaveRepository);
       case 'employee':
       default:
         return EmployeeListScreen();
@@ -82,7 +72,7 @@ class _HRMMobileViewState extends State<_HRMMobileView> {
       AttendanceScreen(),
       PayrollScreen(),
       LeaveScreen(),
-      LeaveApprovalScreen(repository: HRMModuleScreen.leaveRepository),
+      LeaveApprovalScreen(repository: globalLeaveRepository),
     ];
     if (widget.submodule != null) {
       final idx = _submodules.indexOf(widget.submodule!);

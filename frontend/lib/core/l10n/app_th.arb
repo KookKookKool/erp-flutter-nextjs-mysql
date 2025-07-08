@@ -142,5 +142,6 @@
   "pleaseSelectLeaveType": "กรุณาเลือกประเภทการลา",
   "pleaseSelectDate": "กรุณาเลือกวันที่ลา",
   "pleaseEnterReason": "กรุณากรอกเหตุผล",
-  "leaveTypeLabel": "ประเภทการลา"
+  "leaveTypeLabel": "ประเภทการลา",
+  "saveError": "ไม่สามารถบันทึกคำขอลาได้ กรุณาลองอีกครั้ง."
 }

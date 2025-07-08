@@ -421,4 +421,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get leaveTypeLabel => 'Leave Type';
+
+  @override
+  String get saveError => 'Failed to save leave request. Please try again.';
 }
