@@ -7,6 +7,7 @@ import 'package:frontend/core/theme/sun_theme.dart';
 import 'widgets/leave_card.dart';
 import 'widgets/leave_search_bar.dart';
 import 'widgets/add_leave_dialog.dart';
+import 'widgets/leave_approval_tab.dart';
 import 'leave_repository.dart';
 import 'bloc/leave_cubit.dart';
 
@@ -150,50 +151,7 @@ class _LeaveScreenViewState extends State<_LeaveScreenView>
 
   // Tab สำหรับแสดงรายการอนุมัติการลา
   Widget _buildApprovalTab() {
-    return BlocBuilder<LeaveCubit, LeaveState>(
-      builder: (context, state) {
-        final filtered = state.leaves
-            .where((leave) => leave.status == 'pending')
-            .where(
-              (leave) =>
-                  _search.isEmpty ||
-                  leave.employeeName.toLowerCase().contains(
-                    _search.toLowerCase(),
-                  ) ||
-                  leave.employeeId.toLowerCase().contains(
-                    _search.toLowerCase(),
-                  ),
-            )
-            .toList();
-        return ResponsiveCardGrid(
-          cardHeight: WidgetStyles.cardHeightMedium,
-          children: filtered
-              .map(
-                (leave) => LeaveCard(
-                  leave: leave,
-                  showEdit: false,
-                  showStatusChip: false,
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.check, color: Colors.green),
-                        tooltip: widget.l10n.leaveStatusApproved,
-                        onPressed: () => _approveLeave(leave),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.red),
-                        tooltip: widget.l10n.leaveStatusRejected,
-                        onPressed: () => _rejectLeave(leave),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-        );
-      },
-    );
+    return LeaveApprovalTab(search: _search);
   }
 
   List<String> _mockEmployees() => [
@@ -252,75 +210,5 @@ class _LeaveScreenViewState extends State<_LeaveScreenView>
 
   void _deleteLeave(String id) {
     context.read<LeaveCubit>().deleteLeave(id);
-  }
-
-  void _approveLeave(Leave leave) async {
-    final l10n = widget.l10n;
-    bool? deductSalary = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.leaveStatusApproved),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.localeName == 'th'
-                  ? 'ต้องการหักเงินเดือนสำหรับการลาครั้งนี้หรือไม่?'
-                  : 'Deduct salary for this leave?',
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Navigator.of(ctx).pop(true),
-                  child: Text(l10n.localeName == 'th' ? 'หักเงิน' : 'Deduct'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () => Navigator.of(ctx).pop(false),
-                  child: Text(
-                    l10n.localeName == 'th' ? 'ไม่หักเงิน' : 'No Deduct',
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-    if (deductSalary != null && mounted) {
-      context.read<LeaveCubit>().approveLeave(
-        leave.id,
-        true,
-        deductSalary: deductSalary,
-      );
-      // แสดงข้อความยืนยันการอนุมัติ
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            widget.l10n.localeName == 'th'
-                ? 'อนุมัติการลาเรียบร้อยแล้ว'
-                : 'Leave approved successfully',
-          ),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
-  }
-
-  void _rejectLeave(Leave leave) {
-    context.read<LeaveCubit>().approveLeave(leave.id, false);
-    // แสดงข้อความยืนยันการปฏิเสธ
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          widget.l10n.localeName == 'th'
-              ? 'ปฏิเสธการลาเรียบร้อยแล้ว'
-              : 'Leave rejected successfully',
-        ),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
 }

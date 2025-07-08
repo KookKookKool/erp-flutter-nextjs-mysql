@@ -426,4 +426,48 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get saveError => 'ไม่สามารถบันทึกคำขอลาได้ กรุณาลองอีกครั้ง.';
+
+  @override
+  String get otSelectRate => 'เลือกรอบ OT';
+
+  @override
+  String get otApprove => 'อนุมัติ';
+
+  @override
+  String get otReject => 'ปฏิเสธ';
+
+  @override
+  String get otRequest => 'คำขอ OT';
+
+  @override
+  String get otMultiSelect => 'เลือกหลายรายการ';
+
+  @override
+  String get otCancelMultiSelect => 'ยกเลิกเลือกหลายรายการ';
+
+  @override
+  String get otSelectAll => 'เลือกทั้งหมด';
+
+  @override
+  String get otDeselectAll => 'ยกเลิกเลือกทั้งหมด';
+
+  @override
+  String otSelectedCount(Object count) {
+    return 'เลือกแล้ว $count รายการ';
+  }
+
+  @override
+  String get otNoRequests => 'ไม่พบคำขอ OT';
+
+  @override
+  String get otNoPendingRequests => 'ไม่มีคำขอ OT ที่รอดำเนินการ';
+
+  @override
+  String get approve => 'อนุมัติ';
+
+  @override
+  String get reject => 'ปฏิเสธ';
+
+  @override
+  String get retry => 'ลองใหม่';
 }

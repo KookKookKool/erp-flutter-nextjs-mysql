@@ -29,7 +29,17 @@ class LeaveCubit extends Cubit<LeaveState> {
     loadLeaves();
   }
 
-  void approveLeave(String id, bool approve, {bool deductSalary = false}) {
+  void approveLeave(String id, {bool deductSalary = false}) {
+    repository.approveLeave(id, true, deductSalary: deductSalary);
+    loadLeaves();
+  }
+
+  void rejectLeave(String id) {
+    repository.approveLeave(id, false);
+    loadLeaves();
+  }
+
+  void approveLeaveOld(String id, bool approve, {bool deductSalary = false}) {
     repository.approveLeave(id, approve, deductSalary: deductSalary);
     loadLeaves();
   }

@@ -91,6 +91,104 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     }
   }
 
+  Widget _buildNoSearchResults() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.search_off,
+              size: 64,
+              color: Colors.grey.shade400,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'ไม่พบผลการค้นหา',
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'ไม่พบพนักงานที่ตรงกับ "$_search"\nลองค้นหาด้วยชื่อหรือรหัสพนักงานอื่น',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.grey.shade600,
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          TextButton.icon(
+            onPressed: () {
+              setState(() {
+                _search = '';
+              });
+            },
+            icon: const Icon(Icons.clear),
+            label: const Text('ล้างการค้นหา'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade100, Colors.blue.shade50],
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.people_outline,
+              size: 80,
+              color: Colors.blue.shade300,
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'ยังไม่มีข้อมูลพนักงาน',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'เริ่มต้นโดยการเพิ่มข้อมูลพนักงานคนแรก\nเพื่อจัดการข้อมูลบุคลากรในระบบ',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.grey.shade600,
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 40),
+          ElevatedButton.icon(
+            onPressed: () => _addOrEditEmployee(),
+            icon: const Icon(Icons.person_add),
+            label: Text(l10n.addEmployee),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -115,23 +213,27 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               onChanged: (v) => setState(() => _search = v),
               hintText: l10n.searchHint,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Expanded(
-              child: ResponsiveCardGrid(
-                cardHeight: WidgetStyles.cardHeightSmall,
-                children: _filteredEmployees
-                    .map(
-                      (emp) => EmployeeCard(
-                        employee: emp,
-                        onEdit: () => _addOrEditEmployee(
-                          employee: emp,
-                          index: employees.indexOf(emp),
-                        ),
-                        positionLabel: l10n.position,
-                      ),
-                    )
-                    .toList(),
-              ),
+              child: _filteredEmployees.isEmpty && _search.isNotEmpty
+                  ? _buildNoSearchResults()
+                  : _filteredEmployees.isEmpty
+                  ? _buildEmptyState()
+                  : ResponsiveCardGrid(
+                      cardHeight: WidgetStyles.cardHeightSmall,
+                      children: _filteredEmployees
+                          .map(
+                            (emp) => EmployeeCard(
+                              employee: emp,
+                              onEdit: () => _addOrEditEmployee(
+                                employee: emp,
+                                index: employees.indexOf(emp),
+                              ),
+                              positionLabel: l10n.position,
+                            ),
+                          )
+                          .toList(),
+                    ),
             ),
           ],
         ),

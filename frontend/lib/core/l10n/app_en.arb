@@ -144,5 +144,25 @@
   "pleaseEnterReason": "Please enter reason",
   "leaveTypeLabel": "Leave Type",
   "saveError": "Failed to save leave request. Please try again.",
+  "otSelectRate": "Select OT Rate",
+  "otApprove": "Approve",
+  "otReject": "Reject",
+  "otRequest": "OT request(s)",
+  "otMultiSelect": "Multi-select",
+  "otCancelMultiSelect": "Cancel multi-select",
+  "otSelectAll": "Select all",
+  "otDeselectAll": "Deselect all",
+  "otSelectedCount": "{count} selected",
+  "@otSelectedCount": {
+    "description": "Number of selected OT requests",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "otNoRequests": "No OT requests found",
+  "otNoPendingRequests": "No pending OT requests",
+  "approve": "Approve",
+  "reject": "Reject",
+  "retry": "Retry",
   "@@locale": "en"
 }

@@ -56,9 +56,11 @@ class _SunErpAppState extends State<SunErpApp> {
   Locale? _locale;
 
   void setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
+    if (_locale != locale) {
+      setState(() {
+        _locale = locale;
+      });
+    }
   }
 
   @override
@@ -78,6 +80,18 @@ class _SunErpAppState extends State<SunErpApp> {
       locale: _locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      // Add builder to handle media query changes gracefully
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            // Prevent text scaling issues on different devices
+            textScaler: TextScaler.linear(
+              MediaQuery.of(context).textScaler.scale(1.0).clamp(0.8, 1.2),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
   }
 }

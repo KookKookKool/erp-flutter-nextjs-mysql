@@ -1,6 +1,5 @@
 //import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:frontend/core/l10n/app_localizations.dart';
 import '/modules/hrm/employee/employee_list_screen.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
@@ -18,15 +17,18 @@ class EmployeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return SizedBox(
       height: WidgetStyles.cardHeightSmall,
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(WidgetStyles.cardBorderRadius),
+        ),
         color: SunTheme.cardColor,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(WidgetStyles.cardBorderRadius),
           onTap: onEdit,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -36,11 +38,11 @@ class EmployeeCard extends StatelessWidget {
                 employee.image != null
                     ? CircleAvatar(
                         backgroundImage: FileImage(employee.image!),
-                        backgroundColor: SunTheme.primaryLight,
+                        backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
                       )
-                    : const CircleAvatar(
-                        backgroundColor: SunTheme.primaryLight,
-                        child: Icon(Icons.person),
+                    : CircleAvatar(
+                        backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
+                        child: Icon(Icons.person, color: SunTheme.sunOrange),
                       ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -53,11 +55,12 @@ class EmployeeCard extends StatelessWidget {
                         '${employee.firstName} ${employee.lastName}',
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: SunTheme.textPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${positionLabel ?? l10n?.position ?? 'ตำแหน่ง'}: ${employee.position}',
+                        '${employee.employeeId} • ${employee.position}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
@@ -65,7 +68,29 @@ class EmployeeCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.edit, color: SunTheme.sunOrange),
+                PopupMenuButton<String>(
+                  icon: Icon(Icons.more_vert, color: SunTheme.textSecondary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      onEdit();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, color: SunTheme.sunOrange, size: 20),
+                          const SizedBox(width: 12),
+                          const Text('แก้ไข'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

@@ -427,4 +427,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveError => 'Failed to save leave request. Please try again.';
+
+  @override
+  String get otSelectRate => 'Select OT Rate';
+
+  @override
+  String get otApprove => 'Approve';
+
+  @override
+  String get otReject => 'Reject';
+
+  @override
+  String get otRequest => 'OT request(s)';
+
+  @override
+  String get otMultiSelect => 'Multi-select';
+
+  @override
+  String get otCancelMultiSelect => 'Cancel multi-select';
+
+  @override
+  String get otSelectAll => 'Select all';
+
+  @override
+  String get otDeselectAll => 'Deselect all';
+
+  @override
+  String otSelectedCount(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get otNoRequests => 'No OT requests found';
+
+  @override
+  String get otNoPendingRequests => 'No pending OT requests';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get reject => 'Reject';
+
+  @override
+  String get retry => 'Retry';
 }

@@ -5,6 +5,8 @@ class WidgetStyles {
   static const double cardHeightDefault = 110;
   static const double cardHeightMedium = 120;
   static const double cardHeightLarge = 160;
+  static const double cardHeightExtraLarge = 200;
+  static const double cardHeightFull = 250;
 
   // Card Border Radius
   static const double cardBorderRadius = 16;

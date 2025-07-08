@@ -931,6 +931,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save leave request. Please try again.'**
   String get saveError;
+
+  /// No description provided for @otSelectRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select OT Rate'**
+  String get otSelectRate;
+
+  /// No description provided for @otApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get otApprove;
+
+  /// No description provided for @otReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get otReject;
+
+  /// No description provided for @otRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'OT request(s)'**
+  String get otRequest;
+
+  /// No description provided for @otMultiSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-select'**
+  String get otMultiSelect;
+
+  /// No description provided for @otCancelMultiSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel multi-select'**
+  String get otCancelMultiSelect;
+
+  /// No description provided for @otSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get otSelectAll;
+
+  /// No description provided for @otDeselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect all'**
+  String get otDeselectAll;
+
+  /// Number of selected OT requests
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String otSelectedCount(Object count);
+
+  /// No description provided for @otNoRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No OT requests found'**
+  String get otNoRequests;
+
+  /// No description provided for @otNoPendingRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending OT requests'**
+  String get otNoPendingRequests;
+
+  /// No description provided for @approve.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approve;
+
+  /// No description provided for @reject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reject;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

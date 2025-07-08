@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
-import 'package:frontend/widgets/responsive_card_grid.dart';
-import 'package:frontend/core/theme/widget_styles.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
 import 'bloc/attendance_cubit.dart';
-import 'widgets/attendance_card.dart';
-import 'widgets/attendance_edit_dialog.dart';
+import 'bloc/ot_cubit.dart';
+import 'services/ot_data_service.dart';
 import 'widgets/attendance_search_bar.dart';
+import 'widgets/attendance_tab.dart';
+import 'widgets/ot_tab.dart';
 
 class EmployeeAttendance {
   final String id;
@@ -102,12 +103,23 @@ class AttendanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final todayKey = DateTime(today.year, today.month, today.day);
-    return BlocProvider(
-      create: (_) {
-        final cubit = AttendanceCubit();
-        cubit.loadAttendances(_mockEmployees(today));
-        return cubit;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) {
+            final cubit = AttendanceCubit();
+            cubit.loadAttendances(_mockEmployees(today));
+            return cubit;
+          },
+        ),
+        BlocProvider(
+          create: (_) {
+            final cubit = OtCubit(OtDataService());
+            cubit.loadOtRequests();
+            return cubit;
+          },
+        ),
+      ],
       child: _AttendanceScreenView(
         today: today,
         todayKey: todayKey,
@@ -130,23 +142,29 @@ class _AttendanceScreenView extends StatefulWidget {
   State<_AttendanceScreenView> createState() => _AttendanceScreenViewState();
 }
 
-class _AttendanceScreenViewState extends State<_AttendanceScreenView> {
+class _AttendanceScreenViewState extends State<_AttendanceScreenView>
+    with TickerProviderStateMixin {
   String _search = '';
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Expanded(child: Text(widget.l10n.attendanceTitle)),
-            Text(
-              _formatDate(widget.today),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        ),
+        title: Text(widget.l10n.attendanceTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -156,44 +174,38 @@ class _AttendanceScreenViewState extends State<_AttendanceScreenView> {
               value: _search,
               onChanged: (v) => setState(() => _search = v.trim()),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
+            // Tab Bar สำหรับสลับระหว่างบันทึกเวลาและ OT
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                indicator: BoxDecoration(
+                  color: SunTheme.sunOrange,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorPadding: EdgeInsets.zero,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.grey[600],
+                dividerColor: Colors.transparent,
+                tabs: [
+                  Tab(
+                    text: widget.l10n.attendanceModule,
+                    icon: const Icon(Icons.access_time),
+                  ),
+                  Tab(text: 'OT', icon: const Icon(Icons.schedule)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
-              child: BlocBuilder<AttendanceCubit, AttendanceState>(
-                builder: (context, state) {
-                  if (state is AttendanceLoaded) {
-                    final filtered = _search.isEmpty
-                        ? state.attendances
-                        : state.attendances
-                              .where(
-                                (e) =>
-                                    e.name.toLowerCase().contains(
-                                      _search.toLowerCase(),
-                                    ) ||
-                                    e.id.toLowerCase().contains(
-                                      _search.toLowerCase(),
-                                    ),
-                              )
-                              .toList();
-                    return ResponsiveCardGrid(
-                      cardHeight: WidgetStyles.cardHeightSmall,
-                      children: filtered
-                          .map(
-                            (emp) => GestureDetector(
-                              onTap: () => _showEditDialog(emp),
-                              child: AttendanceCard(
-                                emp: emp,
-                                todayKey: widget.todayKey,
-                                onEdit: () => _showEditDialog(emp),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    );
-                  } else if (state is AttendanceError) {
-                    return Center(child: Text(state.message));
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
+              child: TabBarView(
+                controller: _tabController,
+                children: [_buildAttendanceTab(), _buildOtTab()],
               ),
             ),
           ],
@@ -202,14 +214,17 @@ class _AttendanceScreenViewState extends State<_AttendanceScreenView> {
     );
   }
 
-  String _formatDate(DateTime d) =>
-      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
-  void _showEditDialog(EmployeeAttendance emp) async {
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          AttendanceEditDialog(employee: emp, today: widget.today),
+  // Tab สำหรับแสดงรายการบันทึกเวลา
+  Widget _buildAttendanceTab() {
+    return AttendanceTab(
+      search: _search,
+      todayKey: widget.todayKey,
+      today: widget.today,
     );
+  }
+
+  // Tab สำหรับแสดงรายการ OT
+  Widget _buildOtTab() {
+    return OtTab(search: _search);
   }
 }

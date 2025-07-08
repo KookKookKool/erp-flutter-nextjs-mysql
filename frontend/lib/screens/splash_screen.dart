@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/app_state_cubit.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/utils/debug_utils.dart';
 
 import '../widgets/sun_logo.dart';
 
@@ -15,33 +16,84 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
+    DebugUtils.logNavigation('Unknown', 'SplashScreen', 'App start');
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+
+    // Safety fallback: force navigate after 10 seconds if nothing happens
+    Future.delayed(const Duration(seconds: 10), () {
+      if (mounted && !_hasNavigated) {
+        DebugUtils.logNavigation(
+          'SplashScreen',
+          'LanguageScreen',
+          'Emergency fallback',
+        );
+        _safeNavigate(AppStatus.language);
+      }
+    });
   }
 
-  void _navigate(AppStatus status) {
-    if (!mounted) return;
+  void _safeNavigate(AppStatus status) {
+    if (!mounted || _hasNavigated) {
+      DebugUtils.logNavigation(
+        'SplashScreen',
+        'Cancelled',
+        'Not mounted or already navigated',
+      );
+      return;
+    }
+
+    // Check if we're still on splash screen
+    final route = ModalRoute.of(context);
+    if (route?.isCurrent != true) {
+      DebugUtils.logNavigation(
+        'SplashScreen',
+        'Cancelled',
+        'Not current route',
+      );
+      return;
+    }
+
+    _hasNavigated = true;
+    _controller.stop(); // Stop animation before navigation
+
+    String routeName;
     switch (status) {
       case AppStatus.home:
-        Navigator.of(context).pushReplacementNamed('/home');
+        routeName = '/home';
         break;
       case AppStatus.org:
-        Navigator.of(context).pushReplacementNamed('/org');
+        routeName = '/org';
         break;
       case AppStatus.login:
-        Navigator.of(context).pushReplacementNamed('/login');
+        routeName = '/login';
         break;
       case AppStatus.language:
       default:
-        Navigator.of(context).pushReplacementNamed('/language');
+        routeName = '/language';
         break;
     }
+
+    DebugUtils.logNavigation(
+      'SplashScreen',
+      routeName,
+      'Status: ${status.toString()}',
+    );
+
+    // Use safe navigation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed(routeName);
+      }
+    });
   }
 
   @override
@@ -54,19 +106,17 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return BlocListener<AppStateCubit, AppState>(
-      listenWhen: (prev, curr) => prev.status != curr.status,
+      listenWhen: (prev, curr) =>
+          prev.status != curr.status && curr.status != AppStatus.splash,
       listener: (context, state) {
-        print('[SplashScreen] BlocListener: state.status = \\${state.status}');
-        Future.delayed(const Duration(milliseconds: 500), () {
-          _navigate(state.status);
-        });
-        // Fallback: ถ้า 5 วินาทีแล้วยังไม่ navigate ให้ไปหน้า language
-        Future.delayed(const Duration(seconds: 5), () {
-          final route = ModalRoute.of(context);
-          if (mounted && (route?.isCurrent ?? false)) {
-            print('[SplashScreen] Fallback: force navigate to /language');
-            _navigate(AppStatus.language);
-          }
+        DebugUtils.logBlocEvent(
+          'SplashScreen',
+          'BlocListener',
+          'state.status = ${state.status}',
+        );
+        // Add a small delay to ensure smooth transition
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _safeNavigate(state.status);
         });
       },
       child: Scaffold(

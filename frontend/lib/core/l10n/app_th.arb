@@ -144,5 +144,23 @@
   "pleaseSelectDate": "กรุณาเลือกวันที่ลา",
   "pleaseEnterReason": "กรุณากรอกเหตุผล",
   "leaveTypeLabel": "ประเภทการลา",
-  "saveError": "ไม่สามารถบันทึกคำขอลาได้ กรุณาลองอีกครั้ง."
+  "saveError": "ไม่สามารถบันทึกคำขอลาได้ กรุณาลองอีกครั้ง.",
+  "otSelectRate": "เลือกรอบ OT",
+  "otApprove": "อนุมัติ",
+  "otReject": "ปฏิเสธ",
+  "otRequest": "คำขอ OT",
+  "otMultiSelect": "เลือกหลายรายการ",
+  "otCancelMultiSelect": "ยกเลิกเลือกหลายรายการ",
+  "otSelectAll": "เลือกทั้งหมด",
+  "otDeselectAll": "ยกเลิกเลือกทั้งหมด",
+  "otSelectedCount": "เลือกแล้ว {count} รายการ",
+  "@otSelectedCount": {
+    "description": "จำนวนรายการ OT ที่เลือก",
+    "placeholders": {"count": {}}
+  },
+  "otNoRequests": "ไม่พบคำขอ OT",
+  "otNoPendingRequests": "ไม่มีคำขอ OT ที่รอดำเนินการ",
+  "approve": "อนุมัติ",
+  "reject": "ปฏิเสธ",
+  "retry": "ลองใหม่"
 }

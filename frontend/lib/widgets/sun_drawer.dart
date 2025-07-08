@@ -20,7 +20,6 @@ class SunDrawer extends StatefulWidget {
         {'labelKey': 'attendanceModule', 'subType': 'attendance'},
         {'labelKey': 'payrollModule', 'subType': 'payroll'},
         {'labelKey': 'leaveModule', 'subType': 'leave'},
-        {'labelKey': 'leaveApprovalModule', 'subType': 'leaveApproval'},
         {'labelKey': 'announcementModule', 'subType': 'announcement'},
       ],
     },
@@ -110,17 +109,31 @@ class SunDrawer extends StatefulWidget {
 }
 
 class _SunDrawerState extends State<SunDrawer> {
+  late bool _isDesktop;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _isDesktop = MediaQuery.of(context).size.width >= 900;
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final selected = context.watch<ModuleCubit>().state;
     final localizations = AppLocalizations.of(context)!;
-    final isDesktop = MediaQuery.of(context).size.width >= 900;
+    final currentIsDesktop = MediaQuery.of(context).size.width >= 900;
+
+    // Update desktop state if changed
+    if (_isDesktop != currentIsDesktop) {
+      _isDesktop = currentIsDesktop;
+    }
+
     return Drawer(
       child: SafeArea(
         child: Column(
           children: [
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: Text(
                 'SUN ERP',
@@ -134,7 +147,7 @@ class _SunDrawerState extends State<SunDrawer> {
               child: ListView(
                 children: [
                   for (final m in SunDrawer.modules)
-                    m.containsKey('subs') && isDesktop
+                    m.containsKey('subs') && _isDesktop
                         ? _ControlledExpansionTile(
                             module: m,
                             selected: selected,
@@ -161,7 +174,10 @@ class _SunDrawerState extends State<SunDrawer> {
                                   m['type'] as ModuleType,
                                 );
                               }
-                              Navigator.of(context).maybePop();
+                              // Close drawer on mobile after selection
+                              if (!_isDesktop) {
+                                Navigator.of(context).maybePop();
+                              }
                             },
                           ),
                 ],
@@ -169,7 +185,7 @@ class _SunDrawerState extends State<SunDrawer> {
             ),
             const Divider(),
             // เปลี่ยนภาษาเป็น Dropdown
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: _LanguageDropdown(),
             ),
@@ -180,6 +196,10 @@ class _SunDrawerState extends State<SunDrawer> {
                 style: textTheme.bodyLarge?.copyWith(color: Colors.red),
               ),
               onTap: () {
+                // Close drawer before navigation
+                if (!_isDesktop) {
+                  Navigator.of(context).maybePop();
+                }
                 Navigator.of(context).pushReplacementNamed('/org');
               },
             ),
@@ -263,6 +283,8 @@ class _ControlledExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isExpanded = selected.module == module['type'];
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+
     return ExpansionTile(
       leading: Icon(module['icon'] as IconData, color: SunTheme.sunDeepOrange),
       title: Text(
@@ -293,7 +315,10 @@ class _ControlledExpansionTile extends StatelessWidget {
                   submodule: sub['subType'],
                 );
               }
-              Navigator.of(context).maybePop();
+              // Close drawer on mobile after selection
+              if (!isDesktop) {
+                Navigator.of(context).maybePop();
+              }
             },
           ),
       ],
@@ -331,8 +356,6 @@ String _getModuleLabel(AppLocalizations loc, String key) {
       return loc.payrollModule;
     case 'leaveModule':
       return loc.leaveModule;
-    case 'leaveApprovalModule':
-      return loc.leaveApprovalModule;
     case 'announcementModule':
       return loc.announcementModule;
     case 'projectTaskModule':
