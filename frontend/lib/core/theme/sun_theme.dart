@@ -116,7 +116,7 @@ class SunTheme {
     border: Border.all(color: primary, width: 1.2),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.10),
+        color: Colors.black.withValues(alpha: 0.10),
         blurRadius: 4,
         spreadRadius: 0.5,
         offset: const Offset(0, 1),
@@ -124,5 +124,3 @@ class SunTheme {
     ],
   );
 }
-
-

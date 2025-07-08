@@ -134,6 +134,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get leaveApprovalModule => 'อนุมัติการลา';
 
   @override
+  String get announcementModule => 'ประกาศ';
+
+  @override
   String get employeeListTitle => 'รายชื่อพนักงาน';
 
   @override

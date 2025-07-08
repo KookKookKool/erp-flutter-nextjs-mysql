@@ -5,9 +5,8 @@ import 'employee/employee_list_screen.dart';
 import 'attendance/attendance_screen.dart';
 import 'payroll/payroll_screen.dart';
 import 'leave/leave_screen.dart';
-import 'leave/leave_approval_screen.dart';
+import 'announcement/announcement_screen.dart';
 import '../../core/l10n/app_localizations.dart';
-import '../../main.dart';
 
 class HRMModuleScreen extends StatelessWidget {
   final String? submodule;
@@ -18,7 +17,7 @@ class HRMModuleScreen extends StatelessWidget {
     'attendance',
     'payroll',
     'leave',
-    'leaveApproval',
+    'announcement',
   ];
 
   @override
@@ -42,9 +41,9 @@ class _HRMDesktopView extends StatelessWidget {
       case 'payroll':
         return PayrollScreen();
       case 'leave':
-        return LeaveScreen();
-      case 'leaveApproval':
-        return LeaveApprovalScreen(repository: globalLeaveRepository);
+        return const LeaveScreen();
+      case 'announcement':
+        return const AnnouncementScreen();
       case 'employee':
       default:
         return EmployeeListScreen();
@@ -71,8 +70,8 @@ class _HRMMobileViewState extends State<_HRMMobileView> {
       EmployeeListScreen(),
       AttendanceScreen(),
       PayrollScreen(),
-      LeaveScreen(),
-      LeaveApprovalScreen(repository: globalLeaveRepository),
+      const LeaveScreen(),
+      const AnnouncementScreen(),
     ];
     if (widget.submodule != null) {
       final idx = _submodules.indexOf(widget.submodule!);
@@ -134,8 +133,8 @@ class _HRMMobileViewState extends State<_HRMMobileView> {
             label: l10n.leaveModule,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.approval),
-            label: l10n.leaveApprovalModule,
+            icon: Icon(Icons.announcement),
+            label: l10n.announcementModule,
           ),
         ],
       ),

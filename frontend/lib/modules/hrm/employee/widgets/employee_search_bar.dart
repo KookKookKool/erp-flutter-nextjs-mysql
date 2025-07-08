@@ -17,32 +17,15 @@ class EmployeeSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Container(
-      decoration: BoxDecoration(
-        color: SunTheme.cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: SunTheme.primary, width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.10),
-            blurRadius: 4,
-            spreadRadius: 0.5,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
+      decoration: SunTheme.sunSearchBoxDecoration,
       child: TextField(
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search, color: SunTheme.primary),
           hintText: l10n?.searchHint ?? hintText,
-          filled: true,
-          fillColor: SunTheme.cardColor,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
+          border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 0,
             horizontal: 16,
+            vertical: 16,
           ),
         ),
         style: TextStyle(color: SunTheme.textPrimary),

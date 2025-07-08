@@ -21,6 +21,7 @@ class SunDrawer extends StatefulWidget {
         {'labelKey': 'payrollModule', 'subType': 'payroll'},
         {'labelKey': 'leaveModule', 'subType': 'leave'},
         {'labelKey': 'leaveApprovalModule', 'subType': 'leaveApproval'},
+        {'labelKey': 'announcementModule', 'subType': 'announcement'},
       ],
     },
     {
@@ -332,6 +333,8 @@ String _getModuleLabel(AppLocalizations loc, String key) {
       return loc.leaveModule;
     case 'leaveApprovalModule':
       return loc.leaveApprovalModule;
+    case 'announcementModule':
+      return loc.announcementModule;
     case 'projectTaskModule':
       return loc.projectTaskModule;
     case 'projectStatusModule':

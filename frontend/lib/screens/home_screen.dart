@@ -8,6 +8,7 @@ import '../widgets/home/attendance_buttons.dart';
 import '../widgets/home/leave_button.dart';
 import '../widgets/home/task_list.dart';
 import '../widgets/home/hr_announcement.dart';
+import '../widgets/home/urgent_announcement_banner.dart';
 import '../core/bloc/module_cubit.dart';
 import '../modules/hrm/hrm_module_screen.dart';
 import '../modules/crm/crm_module_screen.dart';
@@ -110,6 +111,7 @@ class _HomeContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const UrgentAnnouncementBanner(),
             EmployeeCard(),
             SizedBox(height: 24),
             AttendanceButtons(),

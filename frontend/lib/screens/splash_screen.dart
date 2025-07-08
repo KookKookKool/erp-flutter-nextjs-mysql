@@ -62,7 +62,8 @@ class _SplashScreenState extends State<SplashScreen>
         });
         // Fallback: ถ้า 5 วินาทีแล้วยังไม่ navigate ให้ไปหน้า language
         Future.delayed(const Duration(seconds: 5), () {
-          if (ModalRoute.of(context)?.isCurrent ?? false) {
+          final route = ModalRoute.of(context);
+          if (mounted && (route?.isCurrent ?? false)) {
             print('[SplashScreen] Fallback: force navigate to /language');
             _navigate(AppStatus.language);
           }
@@ -92,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 'Empowering Your Enterprise',
                 style: textTheme.bodyLarge?.copyWith(
-                  color: SunTheme.textOnGradient.withOpacity(0.85),
+                  color: SunTheme.textOnGradient.withValues(alpha: 0.85),
                 ),
               ),
             ],

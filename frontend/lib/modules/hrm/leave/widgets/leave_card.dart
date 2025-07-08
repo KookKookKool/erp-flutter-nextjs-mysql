@@ -79,30 +79,9 @@ class LeaveCard extends StatelessWidget {
                     onEdit!();
                   } else if (value == 'delete' && onDelete != null) {
                     final l10n = AppLocalizations.of(context)!;
-                    final confirmed = await showDialog<bool>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text(
-                          l10n.localeName == 'th'
-                              ? 'ยืนยันการลบ'
-                              : 'Confirm Delete',
-                        ),
-                        content: Text(
-                          l10n.localeName == 'th'
-                              ? 'คุณต้องการลบรายการนี้หรือไม่?'
-                              : 'Do you want to delete this item?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(false),
-                            child: Text(l10n.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(true),
-                            child: Text(l10n.delete),
-                          ),
-                        ],
-                      ),
+                    final confirmed = await _showDeleteConfirmation(
+                      context,
+                      l10n,
                     );
                     if (confirmed == true) onDelete!();
                   }
@@ -111,12 +90,27 @@ class LeaveCard extends StatelessWidget {
                   if (showEdit && onEdit != null)
                     PopupMenuItem(
                       value: 'edit',
-                      child: Text(l10n.localeName == 'th' ? 'แก้ไข' : 'Edit'),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit),
+                          const SizedBox(width: 8),
+                          Text(l10n.localeName == 'th' ? 'แก้ไข' : 'Edit'),
+                        ],
+                      ),
                     ),
                   if (onDelete != null)
                     PopupMenuItem(
                       value: 'delete',
-                      child: Text(l10n.localeName == 'th' ? 'ลบ' : 'Delete'),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.red),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.localeName == 'th' ? 'ลบ' : 'Delete',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
                     ),
                 ],
               ),
@@ -150,5 +144,36 @@ class LeaveCard extends StatelessWidget {
   String _getEmployeeInitial(dynamic employee) {
     final name = _getEmployeeName(employee);
     return name.isNotEmpty ? name.substring(0, 1) : '?';
+  }
+
+  Future<bool?> _showDeleteConfirmation(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.localeName == 'th' ? 'ยืนยันการลบ' : 'Confirm Delete'),
+        content: Text(
+          l10n.localeName == 'th'
+              ? 'คุณต้องการลบรายการนี้หรือไม่?'
+              : 'Do you want to delete this item?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

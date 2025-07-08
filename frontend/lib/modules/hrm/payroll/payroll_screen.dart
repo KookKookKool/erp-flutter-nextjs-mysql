@@ -10,9 +10,9 @@ class PayrollScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(l10n.payrollTitle ?? 'Payroll'),
+        title: Text(l10n.payrollTitle),
       ),
-      body: Center(child: Text(l10n.payrollContent ?? 'Payroll content here')),
+      body: Center(child: Text(l10n.payrollContent)),
     );
   }
 }

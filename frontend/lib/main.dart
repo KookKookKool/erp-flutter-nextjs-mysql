@@ -8,14 +8,17 @@ import 'core/bloc/simple_bloc_observer.dart';
 import 'core/bloc/app_state_cubit.dart';
 import 'modules/hrm/leave/leave_repository.dart';
 import 'modules/hrm/leave/bloc/leave_cubit.dart';
+import 'modules/hrm/announcement/announcement_repository.dart';
+import 'modules/hrm/announcement/bloc/announcement_cubit.dart';
 import 'screens/splash_screen.dart';
 import 'screens/org_code_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/language_select_screen.dart';
 
-// Global repository instance
+// Global repository instances
 final globalLeaveRepository = LeaveRepository();
+final globalAnnouncementRepository = AnnouncementRepository();
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
@@ -26,6 +29,9 @@ void main() {
         BlocProvider<AppStateCubit>(create: (_) => AppStateCubit()),
         BlocProvider<LeaveCubit>(
           create: (_) => LeaveCubit(globalLeaveRepository),
+        ),
+        BlocProvider<AnnouncementCubit>(
+          create: (_) => AnnouncementCubit(globalAnnouncementRepository),
         ),
       ],
       child: const SunErpApp(),

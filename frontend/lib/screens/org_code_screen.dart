@@ -46,7 +46,9 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
         _isLoading = false;
       });
       // ไปหน้า login
-      Navigator.of(context).pushReplacementNamed('/login');
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed('/login');
+      }
     }
   }
 
@@ -93,7 +95,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                       ),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white.withOpacity(0.95),
+                        fillColor: Colors.white.withValues(alpha: 0.95),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none,

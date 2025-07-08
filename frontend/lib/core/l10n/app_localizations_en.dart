@@ -134,6 +134,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leaveApprovalModule => 'Leave Approval';
 
   @override
+  String get announcementModule => 'Announcement';
+
+  @override
   String get employeeListTitle => 'Employee List';
 
   @override

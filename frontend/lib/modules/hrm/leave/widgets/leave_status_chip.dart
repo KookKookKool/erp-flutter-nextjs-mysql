@@ -13,25 +13,19 @@ class LeaveStatusChip extends StatelessWidget {
     switch (status) {
       case 'approved':
         color = Colors.green;
-        label =
-            l10n.leaveStatusApproved ??
-            (l10n.localeName == 'th' ? 'อนุมัติ' : 'Approved');
+        label = l10n.leaveStatusApproved;
         break;
       case 'rejected':
         color = Colors.red;
-        label =
-            l10n.leaveStatusRejected ??
-            (l10n.localeName == 'th' ? 'ไม่อนุมัติ' : 'Rejected');
+        label = l10n.leaveStatusRejected;
         break;
       default:
         color = Colors.orange;
-        label =
-            l10n.leaveStatusPending ??
-            (l10n.localeName == 'th' ? 'รออนุมัติ' : 'Pending');
+        label = l10n.leaveStatusPending;
     }
     return Chip(
       label: Text(label),
-      backgroundColor: color.withOpacity(0.15),
+      backgroundColor: color.withValues(alpha: 0.15),
       labelStyle: TextStyle(color: color),
     );
   }

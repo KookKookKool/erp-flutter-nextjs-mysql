@@ -188,7 +188,7 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               children: [
                 Expanded(
                   child: Text(
-                    l10n.otStart ?? 'OT Start:',
+                    l10n.otStart,
                     style: TextStyle(color: SunTheme.textPrimary),
                   ),
                 ),
@@ -215,7 +215,7 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               children: [
                 Expanded(
                   child: Text(
-                    l10n.otEnd ?? 'OT End:',
+                    l10n.otEnd,
                     style: TextStyle(color: SunTheme.textPrimary),
                   ),
                 ),
@@ -242,7 +242,7 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               children: [
                 Expanded(
                   child: Text(
-                    l10n.otRate ?? 'OT Rate:',
+                    l10n.otRate,
                     style: TextStyle(color: SunTheme.textPrimary),
                   ),
                 ),
@@ -273,7 +273,10 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
           child: Text(l10n.cancel, style: TextStyle(color: SunTheme.primary)),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: SunTheme.primary),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: SunTheme.primary,
+            foregroundColor: SunTheme.onPrimary,
+          ),
           onPressed: () {
             widget.employee.records[selectedDate] = {
               'in': checkIn,

@@ -46,6 +46,7 @@
   "payrollModule": "Payroll",
   "leaveModule": "Leave",
   "leaveApprovalModule": "Leave Approval",
+  "announcementModule": "Announcement",
   "employeeListTitle": "Employee List",
   "employeeListContent": "Employee list content here",
   "attendanceTitle": "Time Attendance",

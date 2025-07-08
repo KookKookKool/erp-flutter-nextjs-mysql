@@ -1,11 +1,10 @@
-
 /// กำหนด style สำหรับ Card widget หลายขนาด
 class WidgetStyles {
   // Card Heights
   static const double cardHeightSmall = 90;
   static const double cardHeightDefault = 110;
   static const double cardHeightMedium = 120;
-  static const double cardHeightLarge = 180;
+  static const double cardHeightLarge = 160;
 
   // Card Border Radius
   static const double cardBorderRadius = 16;

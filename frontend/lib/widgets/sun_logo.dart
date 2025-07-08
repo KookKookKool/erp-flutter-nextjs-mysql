@@ -15,7 +15,7 @@ class SunLogo extends StatelessWidget {
         gradient: SunTheme.sunGradient,
         boxShadow: [
           BoxShadow(
-            color: SunTheme.sunDeepOrange.withOpacity(0.3),
+            color: SunTheme.sunDeepOrange.withValues(alpha: 0.3),
             blurRadius: 16,
             spreadRadius: 2,
             offset: Offset(0, 8),

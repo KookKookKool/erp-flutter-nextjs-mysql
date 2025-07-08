@@ -344,6 +344,12 @@ abstract class AppLocalizations {
   /// **'Leave Approval'**
   String get leaveApprovalModule;
 
+  /// No description provided for @announcementModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcement'**
+  String get announcementModule;
+
   /// No description provided for @employeeListTitle.
   ///
   /// In en, this message translates to:

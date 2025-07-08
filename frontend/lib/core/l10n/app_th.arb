@@ -47,6 +47,7 @@
   "payrollModule": "เงินเดือน",
   "leaveModule": "การลา",
   "leaveApprovalModule": "อนุมัติการลา",
+  "announcementModule": "ประกาศ",
   "employeeListTitle": "รายชื่อพนักงาน",
   "employeeListContent": "เนื้อหารายชื่อพนักงาน",
   "attendanceTitle": "บันทึกเวลาเข้า-ออก",
