@@ -200,7 +200,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get salesReportModule => 'รายงานการขาย';
 
   @override
-  String get salesReportContent => 'เนื้อหารายงานการขาย';
+  String get salesReportContent => 'เนื้อหารายงานบัญชี';
 
   @override
   String get purchasingOrderModule => 'ใบสั่งซื้อ';
@@ -470,4 +470,179 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get retry => 'ลองใหม่';
+
+  @override
+  String get otStatusPending => 'รออนุมัติ';
+
+  @override
+  String get otStatusApproved => 'อนุมัติแล้ว';
+
+  @override
+  String get otStatusRejected => 'ปฏิเสธ';
+
+  @override
+  String otReason(Object reason) {
+    return 'เหตุผล: $reason';
+  }
+
+  @override
+  String otApprovedWithRate(Object rate) {
+    return 'อนุมัติแล้ว (เรท x$rate)';
+  }
+
+  @override
+  String get otApproveButton => 'อนุมัติ';
+
+  @override
+  String get otRejectButton => 'ปฏิเสธ';
+
+  @override
+  String get otSelectRateTitle => 'เลือกเรท OT';
+
+  @override
+  String otApproveOf(Object name) {
+    return 'อนุมัติ OT ของ $name';
+  }
+
+  @override
+  String get otCancel => 'ยกเลิก';
+
+  @override
+  String get payrollEdit => 'แก้ไข';
+
+  @override
+  String get payrollNoSearchResultTitle => 'ไม่พบผลลัพธ์';
+
+  @override
+  String payrollNoSearchResultDescription(Object query) {
+    return 'ไม่พบพนักงานที่ตรงกับ \"$query\" ลองค้นหาด้วยชื่อหรือรหัสอื่น';
+  }
+
+  @override
+  String payrollLastUpdated(Object date) {
+    return 'แก้ไขล่าสุด: $date';
+  }
+
+  @override
+  String get otHourShort => 'ชม.';
+
+  @override
+  String get payrollSearchHint => 'ค้นหาพนักงาน (ชื่อ หรือ รหัสพนักงาน)';
+
+  @override
+  String get payrollLoading => 'กำลังโหลดข้อมูลเงินเดือน...';
+
+  @override
+  String get payrollExporting => 'กำลังส่งออก PDF...';
+
+  @override
+  String payrollExport(Object count) {
+    return 'ส่งออก PDF ($count คน)';
+  }
+
+  @override
+  String payrollExportConfirm(Object count) {
+    return 'ต้องการส่งออก PDF สำหรับ $count คนหรือไม่?';
+  }
+
+  @override
+  String get payrollExported => 'ส่งออกสลิปเงินเดือนสำเร็จ!';
+
+  @override
+  String get payrollNoData => 'ยังไม่มีข้อมูลเงินเดือน';
+
+  @override
+  String get payrollNoDataDescription =>
+      'เริ่มต้นโดยการเพิ่มข้อมูลเงินเดือนของพนักงานเพื่อจัดการและส่งออกสลิปเงินเดือน';
+
+  @override
+  String get payrollAdd => 'เพิ่มข้อมูลเงินเดือน';
+
+  @override
+  String get payrollNoAvailableEmployee => 'ไม่มีพนักงานที่ใช้ได้';
+
+  @override
+  String get payrollNoAvailableEmployeeToAdd => 'ไม่มีพนักงานที่สามารถเพิ่มได้';
+
+  @override
+  String get payrollExportPayslipTitle => 'ส่งออกสลิปเงินเดือน';
+
+  @override
+  String payrollAllSelected(Object count) {
+    return 'เลือกพนักงานเพื่อส่งออกสลิป ($count คนที่พบ)';
+  }
+
+  @override
+  String get payrollSelectAll => 'เลือกทั้งหมด';
+
+  @override
+  String get payrollClearSelection => 'ยกเลิก';
+
+  @override
+  String payrollSelectedCount(Object selected, Object total) {
+    return 'เลือกแล้ว $selected จาก $total คน';
+  }
+
+  @override
+  String get payrollMultiSelectHint => 'สามารถเลือกหลายคนได้';
+
+  @override
+  String get payrollError => 'เกิดข้อผิดพลาดในการโหลดข้อมูล';
+
+  @override
+  String get payrollTryAgain => 'ลองใหม่';
+
+  @override
+  String get payrollDeleteConfirm => 'ยืนยันการลบ';
+
+  @override
+  String payrollDeleteConfirmMsg(Object name) {
+    return 'คุณต้องการลบข้อมูลเงินเดือนของ \"$name\" หรือไม่?';
+  }
+
+  @override
+  String get payrollDelete => 'ลบ';
+
+  @override
+  String get payrollClose => 'ปิด';
+
+  @override
+  String get payrollTypeLabel => 'ประเภท:';
+
+  @override
+  String get payrollTypeMonthly => 'รายเดือน';
+
+  @override
+  String get payrollTypeDaily => 'รายวัน';
+
+  @override
+  String payrollType(String type) {
+    String _temp0 = intl.Intl.selectLogic(type, {
+      'monthly': 'รายเดือน',
+      'daily': 'รายวัน',
+      'other': 'ไม่ระบุ',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get payrollSalary => 'เงินเดือน:';
+
+  @override
+  String get payrollCreatedAt => 'สร้างเมื่อ:';
+
+  @override
+  String get payrollLastUpdatedLabel => 'แก้ไขล่าสุด:';
+
+  @override
+  String payrollNoSearchResult(Object query) {
+    return 'ไม่พบพนักงานที่ตรงกับ \"$query\" ลองค้นหาด้วยชื่อหรือรหัสอื่น';
+  }
+
+  @override
+  String get payrollClearSearch => 'ล้างการค้นหา';
+
+  @override
+  String get payrollNoEmployeeData =>
+      'พนักงานทั้งหมดมีข้อมูลเงินเดือนแล้ว หรือยังไม่มีข้อมูลพนักงานในระบบ';
 }

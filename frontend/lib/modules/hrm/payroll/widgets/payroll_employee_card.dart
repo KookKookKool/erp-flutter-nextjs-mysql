@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/payroll_employee.dart';
 import '../../../../core/theme/sun_theme.dart';
 import '../../../../core/theme/widget_styles.dart';
+import '../../../../core/l10n/app_localizations.dart';
 
 class PayrollEmployeeCard extends StatelessWidget {
   final PayrollEmployee employee;
@@ -24,6 +25,7 @@ class PayrollEmployeeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final currencyFormat = 'THB ${employee.salary.toStringAsFixed(0)}';
 
     return Card(
@@ -169,7 +171,7 @@ class PayrollEmployeeCard extends StatelessWidget {
                                 color: SunTheme.sunOrange,
                               ),
                               const SizedBox(width: 8),
-                              const Text('แก้ไข'),
+                              Text(l10n.payrollEdit),
                             ],
                           ),
                         ),
@@ -183,7 +185,7 @@ class PayrollEmployeeCard extends StatelessWidget {
                                 color: Colors.red.shade600,
                               ),
                               const SizedBox(width: 8),
-                              const Text('ลบ'),
+                              Text(l10n.payrollDelete),
                             ],
                           ),
                         ),
@@ -240,7 +242,7 @@ class PayrollEmployeeCard extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  employee.payrollType.displayName,
+                                  _getPayrollTypeLabel(l10n, employee.payrollType),
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color:
                                         employee.payrollType ==
@@ -295,7 +297,9 @@ class PayrollEmployeeCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'แก้ไขล่าสุด: ${_formatDate(employee.updatedAt)}',
+                            l10n.payrollLastUpdated(
+                              _formatDate(employee.updatedAt),
+                            ),
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.grey.shade600,
                             ),
@@ -315,5 +319,14 @@ class PayrollEmployeeCard extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
+  }
+
+  String _getPayrollTypeLabel(AppLocalizations l10n, PayrollType type) {
+    switch (type) {
+      case PayrollType.monthly:
+        return l10n.payrollTypeMonthly;
+      case PayrollType.daily:
+        return l10n.payrollTypeDaily;
+    }
   }
 }

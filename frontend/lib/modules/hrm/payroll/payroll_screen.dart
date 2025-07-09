@@ -55,7 +55,7 @@ class _PayrollViewState extends State<PayrollView> {
                   onPressed: () =>
                       _showAddDialog(context, state.availableEmployees),
                   icon: const Icon(Icons.add),
-                  tooltip: 'เพิ่มข้อมูลเงินเดือน',
+                  tooltip: l10n.payrollAdd,
                 );
               }
               return const SizedBox.shrink();
@@ -163,7 +163,8 @@ class _PayrollViewState extends State<PayrollView> {
                 child: BlocBuilder<PayrollBloc, PayrollState>(
                   builder: (context, state) {
                     if (state is PayrollLoading) {
-                      return const Center(
+                      final l10n = AppLocalizations.of(context)!;
+                      return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -172,10 +173,10 @@ class _PayrollViewState extends State<PayrollView> {
                                 SunTheme.sunOrange,
                               ),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Text(
-                              'กำลังโหลดข้อมูล...',
-                              style: TextStyle(
+                              l10n.payrollLoading,
+                              style: const TextStyle(
                                 color: SunTheme.textSecondary,
                                 fontSize: 16,
                               ),
@@ -254,7 +255,7 @@ class _PayrollViewState extends State<PayrollView> {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            'เกิดข้อผิดพลาดในการโหลดข้อมูล',
+                            l10n.payrollError,
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: SunTheme.textPrimary,
                               fontWeight: FontWeight.w500,
@@ -268,7 +269,7 @@ class _PayrollViewState extends State<PayrollView> {
                               );
                             },
                             icon: const Icon(Icons.refresh),
-                            label: const Text('ลองใหม่'),
+                            label: Text(l10n.payrollTryAgain),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: SunTheme.sunOrange,
                               foregroundColor: Colors.white,
@@ -297,6 +298,7 @@ class _PayrollViewState extends State<PayrollView> {
     bool isMobile, [
     List<PayrollEmployee>? filteredEmployees,
   ]) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final employees = filteredEmployees ?? state.payrollEmployees;
     final selectedCount = state.selectedEmployeeIds.length;
@@ -346,8 +348,8 @@ class _PayrollViewState extends State<PayrollView> {
                   children: [
                     Text(
                       selectedCount > 0
-                          ? 'เลือกแล้ว $selectedCount จาก $totalCount คน${_searchQuery.isNotEmpty ? ' (กรองแล้ว)' : ''}'
-                          : 'เลือกพนักงานเพื่อส่งออกสลิป${_searchQuery.isNotEmpty ? ' ($totalCount คนที่พบ)' : ''}',
+                          ? l10n.payrollSelectedCount(selectedCount, totalCount)
+                          : l10n.payrollAllSelected(totalCount),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: selectedCount > 0
@@ -357,7 +359,7 @@ class _PayrollViewState extends State<PayrollView> {
                     ),
                     if (selectedCount == 0)
                       Text(
-                        'สามารถเลือกหลายคนได้',
+                        l10n.payrollMultiSelectHint,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
@@ -372,7 +374,7 @@ class _PayrollViewState extends State<PayrollView> {
                     context.read<PayrollBloc>().add(ClearAllSelection());
                   },
                   icon: const Icon(Icons.clear, size: 18),
-                  label: const Text('ยกเลิก'),
+                  label: Text(l10n.payrollClearSelection),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.red.shade600,
                   ),
@@ -383,7 +385,7 @@ class _PayrollViewState extends State<PayrollView> {
                     context.read<PayrollBloc>().add(SelectAllEmployees());
                   },
                   icon: const Icon(Icons.select_all, size: 18),
-                  label: const Text('เลือกทั้งหมด'),
+                  label: Text(l10n.payrollSelectAll),
                   style: TextButton.styleFrom(
                     foregroundColor: SunTheme.sunOrange,
                   ),
@@ -450,8 +452,8 @@ class _PayrollViewState extends State<PayrollView> {
                     : const Icon(Icons.picture_as_pdf, size: 20),
                 label: Text(
                   state.isExporting
-                      ? 'กำลังส่งออก PDF...'
-                      : 'ส่งออกสลิปเงินเดือน PDF ($selectedCount คน)',
+                      ? l10n.payrollExporting
+                      : l10n.payrollExport(selectedCount),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -469,6 +471,7 @@ class _PayrollViewState extends State<PayrollView> {
     BuildContext context,
     List<Employee> availableEmployees,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Center(
@@ -499,7 +502,7 @@ class _PayrollViewState extends State<PayrollView> {
 
           // Title and description
           Text(
-            'ยังไม่มีข้อมูลเงินเดือน',
+            l10n.payrollNoData,
             style: theme.textTheme.headlineSmall?.copyWith(
               color: SunTheme.textPrimary,
               fontWeight: FontWeight.bold,
@@ -509,7 +512,7 @@ class _PayrollViewState extends State<PayrollView> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              'เริ่มต้นโดยการเพิ่มข้อมูลเงินเดือนของพนักงาน\nเพื่อจัดการและส่งออกสลิปเงินเดือน',
+              l10n.payrollNoDataDescription,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: SunTheme.textSecondary,
                 height: 1.5,
@@ -568,8 +571,8 @@ class _PayrollViewState extends State<PayrollView> {
               ),
               label: Text(
                 availableEmployees.isNotEmpty
-                    ? 'เพิ่มข้อมูลเงินเดือน'
-                    : 'ไม่มีพนักงานที่ใช้ได้',
+                    ? l10n.payrollAdd
+                    : l10n.payrollNoAvailableEmployee,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -598,7 +601,7 @@ class _PayrollViewState extends State<PayrollView> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'พนักงานทั้งหมดมีข้อมูลเงินเดือนแล้ว\nหรือยังไม่มีข้อมูลพนักงานในระบบ',
+                      l10n.payrollNoEmployeeData,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.amber.shade700,
                         height: 1.4,
@@ -615,10 +618,11 @@ class _PayrollViewState extends State<PayrollView> {
   }
 
   void _showAddDialog(BuildContext context, List<Employee> availableEmployees) {
+    final l10n = AppLocalizations.of(context)!;
     if (availableEmployees.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('ไม่มีพนักงานที่สามารถเพิ่มได้'),
+        SnackBar(
+          content: Text(l10n.payrollNoAvailableEmployeeToAdd),
           backgroundColor: Colors.orange,
         ),
       );
@@ -659,6 +663,8 @@ class _PayrollViewState extends State<PayrollView> {
   }
 
   void _showDeleteConfirmation(BuildContext context, PayrollEmployee employee) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -678,7 +684,7 @@ class _PayrollViewState extends State<PayrollView> {
               ),
             ),
             const SizedBox(width: 12),
-            const Text('ยืนยันการลบ'),
+            Text(l10n.payrollDeleteConfirm),
           ],
         ),
         content: Container(
@@ -687,16 +693,13 @@ class _PayrollViewState extends State<PayrollView> {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.all(16),
-          child: Text(
-            'คุณต้องการลบข้อมูลเงินเดือนของ\n"${employee.fullName}"\nหรือไม่?',
-            style: const TextStyle(height: 1.5),
-          ),
+          child: Text(l10n.payrollDeleteConfirmMsg(employee.fullName)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'ยกเลิก',
+              l10n.cancel, // ใช้ key มาตรฐาน cancel
               style: TextStyle(color: Colors.grey.shade600),
             ),
           ),
@@ -714,7 +717,7 @@ class _PayrollViewState extends State<PayrollView> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('ลบ'),
+            child: Text(l10n.payrollDelete),
           ),
         ],
       ),
@@ -722,6 +725,8 @@ class _PayrollViewState extends State<PayrollView> {
   }
 
   void _showExportConfirmation(BuildContext context, List<String> employeeIds) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -750,16 +755,13 @@ class _PayrollViewState extends State<PayrollView> {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.all(16),
-          child: Text(
-            'คุณต้องการส่งออกสลิปเงินเดือน PDF สำหรับพนักงาน ${employeeIds.length} คน หรือไม่?',
-            style: const TextStyle(height: 1.5),
-          ),
+          child: Text(l10n.payrollExportConfirm(employeeIds.length)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'ยกเลิก',
+              l10n.cancel, // ใช้ key มาตรฐาน cancel
               style: TextStyle(color: Colors.grey.shade600),
             ),
           ),
@@ -775,7 +777,9 @@ class _PayrollViewState extends State<PayrollView> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('ส่งออก'),
+            child: Text(
+              l10n.payrollExported,
+            ), // เปลี่ยนเป็นข้อความยืนยันการส่งออก (หรือใช้ l10n.payrollExport ถ้าต้องการปุ่ม)
           ),
         ],
       ),
@@ -783,6 +787,8 @@ class _PayrollViewState extends State<PayrollView> {
   }
 
   void _showEmployeeDetails(BuildContext context, PayrollEmployee employee) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -823,25 +829,25 @@ class _PayrollViewState extends State<PayrollView> {
                 ),
                 child: Column(
                   children: [
-                    _buildDetailRow('รหัสพนักงาน:', employee.employeeId),
+                    _buildDetailRow(l10n.employeeIdLabel, employee.employeeId),
                     const Divider(height: 20),
                     _buildDetailRow(
-                      'ประเภท:',
-                      employee.payrollType.displayName,
+                      l10n.payrollTypeLabel,
+                      _getPayrollTypeLabel(l10n, employee.payrollType),
                     ),
                     const Divider(height: 20),
                     _buildDetailRow(
-                      'เงินเดือน:',
+                      l10n.payrollSalary,
                       'THB ${employee.salary.toStringAsFixed(0)}',
                     ),
                     const Divider(height: 20),
                     _buildDetailRow(
-                      'สร้างเมื่อ:',
+                      l10n.payrollCreatedAt,
                       _formatDate(employee.createdAt),
                     ),
                     const Divider(height: 20),
                     _buildDetailRow(
-                      'แก้ไขล่าสุด:',
+                      l10n.payrollLastUpdatedLabel,
                       _formatDate(employee.updatedAt),
                     ),
                   ],
@@ -853,7 +859,10 @@ class _PayrollViewState extends State<PayrollView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('ปิด', style: TextStyle(color: Colors.grey.shade600)),
+            child: Text(
+              l10n.payrollClose,
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
           ),
           ElevatedButton.icon(
             onPressed: () {
@@ -868,7 +877,7 @@ class _PayrollViewState extends State<PayrollView> {
               ),
             ),
             icon: const Icon(Icons.edit, size: 18),
-            label: const Text('แก้ไข'),
+            label: Text(l10n.payrollEdit),
           ),
         ],
       ),
@@ -906,7 +915,18 @@ class _PayrollViewState extends State<PayrollView> {
     return '${date.day}/${date.month}/${date.year}';
   }
 
+  // เพิ่มฟังก์ชัน helper สำหรับแปลประเภทเงินเดือน
+  String _getPayrollTypeLabel(AppLocalizations l10n, PayrollType type) {
+    switch (type) {
+      case PayrollType.monthly:
+        return l10n.payrollTypeMonthly;
+      case PayrollType.daily:
+        return l10n.payrollTypeDaily;
+    }
+  }
+
   Widget _buildNoSearchResults() {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Center(
@@ -927,7 +947,7 @@ class _PayrollViewState extends State<PayrollView> {
           ),
           const SizedBox(height: 24),
           Text(
-            'ไม่พบผลการค้นหา',
+            l10n.payrollNoSearchResultTitle,
             style: theme.textTheme.titleLarge?.copyWith(
               color: SunTheme.textPrimary,
               fontWeight: FontWeight.bold,
@@ -935,7 +955,7 @@ class _PayrollViewState extends State<PayrollView> {
           ),
           const SizedBox(height: 12),
           Text(
-            'ไม่พบพนักงานที่ตรงกับ "$_searchQuery"\nลองค้นหาด้วยชื่อหรือรหัสพนักงานอื่น',
+            l10n.payrollNoSearchResultDescription(_searchQuery),
             style: theme.textTheme.bodyMedium?.copyWith(
               color: SunTheme.textSecondary,
               height: 1.5,
@@ -950,7 +970,7 @@ class _PayrollViewState extends State<PayrollView> {
               });
             },
             icon: const Icon(Icons.clear),
-            label: const Text('ล้างการค้นหา'),
+            label: Text(l10n.payrollClearSearch),
             style: TextButton.styleFrom(
               foregroundColor: SunTheme.sunOrange,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

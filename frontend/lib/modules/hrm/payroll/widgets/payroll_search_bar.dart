@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class PayrollSearchBar extends StatelessWidget {
   final String value;
@@ -12,6 +13,7 @@ class PayrollSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: SunTheme.sunSearchBoxDecoration,
@@ -23,7 +25,7 @@ class PayrollSearchBar extends StatelessWidget {
             horizontal: 20,
           ),
           prefixIcon: Icon(Icons.search, color: SunTheme.textSecondary),
-          hintText: 'ค้นหาพนักงาน (ชื่อ หรือ รหัสพนักงาน)',
+          hintText: l10n.payrollSearchHint,
           hintStyle: TextStyle(color: SunTheme.textSecondary, fontSize: 16),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,

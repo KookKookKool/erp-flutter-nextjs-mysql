@@ -92,7 +92,7 @@ class LeaveCard extends StatelessWidget {
                       value: 'edit',
                       child: Row(
                         children: [
-                          const Icon(Icons.edit),
+                          Icon(Icons.edit, color: SunTheme.sunOrange),
                           const SizedBox(width: 8),
                           Text(l10n.localeName == 'th' ? 'แก้ไข' : 'Edit'),
                         ],

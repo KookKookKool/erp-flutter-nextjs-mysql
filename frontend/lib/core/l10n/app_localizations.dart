@@ -1015,6 +1015,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @otStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get otStatusPending;
+
+  /// No description provided for @otStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get otStatusApproved;
+
+  /// No description provided for @otStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get otStatusRejected;
+
+  /// OT reason label
+  ///
+  /// In en, this message translates to:
+  /// **'Reason: {reason}'**
+  String otReason(Object reason);
+
+  /// OT approved with rate label
+  ///
+  /// In en, this message translates to:
+  /// **'Approved (rate x{rate})'**
+  String otApprovedWithRate(Object rate);
+
+  /// No description provided for @otApproveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get otApproveButton;
+
+  /// No description provided for @otRejectButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get otRejectButton;
+
+  /// No description provided for @otSelectRateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select OT Rate'**
+  String get otSelectRateTitle;
+
+  /// Approve OT of employee
+  ///
+  /// In en, this message translates to:
+  /// **'Approve OT of {name}'**
+  String otApproveOf(Object name);
+
+  /// No description provided for @otCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get otCancel;
+
+  /// No description provided for @payrollEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get payrollEdit;
+
+  /// No description provided for @payrollNoSearchResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No search results'**
+  String get payrollNoSearchResultTitle;
+
+  /// No search result for payroll
+  ///
+  /// In en, this message translates to:
+  /// **'No employees found for \"{query}\". Try another name or ID.'**
+  String payrollNoSearchResultDescription(Object query);
+
+  /// Payroll last updated label
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: {date}'**
+  String payrollLastUpdated(Object date);
+
+  /// No description provided for @otHourShort.
+  ///
+  /// In en, this message translates to:
+  /// **'hr.'**
+  String get otHourShort;
+
+  /// No description provided for @payrollSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search employee (name or ID)'**
+  String get payrollSearchHint;
+
+  /// No description provided for @payrollLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading payroll data...'**
+  String get payrollLoading;
+
+  /// No description provided for @payrollExporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting PDF...'**
+  String get payrollExporting;
+
+  /// Export PDF button label
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF ({count} selected)'**
+  String payrollExport(Object count);
+
+  /// Export PDF confirm dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF for {count} employees?'**
+  String payrollExportConfirm(Object count);
+
+  /// No description provided for @payrollExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Payslips exported successfully!'**
+  String get payrollExported;
+
+  /// No description provided for @payrollNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No payroll data yet'**
+  String get payrollNoData;
+
+  /// No description provided for @payrollNoDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by adding payroll data for employees to manage and export payslips.'**
+  String get payrollNoDataDescription;
+
+  /// No description provided for @payrollAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Payroll'**
+  String get payrollAdd;
+
+  /// No description provided for @payrollNoAvailableEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'No available employees'**
+  String get payrollNoAvailableEmployee;
+
+  /// No description provided for @payrollNoAvailableEmployeeToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'No available employee to add'**
+  String get payrollNoAvailableEmployeeToAdd;
+
+  /// No description provided for @payrollExportPayslipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Payslip'**
+  String get payrollExportPayslipTitle;
+
+  /// Select employees info
+  ///
+  /// In en, this message translates to:
+  /// **'Select employees to export payslips ({count} found)'**
+  String payrollAllSelected(Object count);
+
+  /// No description provided for @payrollSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get payrollSelectAll;
+
+  /// No description provided for @payrollClearSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Selection'**
+  String get payrollClearSelection;
+
+  /// Selected count info
+  ///
+  /// In en, this message translates to:
+  /// **'{selected} of {total} selected'**
+  String payrollSelectedCount(Object selected, Object total);
+
+  /// No description provided for @payrollMultiSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can select multiple employees'**
+  String get payrollMultiSelectHint;
+
+  /// No description provided for @payrollError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load payroll data'**
+  String get payrollError;
+
+  /// No description provided for @payrollTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get payrollTryAgain;
+
+  /// No description provided for @payrollDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get payrollDeleteConfirm;
+
+  /// Delete confirm message
+  ///
+  /// In en, this message translates to:
+  /// **'Delete payroll data for \"{name}\"?'**
+  String payrollDeleteConfirmMsg(Object name);
+
+  /// No description provided for @payrollDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get payrollDelete;
+
+  /// No description provided for @payrollClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get payrollClose;
+
+  /// No description provided for @payrollTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type:'**
+  String get payrollTypeLabel;
+
+  /// No description provided for @payrollTypeMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get payrollTypeMonthly;
+
+  /// No description provided for @payrollTypeDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get payrollTypeDaily;
+
+  /// Payroll type label
+  ///
+  /// In en, this message translates to:
+  /// **'{type, select, monthly {Monthly} daily {Daily} other {Unknown}}'**
+  String payrollType(String type);
+
+  /// No description provided for @payrollSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary:'**
+  String get payrollSalary;
+
+  /// No description provided for @payrollCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Created at:'**
+  String get payrollCreatedAt;
+
+  /// No description provided for @payrollLastUpdatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated:'**
+  String get payrollLastUpdatedLabel;
+
+  /// No search result for payroll
+  ///
+  /// In en, this message translates to:
+  /// **'No employees found for \"{query}\". Try another name or ID.'**
+  String payrollNoSearchResult(Object query);
+
+  /// No description provided for @payrollClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Search'**
+  String get payrollClearSearch;
+
+  /// No description provided for @payrollNoEmployeeData.
+  ///
+  /// In en, this message translates to:
+  /// **'All employees already have payroll data or there are no employees in the system.'**
+  String get payrollNoEmployeeData;
 }
 
 class _AppLocalizationsDelegate

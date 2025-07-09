@@ -164,5 +164,126 @@
   "approve": "Approve",
   "reject": "Reject",
   "retry": "Retry",
+  "otStatusPending": "Pending",
+  "otStatusApproved": "Approved",
+  "otStatusRejected": "Rejected",
+  "otReason": "Reason: {reason}",
+  "@otReason": {
+    "description": "OT reason label",
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "otApprovedWithRate": "Approved (rate x{rate})",
+  "@otApprovedWithRate": {
+    "description": "OT approved with rate label",
+    "placeholders": {
+      "rate": {}
+    }
+  },
+  "otApproveButton": "Approve",
+  "otRejectButton": "Reject",
+  "otSelectRateTitle": "Select OT Rate",
+  "otApproveOf": "Approve OT of {name}",
+  "@otApproveOf": {
+    "description": "Approve OT of employee",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "otCancel": "Cancel",
+  "payrollEdit": "Edit",
+  "payrollNoSearchResultTitle": "No search results",
+  "payrollNoSearchResultDescription": "No employees found for \"{query}\". Try another name or ID.",
+  "@payrollNoSearchResultDescription": {
+    "description": "No search result for payroll",
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "payrollLastUpdated": "Last updated: {date}",
+  "@payrollLastUpdated": {
+    "description": "Payroll last updated label",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "otHourShort": "hr.",
+  "payrollSearchHint": "Search employee (name or ID)",
+  "payrollLoading": "Loading payroll data...",
+  "payrollExporting": "Exporting PDF...",
+  "payrollExport": "Export PDF ({count} selected)",
+  "@payrollExport": {
+    "description": "Export PDF button label",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "payrollExportConfirm": "Export PDF for {count} employees?",
+  "@payrollExportConfirm": {
+    "description": "Export PDF confirm dialog",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "payrollExported": "Payslips exported successfully!",
+  "payrollNoData": "No payroll data yet",
+  "payrollNoDataDescription": "Start by adding payroll data for employees to manage and export payslips.",
+  "payrollAdd": "Add Payroll",
+  "payrollNoAvailableEmployee": "No available employees",
+  "payrollNoAvailableEmployeeToAdd": "No available employee to add",
+  "payrollExportPayslipTitle": "Export Payslip",
+  "payrollAllSelected": "Select employees to export payslips ({count} found)",
+  "@payrollAllSelected": {
+    "description": "Select employees info",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "payrollSelectAll": "Select All",
+  "payrollClearSelection": "Clear Selection",
+  "payrollSelectedCount": "{selected} of {total} selected",
+  "@payrollSelectedCount": {
+    "description": "Selected count info",
+    "placeholders": {
+      "selected": {},
+      "total": {}
+    }
+  },
+  "payrollMultiSelectHint": "You can select multiple employees",
+  "payrollError": "Failed to load payroll data",
+  "payrollTryAgain": "Try Again",
+  "payrollDeleteConfirm": "Confirm Delete",
+  "payrollDeleteConfirmMsg": "Delete payroll data for \"{name}\"?",
+  "@payrollDeleteConfirmMsg": {
+    "description": "Delete confirm message",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "payrollDelete": "Delete",
+  "payrollClose": "Close",
+  "payrollTypeLabel": "Type:",
+  "payrollTypeMonthly": "Monthly",
+  "payrollTypeDaily": "Daily",
+  "payrollType": "{type, select, monthly {Monthly} daily {Daily} other {Unknown}}",
+  "@payrollType": {
+    "description": "Payroll type label",
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "payrollSalary": "Salary:",
+  "payrollCreatedAt": "Created at:",
+  "payrollLastUpdatedLabel": "Last updated:",
+  "payrollNoSearchResult": "No employees found for \"{query}\". Try another name or ID.",
+  "@payrollNoSearchResult": {
+    "description": "No search result for payroll",
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "payrollClearSearch": "Clear Search",
+  "payrollNoEmployeeData": "All employees already have payroll data or there are no employees in the system.",
   "@@locale": "en"
 }

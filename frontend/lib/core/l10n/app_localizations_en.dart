@@ -471,4 +471,179 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get otStatusPending => 'Pending';
+
+  @override
+  String get otStatusApproved => 'Approved';
+
+  @override
+  String get otStatusRejected => 'Rejected';
+
+  @override
+  String otReason(Object reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String otApprovedWithRate(Object rate) {
+    return 'Approved (rate x$rate)';
+  }
+
+  @override
+  String get otApproveButton => 'Approve';
+
+  @override
+  String get otRejectButton => 'Reject';
+
+  @override
+  String get otSelectRateTitle => 'Select OT Rate';
+
+  @override
+  String otApproveOf(Object name) {
+    return 'Approve OT of $name';
+  }
+
+  @override
+  String get otCancel => 'Cancel';
+
+  @override
+  String get payrollEdit => 'Edit';
+
+  @override
+  String get payrollNoSearchResultTitle => 'No search results';
+
+  @override
+  String payrollNoSearchResultDescription(Object query) {
+    return 'No employees found for \"$query\". Try another name or ID.';
+  }
+
+  @override
+  String payrollLastUpdated(Object date) {
+    return 'Last updated: $date';
+  }
+
+  @override
+  String get otHourShort => 'hr.';
+
+  @override
+  String get payrollSearchHint => 'Search employee (name or ID)';
+
+  @override
+  String get payrollLoading => 'Loading payroll data...';
+
+  @override
+  String get payrollExporting => 'Exporting PDF...';
+
+  @override
+  String payrollExport(Object count) {
+    return 'Export PDF ($count selected)';
+  }
+
+  @override
+  String payrollExportConfirm(Object count) {
+    return 'Export PDF for $count employees?';
+  }
+
+  @override
+  String get payrollExported => 'Payslips exported successfully!';
+
+  @override
+  String get payrollNoData => 'No payroll data yet';
+
+  @override
+  String get payrollNoDataDescription =>
+      'Start by adding payroll data for employees to manage and export payslips.';
+
+  @override
+  String get payrollAdd => 'Add Payroll';
+
+  @override
+  String get payrollNoAvailableEmployee => 'No available employees';
+
+  @override
+  String get payrollNoAvailableEmployeeToAdd => 'No available employee to add';
+
+  @override
+  String get payrollExportPayslipTitle => 'Export Payslip';
+
+  @override
+  String payrollAllSelected(Object count) {
+    return 'Select employees to export payslips ($count found)';
+  }
+
+  @override
+  String get payrollSelectAll => 'Select All';
+
+  @override
+  String get payrollClearSelection => 'Clear Selection';
+
+  @override
+  String payrollSelectedCount(Object selected, Object total) {
+    return '$selected of $total selected';
+  }
+
+  @override
+  String get payrollMultiSelectHint => 'You can select multiple employees';
+
+  @override
+  String get payrollError => 'Failed to load payroll data';
+
+  @override
+  String get payrollTryAgain => 'Try Again';
+
+  @override
+  String get payrollDeleteConfirm => 'Confirm Delete';
+
+  @override
+  String payrollDeleteConfirmMsg(Object name) {
+    return 'Delete payroll data for \"$name\"?';
+  }
+
+  @override
+  String get payrollDelete => 'Delete';
+
+  @override
+  String get payrollClose => 'Close';
+
+  @override
+  String get payrollTypeLabel => 'Type:';
+
+  @override
+  String get payrollTypeMonthly => 'Monthly';
+
+  @override
+  String get payrollTypeDaily => 'Daily';
+
+  @override
+  String payrollType(String type) {
+    String _temp0 = intl.Intl.selectLogic(type, {
+      'monthly': 'Monthly',
+      'daily': 'Daily',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get payrollSalary => 'Salary:';
+
+  @override
+  String get payrollCreatedAt => 'Created at:';
+
+  @override
+  String get payrollLastUpdatedLabel => 'Last updated:';
+
+  @override
+  String payrollNoSearchResult(Object query) {
+    return 'No employees found for \"$query\". Try another name or ID.';
+  }
+
+  @override
+  String get payrollClearSearch => 'Clear Search';
+
+  @override
+  String get payrollNoEmployeeData =>
+      'All employees already have payroll data or there are no employees in the system.';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import '../models/ot_request.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class OtRequestCard extends StatefulWidget {
   final OtRequest otRequest;
@@ -27,6 +28,7 @@ class OtRequestCard extends StatefulWidget {
 class _OtRequestCardState extends State<OtRequestCard> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final duration = widget.otRequest.endTime.difference(
       widget.otRequest.startTime,
     );
@@ -84,7 +86,7 @@ class _OtRequestCardState extends State<OtRequestCard> {
                           ],
                         ),
                       ),
-                      _buildStatusChip(),
+                      _buildStatusChip(l10n),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -97,26 +99,28 @@ class _OtRequestCardState extends State<OtRequestCard> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${_formatTime(widget.otRequest.startTime)} - ${_formatTime(widget.otRequest.endTime)} (${hours.toStringAsFixed(1)} ชม.)',
+                        '${_formatTime(widget.otRequest.startTime)} - ${_formatTime(widget.otRequest.endTime)} (${hours.toStringAsFixed(1)} ${l10n.otHourShort})',
                         style: TextStyle(color: SunTheme.textSecondary),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'เหตุผล: ${widget.otRequest.reason}',
+                    l10n.otReason(widget.otRequest.reason),
                     style: TextStyle(color: SunTheme.textSecondary),
                   ),
                   if (widget.otRequest.status == OtStatus.pending &&
                       !widget.isMultiSelectMode) ...[
                     const SizedBox(height: 12),
-                    _buildApprovalButtons(),
+                    _buildApprovalButtons(l10n),
                   ],
                   if (widget.otRequest.status == OtStatus.approved &&
                       widget.otRequest.rate != null) ...[
                     const SizedBox(height: 8),
                     Text(
-                      'อนุมัติแล้ว (เรท x${widget.otRequest.rate})',
+                      l10n.otApprovedWithRate(
+                        widget.otRequest.rate!.toString(),
+                      ),
                       style: const TextStyle(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -146,21 +150,21 @@ class _OtRequestCardState extends State<OtRequestCard> {
     );
   }
 
-  Widget _buildStatusChip() {
+  Widget _buildStatusChip(AppLocalizations l10n) {
     Color color;
     String text;
     switch (widget.otRequest.status) {
       case OtStatus.pending:
         color = Colors.orange;
-        text = 'รออนุมัติ';
+        text = l10n.otStatusPending;
         break;
       case OtStatus.approved:
         color = Colors.green;
-        text = 'อนุมัติแล้ว';
+        text = l10n.otStatusApproved;
         break;
       case OtStatus.rejected:
         color = Colors.red;
-        text = 'ปฏิเสธ';
+        text = l10n.otStatusRejected;
         break;
     }
 
@@ -174,7 +178,7 @@ class _OtRequestCardState extends State<OtRequestCard> {
     );
   }
 
-  Widget _buildApprovalButtons() {
+  Widget _buildApprovalButtons(AppLocalizations l10n) {
     return Row(
       children: [
         Expanded(
@@ -184,10 +188,10 @@ class _OtRequestCardState extends State<OtRequestCard> {
               foregroundColor: Colors.white,
             ),
             onPressed: widget.onApprove != null
-                ? () => _showRateDialog()
+                ? () => _showRateDialog(l10n)
                 : null,
             icon: const Icon(Icons.check, size: 16),
-            label: const Text('อนุมัติ'),
+            label: Text(l10n.otApproveButton),
           ),
         ),
         const SizedBox(width: 8),
@@ -199,22 +203,22 @@ class _OtRequestCardState extends State<OtRequestCard> {
             ),
             onPressed: widget.onReject,
             icon: const Icon(Icons.close, size: 16),
-            label: const Text('ปฏิเสธ'),
+            label: Text(l10n.otRejectButton),
           ),
         ),
       ],
     );
   }
 
-  void _showRateDialog() {
+  void _showRateDialog(AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('เลือกเรท OT'),
+        title: Text(l10n.otSelectRateTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('อนุมัติ OT ของ ${widget.otRequest.employeeName}'),
+            Text(l10n.otApproveOf(widget.otRequest.employeeName)),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -248,7 +252,7 @@ class _OtRequestCardState extends State<OtRequestCard> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('ยกเลิก'),
+            child: Text(l10n.otCancel),
           ),
         ],
       ),
