@@ -49,7 +49,7 @@ class _OtRequestCardState extends State<OtRequestCard> {
               : BorderSide.none,
         ),
         color: widget.isSelected
-            ? Colors.blue.withOpacity(0.1)
+            ? Colors.blue.withValues(alpha: 0.1)
             : SunTheme.cardColor,
         child: Stack(
           children: [

@@ -37,7 +37,7 @@ class AttendanceCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center, // กึ่งกลางแนวตั้ง
               children: [
                 CircleAvatar(
-                  backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
+                  backgroundColor: SunTheme.sunOrange.withValues(alpha: 0.1),
                   child: Text(
                     emp.name.characters.first.toUpperCase(),
                     style: TextStyle(
@@ -85,6 +85,34 @@ class AttendanceCard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      // Show OT info if available
+                      if (rec['otStart'] != null && rec['otEnd'] != null) ...[
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 12,
+                              color: rec['otRequestId'] != null
+                                  ? Colors.green.shade600
+                                  : Colors.orange.shade600,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                'OT: ${_formatTime(rec['otStart'])} - ${_formatTime(rec['otEnd'])} ${rec['otRequestId'] != null ? "(อนุมัติ)" : ""}',
+                                style: TextStyle(
+                                  color: rec['otRequestId'] != null
+                                      ? Colors.green.shade600
+                                      : Colors.orange.shade600,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),

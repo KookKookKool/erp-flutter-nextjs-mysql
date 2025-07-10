@@ -43,7 +43,7 @@ class PayrollEmployeeCard extends StatelessWidget {
           gradient: isSelected
               ? LinearGradient(
                   colors: [
-                    SunTheme.sunOrange.withOpacity(0.05),
+                    SunTheme.sunOrange.withValues(alpha: 0.05),
                     SunTheme.sunLight,
                   ],
                   begin: Alignment.topLeft,
@@ -97,7 +97,7 @@ class PayrollEmployeeCard extends StatelessWidget {
                       radius: 24,
                       backgroundColor: isSelected
                           ? SunTheme.sunOrange
-                          : SunTheme.sunOrange.withOpacity(0.1),
+                          : SunTheme.sunOrange.withValues(alpha: 0.1),
                       child: Text(
                         employee.fullName.isNotEmpty
                             ? employee.fullName[0].toUpperCase()
@@ -200,7 +200,7 @@ class PayrollEmployeeCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.grey.shade200, width: 1),
                   ),
@@ -242,7 +242,10 @@ class PayrollEmployeeCard extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  _getPayrollTypeLabel(l10n, employee.payrollType),
+                                  _getPayrollTypeLabel(
+                                    l10n,
+                                    employee.payrollType,
+                                  ),
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color:
                                         employee.payrollType ==
@@ -265,13 +268,15 @@ class PayrollEmployeeCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  SunTheme.sunOrange.withOpacity(0.1),
-                                  SunTheme.sunYellow.withOpacity(0.1),
+                                  SunTheme.sunOrange.withValues(alpha: 0.1),
+                                  SunTheme.sunYellow.withValues(alpha: 0.1),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: SunTheme.sunOrange.withOpacity(0.3),
+                                color: SunTheme.sunOrange.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                             ),
                             child: Text(

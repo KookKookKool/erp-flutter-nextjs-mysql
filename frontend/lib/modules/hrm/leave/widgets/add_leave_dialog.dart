@@ -368,12 +368,9 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
                   ],
                 ),
               );
-              if (confirmed == true) {
-                final navigator = Navigator.of(context);
-                if (mounted) {
-                  widget.onDelete!();
-                  navigator.pop();
-                }
+              if (confirmed == true && mounted) {
+                widget.onDelete!();
+                Navigator.of(context).pop();
               }
             },
             style: TextButton.styleFrom(foregroundColor: SunTheme.error),
@@ -440,14 +437,12 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
 
                 await widget.onSave(leave);
 
-                final navigator = Navigator.of(context);
                 if (mounted) {
-                  navigator.pop();
+                  Navigator.of(context).pop();
                 }
               } catch (e) {
-                final scaffoldMessenger = ScaffoldMessenger.of(context);
                 if (mounted) {
-                  scaffoldMessenger.showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('เกิดข้อผิดพลาด: ${e.toString()}')),
                   );
                 }

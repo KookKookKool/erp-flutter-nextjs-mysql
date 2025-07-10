@@ -1303,6 +1303,486 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All employees already have payroll data or there are no employees in the system.'**
   String get payrollNoEmployeeData;
+
+  /// No description provided for @payrollSocialSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Security'**
+  String get payrollSocialSecurity;
+
+  /// No description provided for @payrollSocialSecurityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Security Amount'**
+  String get payrollSocialSecurityLabel;
+
+  /// No description provided for @payrollSocialSecurityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter social security amount'**
+  String get payrollSocialSecurityHint;
+
+  /// No description provided for @payrollSalaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary Amount'**
+  String get payrollSalaryLabel;
+
+  /// No description provided for @payrollSalaryHintMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 25000'**
+  String get payrollSalaryHintMonthly;
+
+  /// No description provided for @payrollSalaryHintDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 500'**
+  String get payrollSalaryHintDaily;
+
+  /// No description provided for @payrollSalaryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter salary amount'**
+  String get payrollSalaryRequired;
+
+  /// No description provided for @payrollSalaryInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid salary amount'**
+  String get payrollSalaryInvalid;
+
+  /// No description provided for @payrollBaht.
+  ///
+  /// In en, this message translates to:
+  /// **'Baht'**
+  String get payrollBaht;
+
+  /// No description provided for @payrollSocialSecurityInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid social security amount'**
+  String get payrollSocialSecurityInvalid;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error. Please try again.'**
+  String get connectionError;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @newMemberRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'New Organization Registration'**
+  String get newMemberRegistration;
+
+  /// No description provided for @previousStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Step'**
+  String get previousStep;
+
+  /// No description provided for @nextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Step'**
+  String get nextStep;
+
+  /// No description provided for @submitRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Request'**
+  String get submitRequest;
+
+  /// No description provided for @organizationInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Information'**
+  String get organizationInfo;
+
+  /// No description provided for @orgName.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Name *'**
+  String get orgName;
+
+  /// No description provided for @pleaseEnterOrgName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter organization name'**
+  String get pleaseEnterOrgName;
+
+  /// No description provided for @orgCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Code *'**
+  String get orgCode;
+
+  /// No description provided for @codeForLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Code for login access'**
+  String get codeForLogin;
+
+  /// No description provided for @pleaseGenerateOrgCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please generate organization code'**
+  String get pleaseGenerateOrgCode;
+
+  /// No description provided for @generateNewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate New Code'**
+  String get generateNewCode;
+
+  /// No description provided for @orgEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Email *'**
+  String get orgEmail;
+
+  /// No description provided for @pleaseEnterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter email address'**
+  String get pleaseEnterEmail;
+
+  /// No description provided for @invalidEmailFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get invalidEmailFormat;
+
+  /// No description provided for @orgPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number *'**
+  String get orgPhone;
+
+  /// No description provided for @pleaseEnterPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter phone number'**
+  String get pleaseEnterPhone;
+
+  /// No description provided for @orgAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address *'**
+  String get orgAddress;
+
+  /// No description provided for @pleaseEnterAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter address'**
+  String get pleaseEnterAddress;
+
+  /// No description provided for @orgDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description *'**
+  String get orgDescription;
+
+  /// No description provided for @pleaseEnterDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter description'**
+  String get pleaseEnterDescription;
+
+  /// No description provided for @adminInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator Information'**
+  String get adminInfo;
+
+  /// No description provided for @adminDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This person will be the system administrator for your organization'**
+  String get adminDescription;
+
+  /// No description provided for @adminName.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator Name *'**
+  String get adminName;
+
+  /// No description provided for @pleaseEnterAdminName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter administrator name'**
+  String get pleaseEnterAdminName;
+
+  /// No description provided for @adminEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator Email *'**
+  String get adminEmail;
+
+  /// No description provided for @passwordRequirement.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 6 characters'**
+  String get passwordRequirement;
+
+  /// No description provided for @pleaseEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter password'**
+  String get pleaseEnterPassword;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password *'**
+  String get confirmPassword;
+
+  /// No description provided for @pleaseConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm password'**
+  String get pleaseConfirmPassword;
+
+  /// No description provided for @passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordMismatch;
+
+  /// No description provided for @confirmationInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation Information'**
+  String get confirmationInfo;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @waitingApprovalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your registration request has been submitted and is awaiting approval from our admin team. You will receive a notification email once approved.'**
+  String get waitingApprovalNote;
+
+  /// No description provided for @businessTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Type *'**
+  String get businessTypeLabel;
+
+  /// No description provided for @businessTypeRetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Retail'**
+  String get businessTypeRetail;
+
+  /// No description provided for @businessTypeWholesale.
+  ///
+  /// In en, this message translates to:
+  /// **'Wholesale'**
+  String get businessTypeWholesale;
+
+  /// No description provided for @businessTypeManufacturing.
+  ///
+  /// In en, this message translates to:
+  /// **'Manufacturing'**
+  String get businessTypeManufacturing;
+
+  /// No description provided for @businessTypeService.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get businessTypeService;
+
+  /// No description provided for @businessTypeTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get businessTypeTechnology;
+
+  /// No description provided for @businessTypeEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get businessTypeEducation;
+
+  /// No description provided for @businessTypeHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get businessTypeHealthcare;
+
+  /// No description provided for @businessTypeFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get businessTypeFinance;
+
+  /// No description provided for @businessTypeConstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Construction'**
+  String get businessTypeConstruction;
+
+  /// No description provided for @businessTypeFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Beverage'**
+  String get businessTypeFood;
+
+  /// No description provided for @businessTypeLogistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Logistics'**
+  String get businessTypeLogistics;
+
+  /// No description provided for @businessTypeTourism.
+  ///
+  /// In en, this message translates to:
+  /// **'Tourism'**
+  String get businessTypeTourism;
+
+  /// No description provided for @businessTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get businessTypeOther;
+
+  /// No description provided for @pleaseSelectBusinessType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select business type'**
+  String get pleaseSelectBusinessType;
+
+  /// No description provided for @employeeCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Count *'**
+  String get employeeCountLabel;
+
+  /// No description provided for @employeeCount_1_10.
+  ///
+  /// In en, this message translates to:
+  /// **'1-10 employees'**
+  String get employeeCount_1_10;
+
+  /// No description provided for @employeeCount_11_50.
+  ///
+  /// In en, this message translates to:
+  /// **'11-50 employees'**
+  String get employeeCount_11_50;
+
+  /// No description provided for @employeeCount_51_100.
+  ///
+  /// In en, this message translates to:
+  /// **'51-100 employees'**
+  String get employeeCount_51_100;
+
+  /// No description provided for @employeeCount_101_500.
+  ///
+  /// In en, this message translates to:
+  /// **'101-500 employees'**
+  String get employeeCount_101_500;
+
+  /// No description provided for @employeeCount_501_1000.
+  ///
+  /// In en, this message translates to:
+  /// **'501-1000 employees'**
+  String get employeeCount_501_1000;
+
+  /// No description provided for @employeeCount_1000plus.
+  ///
+  /// In en, this message translates to:
+  /// **'More than 1000 employees'**
+  String get employeeCount_1000plus;
+
+  /// No description provided for @pleaseSelectEmployeeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select employee count'**
+  String get pleaseSelectEmployeeCount;
+
+  /// No description provided for @websiteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get websiteLabel;
+
+  /// No description provided for @websiteInvalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Website must start with http:// or https://'**
+  String get websiteInvalidFormat;
+
+  /// No description provided for @pleaseEnterOrgCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter organization code'**
+  String get pleaseEnterOrgCode;
+
+  /// No description provided for @invalidOrgCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid organization code'**
+  String get invalidOrgCode;
+
+  /// No description provided for @orgNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization code not found'**
+  String get orgNotFound;
+
+  /// No description provided for @orgNotApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization is not approved or cannot login yet'**
+  String get orgNotApproved;
+
+  /// No description provided for @orgCheckError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error checking organization'**
+  String get orgCheckError;
+
+  /// No description provided for @serverConnectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error connecting to server'**
+  String get serverConnectionError;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @languageSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get languageSelection;
 }
 
 class _AppLocalizationsDelegate

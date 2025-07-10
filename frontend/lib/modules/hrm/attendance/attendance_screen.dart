@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/sun_theme.dart';
 import 'bloc/attendance_cubit.dart';
 import 'bloc/ot_cubit.dart';
 import 'services/ot_data_service.dart';
+import 'services/attendance_ot_integration_service.dart';
 import 'widgets/attendance_search_bar.dart';
 import 'widgets/attendance_tab.dart';
 import 'widgets/ot_tab.dart';
@@ -21,10 +22,17 @@ class EmployeeAttendance {
   });
 }
 
-class AttendanceScreen extends StatelessWidget {
-  AttendanceScreen({super.key});
+class AttendanceScreen extends StatefulWidget {
+  const AttendanceScreen({super.key});
 
+  @override
+  State<AttendanceScreen> createState() => _AttendanceScreenState();
+}
+
+class _AttendanceScreenState extends State<AttendanceScreen> {
   final DateTime today = DateTime.now();
+  final AttendanceOtIntegrationService _otIntegrationService =
+      AttendanceOtIntegrationService();
 
   List<EmployeeAttendance> _mockEmployees(DateTime today) {
     DateTime d(int minus) {
@@ -32,7 +40,7 @@ class AttendanceScreen extends StatelessWidget {
       return DateTime(t.year, t.month, t.day);
     }
 
-    return [
+    final employees = [
       EmployeeAttendance(
         id: 'EMP001',
         name: 'สมชาย ใจดี',
@@ -97,6 +105,19 @@ class AttendanceScreen extends StatelessWidget {
         },
       ),
     ];
+
+    // Load approved OT data for all employees
+    _loadApprovedOtData(employees);
+
+    return employees;
+  }
+
+  Future<void> _loadApprovedOtData(List<EmployeeAttendance> employees) async {
+    try {
+      await _otIntegrationService.updateAllAttendanceWithApprovedOt(employees);
+    } catch (e) {
+      print('Error loading approved OT data: $e');
+    }
   }
 
   @override

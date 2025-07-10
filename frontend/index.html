@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRM System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .org-info {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .login-form, .dashboard {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .nav-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e1e1e1;
+        }
+
+        .nav-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 HRM System</h1>
+        <div class="org-info" id="orgInfo">ระบบบริหารทรัพยากรบุคคล</div>
+    </div>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginForm" class="login-form">
+            <h2>เข้าสู่ระบบ</h2>
+            <div id="loginAlert"></div>
+            
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="orgCode">รหัสองค์กร</label>
+                    <input type="text" id="orgCode" name="organization_code" required placeholder="ORG123">
+                </div>
+                
+                <div class="form-group">
+                    <label for="employeeId">รหัสพนักงาน</label>
+                    <input type="text" id="employeeId" name="employee_id" required placeholder="EMP001">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn">เข้าสู่ระบบ</button>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard hidden">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('employees')">👥 พนักงาน</button>
+                <button class="nav-tab" onclick="showTab('attendance')">⏰ ลงเวลา</button>
+                <button class="nav-tab" onclick="showTab('announcements')">📢 ประกาศ</button>
+            </div>
+
+            <!-- Employees Tab -->
+            <div id="employees" class="tab-content active">
+                <div class="card">
+                    <h3>จัดการพนักงาน</h3>
+                    <button class="btn" onclick="showAddEmployeeForm()">+ เพิ่มพนักงาน</button>
+                    
+                    <div id="employeesList" class="loading">กำลังโหลด...</div>
+                </div>
+
+                <!-- Add Employee Form -->
+                <div id="addEmployeeForm" class="card hidden">
+                    <h3>เพิ่มพนักงานใหม่</h3>
+                    <form id="newEmployeeForm">
+                        <div class="form-group">
+                            <label for="empId">รหัสพนักงาน</label>
+                            <input type="text" id="empId" name="employee_id" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="firstName">ชื่อ</label>
+                            <input type="text" id="firstName" name="first_name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">นามสกุล</label>
+                            <input type="text" id="lastName" name="last_name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">อีเมล</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">เบอร์โทร</label>
+                            <input type="text" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="baseSalary">เงินเดือนพื้นฐาน</label>
+                            <input type="number" id="baseSalary" name="base_salary" required>
+                        </div>
+                        
+                        <button type="submit" class="btn">บันทึก</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideAddEmployeeForm()">ยกเลิก</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div id="attendance" class="tab-content">
+                <div class="card">
+                    <h3>ลงเวลาเข้า-ออกงาน</h3>
+                    <button class="btn" onclick="clockIn()">เข้างาน</button>
+                    <button class="btn btn-secondary" onclick="clockOut()">ออกงาน</button>
+                    
+                    <div id="attendanceStatus" class="loading">กำลังโหลดสถานะ...</div>
+                </div>
+            </div>
+
+            <!-- Announcements Tab -->
+            <div id="announcements" class="tab-content">
+                <div class="card">
+                    <h3>ประกาศ</h3>
+                    <div id="announcementsList" class="loading">กำลังโหลดประกาศ...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let authToken = localStorage.getItem('authToken');
+        let organizationCode = localStorage.getItem('organizationCode');
+        const API_BASE = 'http://localhost:8000/api';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            if (authToken && organizationCode) {
+                showDashboard();
+                loadEmployees();
+                loadAttendanceStatus();
+                loadAnnouncements();
+            }
+        });
+
+        // Authentication
+        document.getElementById('authForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    authToken = result.data.token;
+                    organizationCode = data.organization_code;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('organizationCode', organizationCode);
+                    
+                    showAlert('loginAlert', 'success', 'เข้าสู่ระบบสำเร็จ');
+                    setTimeout(() => {
+                        showDashboard();
+                        loadEmployees();
+                        loadAttendanceStatus();
+                        loadAnnouncements();
+                    }, 1000);
+                } else {
+                    showAlert('loginAlert', 'error', result.message);
+                }
+            } catch (error) {
+                showAlert('loginAlert', 'error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        });
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('orgInfo').textContent = `องค์กร: ${organizationCode}`;
+        }
+
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Employee management
+        async function loadEmployees() {
+            try {
+                const response = await fetch(`${API_BASE}/hrm/employees`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Organization-Code': organizationCode
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayEmployees(result.data);
+                } else {
+                    document.getElementById('employeesList').innerHTML = `<div class="alert alert-error">${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('employeesList').innerHTML = `<div class="alert alert-error">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+            }
+        }
+
+        function displayEmployees(employees) {
+            const container = document.getElementById('employeesList');
+            
+            if (employees.length === 0) {
+                container.innerHTML = '<p>ไม่มีข้อมูลพนักงาน</p>';
+                return;
+            }
+            
+            let html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>ชื่อ-นามสกุล</th>
+                            <th>อีเมล</th>
+                            <th>เงินเดือน</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            employees.forEach(emp => {
+                html += `
+                    <tr>
+                        <td>${emp.employee_id}</td>
+                        <td>${emp.first_name} ${emp.last_name}</td>
+                        <td>${emp.email}</td>
+                        <td>${emp.base_salary ? emp.base_salary.toLocaleString() : '-'}</td>
+                        <td>${emp.status === 'active' ? 'ใช้งาน' : 'ไม่ใช้งาน'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function showAddEmployeeForm() {
+            document.getElementById('addEmployeeForm').classList.remove('hidden');
+        }
+
+        function hideAddEmployeeForm() {
+            document.getElementById('addEmployeeForm').classList.add('hidden');
+            document.getElementById('newEmployeeForm').reset();
+        }
+
+        // Add new employee
+        document.getElementById('newEmployeeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`${API_BASE}/hrm/employees`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Organization-Code': organizationCode
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    hideAddEmployeeForm();
+                    loadEmployees();
+                    alert('เพิ่มพนักงานสำเร็จ');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.message);
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        });
+
+        // Attendance functions
+        async function loadAttendanceStatus() {
+            // Get current user's employee ID (assuming it's the same as login)
+            const employeeId = localStorage.getItem('employeeId') || 'EMP001';
+            
+            try {
+                const response = await fetch(`${API_BASE}/hrm/attendance/today/${employeeId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Organization-Code': organizationCode
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayAttendanceStatus(result.data);
+                } else {
+                    document.getElementById('attendanceStatus').innerHTML = `<div class="alert alert-error">${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('attendanceStatus').innerHTML = `<div class="alert alert-error">เกิดข้อผิดพลาดในการโหลดสถานะ</div>`;
+            }
+        }
+
+        function displayAttendanceStatus(data) {
+            const container = document.getElementById('attendanceStatus');
+            
+            if (data) {
+                container.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>สถานะวันนี้:</strong><br>
+                        เข้างาน: ${data.clock_in ? new Date(data.clock_in).toLocaleTimeString('th-TH') : 'ยังไม่ได้เข้างาน'}<br>
+                        ออกงาน: ${data.clock_out ? new Date(data.clock_out).toLocaleTimeString('th-TH') : 'ยังไม่ได้ออกงาน'}
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<p>ยังไม่มีการลงเวลาวันนี้</p>';
+            }
+        }
+
+        async function clockIn() {
+            await clockAction('clock-in', 'เข้างาน');
+        }
+
+        async function clockOut() {
+            await clockAction('clock-out', 'ออกงาน');
+        }
+
+        async function clockAction(action, actionName) {
+            const employeeId = localStorage.getItem('employeeId') || 'EMP001';
+            
+            try {
+                const response = await fetch(`${API_BASE}/hrm/attendance/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Organization-Code': organizationCode
+                    },
+                    body: JSON.stringify({
+                        employee_id: employeeId,
+                        location: 'สำนักงาน',
+                        notes: `${actionName}ผ่านระบบเว็บ`
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`${actionName}สำเร็จ`);
+                    loadAttendanceStatus();
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.message);
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+
+        // Announcements
+        async function loadAnnouncements() {
+            try {
+                const response = await fetch(`${API_BASE}/hrm/announcements/my`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Organization-Code': organizationCode
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayAnnouncements(result.data);
+                } else {
+                    document.getElementById('announcementsList').innerHTML = `<div class="alert alert-error">${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('announcementsList').innerHTML = `<div class="alert alert-error">เกิดข้อผิดพลาดในการโหลดประกาศ</div>`;
+            }
+        }
+
+        function displayAnnouncements(announcements) {
+            const container = document.getElementById('announcementsList');
+            
+            if (announcements.length === 0) {
+                container.innerHTML = '<p>ไม่มีประกาศ</p>';
+                return;
+            }
+            
+            let html = '';
+            announcements.forEach(announcement => {
+                html += `
+                    <div class="card">
+                        <h4>${announcement.title}</h4>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            ${announcement.announcement_type} • 
+                            ${new Date(announcement.created_at).toLocaleDateString('th-TH')}
+                        </p>
+                        <p>${announcement.summary || announcement.content}</p>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Utility functions
+        function showAlert(containerId, type, message) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('organizationCode');
+            localStorage.removeItem('employeeId');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

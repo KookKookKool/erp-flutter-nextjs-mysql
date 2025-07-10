@@ -15,6 +15,7 @@ class PayrollEmployee extends Equatable {
   final String lastName;
   final PayrollType payrollType;
   final double salary;
+  final double socialSecurity;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -25,6 +26,7 @@ class PayrollEmployee extends Equatable {
     required this.lastName,
     required this.payrollType,
     required this.salary,
+    required this.socialSecurity,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -38,6 +40,7 @@ class PayrollEmployee extends Equatable {
     String? lastName,
     PayrollType? payrollType,
     double? salary,
+    double? socialSecurity,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -48,6 +51,7 @@ class PayrollEmployee extends Equatable {
       lastName: lastName ?? this.lastName,
       payrollType: payrollType ?? this.payrollType,
       salary: salary ?? this.salary,
+      socialSecurity: socialSecurity ?? this.socialSecurity,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -61,6 +65,7 @@ class PayrollEmployee extends Equatable {
       'lastName': lastName,
       'payrollType': payrollType.name,
       'salary': salary,
+      'socialSecurity': socialSecurity,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -77,6 +82,7 @@ class PayrollEmployee extends Equatable {
         orElse: () => PayrollType.monthly,
       ),
       salary: (json['salary'] as num).toDouble(),
+      socialSecurity: (json['socialSecurity'] as num?)?.toDouble() ?? 0.0,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -90,6 +96,7 @@ class PayrollEmployee extends Equatable {
     lastName,
     payrollType,
     salary,
+    socialSecurity,
     createdAt,
     updatedAt,
   ];

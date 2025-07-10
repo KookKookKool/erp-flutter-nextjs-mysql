@@ -114,7 +114,9 @@ class _OtTabState extends State<OtTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.otReject),
-        content: Text('${l10n.otReject} ${_selectedIds.length} ${l10n.otRequest}?'),
+        content: Text(
+          '${l10n.otReject} ${_selectedIds.length} ${l10n.otRequest}?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -126,7 +128,10 @@ class _OtTabState extends State<OtTab> {
               Navigator.pop(context);
               _rejectSelected(context);
             },
-            child: Text(l10n.otReject, style: const TextStyle(color: Colors.white)),
+            child: Text(
+              l10n.otReject,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -159,7 +164,7 @@ class _OtTabState extends State<OtTab> {
       },
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
-        
+
         if (state is OtInitial) {
           return Center(child: Text(l10n.loading));
         }
@@ -252,7 +257,11 @@ class _OtTabState extends State<OtTab> {
                 ? _toggleMultiSelectMode
                 : null,
             icon: Icon(_isMultiSelectMode ? Icons.close : Icons.checklist),
-            label: Text(_isMultiSelectMode ? l10n.otCancelMultiSelect : l10n.otMultiSelect),
+            label: Text(
+              _isMultiSelectMode
+                  ? l10n.otCancelMultiSelect
+                  : l10n.otMultiSelect,
+            ),
           ),
 
           if (_isMultiSelectMode) ...[
@@ -295,7 +304,7 @@ class _OtTabState extends State<OtTab> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 4,
               offset: const Offset(0, -2),
             ),
@@ -366,9 +375,7 @@ class _OtTabState extends State<OtTab> {
             Icon(Icons.access_time, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
             Text(
-              _isMultiSelectMode
-                  ? l10n.otNoPendingRequests
-                  : l10n.otNoRequests,
+              _isMultiSelectMode ? l10n.otNoPendingRequests : l10n.otNoRequests,
             ),
           ],
         ),

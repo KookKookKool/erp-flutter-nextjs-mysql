@@ -199,28 +199,32 @@ class _OtRequestDialogState extends State<OtRequestDialog> {
                       reason: reasonController.text,
                     );
 
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          l10n.localeName == 'th'
-                              ? 'ส่งคำขอ OT เรียบร้อยแล้ว'
-                              : 'OT request submitted successfully',
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            l10n.localeName == 'th'
+                                ? 'ส่งคำขอ OT เรียบร้อยแล้ว'
+                                : 'OT request submitted successfully',
+                          ),
+                          backgroundColor: Colors.green,
                         ),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                      );
+                    }
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          l10n.localeName == 'th'
-                              ? 'เกิดข้อผิดพลาดในการส่งคำขอ OT'
-                              : 'Error submitting OT request',
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            l10n.localeName == 'th'
+                                ? 'เกิดข้อผิดพลาดในการส่งคำขอ OT'
+                                : 'Error submitting OT request',
+                          ),
+                          backgroundColor: Colors.red,
                         ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
+                      );
+                    }
                   }
                 }
               : null,

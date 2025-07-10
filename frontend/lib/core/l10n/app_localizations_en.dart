@@ -646,4 +646,248 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get payrollNoEmployeeData =>
       'All employees already have payroll data or there are no employees in the system.';
+
+  @override
+  String get payrollSocialSecurity => 'Social Security';
+
+  @override
+  String get payrollSocialSecurityLabel => 'Social Security Amount';
+
+  @override
+  String get payrollSocialSecurityHint => 'Enter social security amount';
+
+  @override
+  String get payrollSalaryLabel => 'Salary Amount';
+
+  @override
+  String get payrollSalaryHintMonthly => 'e.g. 25000';
+
+  @override
+  String get payrollSalaryHintDaily => 'e.g. 500';
+
+  @override
+  String get payrollSalaryRequired => 'Please enter salary amount';
+
+  @override
+  String get payrollSalaryInvalid => 'Invalid salary amount';
+
+  @override
+  String get payrollBaht => 'Baht';
+
+  @override
+  String get payrollSocialSecurityInvalid => 'Invalid social security amount';
+
+  @override
+  String get connectionError => 'Connection error. Please try again.';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get newMemberRegistration => 'New Organization Registration';
+
+  @override
+  String get previousStep => 'Previous Step';
+
+  @override
+  String get nextStep => 'Next Step';
+
+  @override
+  String get submitRequest => 'Submit Request';
+
+  @override
+  String get organizationInfo => 'Organization Information';
+
+  @override
+  String get orgName => 'Organization Name *';
+
+  @override
+  String get pleaseEnterOrgName => 'Please enter organization name';
+
+  @override
+  String get orgCode => 'Organization Code *';
+
+  @override
+  String get codeForLogin => 'Code for login access';
+
+  @override
+  String get pleaseGenerateOrgCode => 'Please generate organization code';
+
+  @override
+  String get generateNewCode => 'Generate New Code';
+
+  @override
+  String get orgEmail => 'Organization Email *';
+
+  @override
+  String get pleaseEnterEmail => 'Please enter email address';
+
+  @override
+  String get invalidEmailFormat => 'Invalid email format';
+
+  @override
+  String get orgPhone => 'Phone Number *';
+
+  @override
+  String get pleaseEnterPhone => 'Please enter phone number';
+
+  @override
+  String get orgAddress => 'Address *';
+
+  @override
+  String get pleaseEnterAddress => 'Please enter address';
+
+  @override
+  String get orgDescription => 'Description *';
+
+  @override
+  String get pleaseEnterDescription => 'Please enter description';
+
+  @override
+  String get adminInfo => 'Administrator Information';
+
+  @override
+  String get adminDescription =>
+      'This person will be the system administrator for your organization';
+
+  @override
+  String get adminName => 'Administrator Name *';
+
+  @override
+  String get pleaseEnterAdminName => 'Please enter administrator name';
+
+  @override
+  String get adminEmail => 'Administrator Email *';
+
+  @override
+  String get passwordRequirement => 'Minimum 6 characters';
+
+  @override
+  String get pleaseEnterPassword => 'Please enter password';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get confirmPassword => 'Confirm Password *';
+
+  @override
+  String get pleaseConfirmPassword => 'Please confirm password';
+
+  @override
+  String get passwordMismatch => 'Passwords do not match';
+
+  @override
+  String get confirmationInfo => 'Confirmation Information';
+
+  @override
+  String get note => 'Note';
+
+  @override
+  String get waitingApprovalNote =>
+      'Your registration request has been submitted and is awaiting approval from our admin team. You will receive a notification email once approved.';
+
+  @override
+  String get businessTypeLabel => 'Business Type *';
+
+  @override
+  String get businessTypeRetail => 'Retail';
+
+  @override
+  String get businessTypeWholesale => 'Wholesale';
+
+  @override
+  String get businessTypeManufacturing => 'Manufacturing';
+
+  @override
+  String get businessTypeService => 'Service';
+
+  @override
+  String get businessTypeTechnology => 'Technology';
+
+  @override
+  String get businessTypeEducation => 'Education';
+
+  @override
+  String get businessTypeHealthcare => 'Healthcare';
+
+  @override
+  String get businessTypeFinance => 'Finance';
+
+  @override
+  String get businessTypeConstruction => 'Construction';
+
+  @override
+  String get businessTypeFood => 'Food & Beverage';
+
+  @override
+  String get businessTypeLogistics => 'Logistics';
+
+  @override
+  String get businessTypeTourism => 'Tourism';
+
+  @override
+  String get businessTypeOther => 'Other';
+
+  @override
+  String get pleaseSelectBusinessType => 'Please select business type';
+
+  @override
+  String get employeeCountLabel => 'Employee Count *';
+
+  @override
+  String get employeeCount_1_10 => '1-10 employees';
+
+  @override
+  String get employeeCount_11_50 => '11-50 employees';
+
+  @override
+  String get employeeCount_51_100 => '51-100 employees';
+
+  @override
+  String get employeeCount_101_500 => '101-500 employees';
+
+  @override
+  String get employeeCount_501_1000 => '501-1000 employees';
+
+  @override
+  String get employeeCount_1000plus => 'More than 1000 employees';
+
+  @override
+  String get pleaseSelectEmployeeCount => 'Please select employee count';
+
+  @override
+  String get websiteLabel => 'Website';
+
+  @override
+  String get websiteInvalidFormat =>
+      'Website must start with http:// or https://';
+
+  @override
+  String get pleaseEnterOrgCode => 'Please enter organization code';
+
+  @override
+  String get invalidOrgCode => 'Invalid organization code';
+
+  @override
+  String get orgNotFound => 'Organization code not found';
+
+  @override
+  String get orgNotApproved =>
+      'Organization is not approved or cannot login yet';
+
+  @override
+  String get orgCheckError => 'Error checking organization';
+
+  @override
+  String get serverConnectionError => 'Error connecting to server';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get languageSelection => 'Select Language';
 }

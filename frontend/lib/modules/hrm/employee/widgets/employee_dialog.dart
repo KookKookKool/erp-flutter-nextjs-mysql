@@ -157,12 +157,9 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
                   ],
                 ),
               );
-              if (confirm == true) {
-                final navigator = Navigator.of(context);
-                if (mounted) {
-                  navigator.pop('delete');
-                  widget.onDelete?.call();
-                }
+              if (confirm == true && mounted) {
+                Navigator.of(context).pop('delete');
+                widget.onDelete?.call();
               }
             },
             style: TextButton.styleFrom(foregroundColor: SunTheme.error),

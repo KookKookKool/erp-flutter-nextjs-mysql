@@ -38,7 +38,9 @@ class LeaveApprovalCard extends StatelessWidget {
               ? const BorderSide(color: Colors.blue, width: 2)
               : BorderSide.none,
         ),
-        color: isSelected ? Colors.blue.withOpacity(0.1) : SunTheme.cardColor,
+        color: isSelected
+            ? Colors.blue.withValues(alpha: 0.1)
+            : SunTheme.cardColor,
         child: Stack(
           children: [
             Padding(

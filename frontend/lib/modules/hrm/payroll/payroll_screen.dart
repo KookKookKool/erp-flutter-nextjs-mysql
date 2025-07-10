@@ -312,7 +312,7 @@ class _PayrollViewState extends State<PayrollView> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -327,7 +327,7 @@ class _PayrollViewState extends State<PayrollView> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: selectedCount > 0
-                      ? SunTheme.sunOrange.withOpacity(0.1)
+                      ? SunTheme.sunOrange.withValues(alpha: 0.1)
                       : Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -414,7 +414,7 @@ class _PayrollViewState extends State<PayrollView> {
                     ? null
                     : [
                         BoxShadow(
-                          color: SunTheme.sunOrange.withOpacity(0.3),
+                          color: SunTheme.sunOrange.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -484,8 +484,8 @@ class _PayrollViewState extends State<PayrollView> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  SunTheme.sunOrange.withOpacity(0.1),
-                  SunTheme.sunYellow.withOpacity(0.1),
+                  SunTheme.sunOrange.withValues(alpha: 0.1),
+                  SunTheme.sunYellow.withValues(alpha: 0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -495,7 +495,7 @@ class _PayrollViewState extends State<PayrollView> {
             child: Icon(
               Icons.payments_outlined,
               size: 80,
-              color: SunTheme.sunOrange.withOpacity(0.7),
+              color: SunTheme.sunOrange.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 32),
@@ -536,7 +536,7 @@ class _PayrollViewState extends State<PayrollView> {
               boxShadow: availableEmployees.isNotEmpty
                   ? [
                       BoxShadow(
-                        color: SunTheme.sunOrange.withOpacity(0.3),
+                        color: SunTheme.sunOrange.withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 6),
                       ),
@@ -633,17 +633,26 @@ class _PayrollViewState extends State<PayrollView> {
       context: context,
       builder: (dialogContext) => AddPayrollDialog(
         availableEmployees: availableEmployees,
-        onAdd: (employeeId, firstName, lastName, payrollType, salary) async {
-          context.read<PayrollBloc>().add(
-            AddPayrollEmployee(
-              employeeId: employeeId,
-              firstName: firstName,
-              lastName: lastName,
-              payrollType: payrollType,
-              salary: salary,
-            ),
-          );
-        },
+        onAdd:
+            (
+              employeeId,
+              firstName,
+              lastName,
+              payrollType,
+              salary,
+              socialSecurity,
+            ) async {
+              context.read<PayrollBloc>().add(
+                AddPayrollEmployee(
+                  employeeId: employeeId,
+                  firstName: firstName,
+                  lastName: lastName,
+                  payrollType: payrollType,
+                  salary: salary,
+                  socialSecurity: socialSecurity,
+                ),
+              );
+            },
       ),
     );
   }
@@ -736,7 +745,7 @@ class _PayrollViewState extends State<PayrollView> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: SunTheme.sunOrange.withOpacity(0.1),
+                color: SunTheme.sunOrange.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -796,7 +805,7 @@ class _PayrollViewState extends State<PayrollView> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
+              backgroundColor: SunTheme.sunOrange.withValues(alpha: 0.1),
               child: Text(
                 employee.fullName.isNotEmpty
                     ? employee.fullName[0].toUpperCase()
@@ -839,6 +848,11 @@ class _PayrollViewState extends State<PayrollView> {
                     _buildDetailRow(
                       l10n.payrollSalary,
                       'THB ${employee.salary.toStringAsFixed(0)}',
+                    ),
+                    const Divider(height: 20),
+                    _buildDetailRow(
+                      l10n.payrollSocialSecurity,
+                      'THB ${employee.socialSecurity.toStringAsFixed(0)}',
                     ),
                     const Divider(height: 20),
                     _buildDetailRow(

@@ -32,12 +32,16 @@ class OtCubit extends Cubit<OtState> {
     }
   }
 
-  /// Approve OT request
+  /// Approve OT request and update attendance records
   Future<void> approveOtRequest(String requestId, {double? otRate}) async {
     emit(OtProcessing());
     try {
       await _otDataService.approveOtRequest(requestId, otRate: otRate);
       emit(OtProcessed('OT request approved successfully'));
+
+      // Note: Integration with attendance will happen when attendance screen loads
+      // The attendance screen will automatically pick up approved OT data
+
       // Reload the list after approval
       await loadOtRequests();
     } catch (e) {

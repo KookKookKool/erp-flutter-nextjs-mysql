@@ -1,0 +1,74 @@
+/* Additional CSS for wider admin layouts */
+
+/* Full width container */
+.admin-container {
+  max-width: none !important;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .admin-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Table improvements */
+.admin-table {
+  min-width: 100%;
+  table-layout: auto;
+}
+
+.admin-table th,
+.admin-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Button improvements for mobile */
+@media (max-width: 768px) {
+  .admin-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .admin-actions .btn {
+    width: 100%;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Stats grid responsive */
+.stats-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .stats-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

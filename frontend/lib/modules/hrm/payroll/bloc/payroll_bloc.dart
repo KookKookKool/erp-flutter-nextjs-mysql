@@ -19,6 +19,7 @@ class AddPayrollEmployee extends PayrollEvent {
   final String lastName;
   final PayrollType payrollType;
   final double salary;
+  final double socialSecurity;
 
   AddPayrollEmployee({
     required this.employeeId,
@@ -26,6 +27,7 @@ class AddPayrollEmployee extends PayrollEvent {
     required this.lastName,
     required this.payrollType,
     required this.salary,
+    required this.socialSecurity,
   });
 
   @override
@@ -35,6 +37,7 @@ class AddPayrollEmployee extends PayrollEvent {
     lastName,
     payrollType,
     salary,
+    socialSecurity,
   ];
 }
 
@@ -208,6 +211,7 @@ class PayrollBloc extends Bloc<PayrollEvent, PayrollState> {
           lastName: event.lastName,
           payrollType: event.payrollType,
           salary: event.salary,
+          socialSecurity: event.socialSecurity,
         );
 
         final payrollEmployees = _payrollService.getAllPayrollEmployees();

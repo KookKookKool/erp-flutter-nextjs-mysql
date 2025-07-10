@@ -14,6 +14,7 @@ class PayrollService {
       lastName: 'ใจดี',
       payrollType: PayrollType.monthly,
       salary: 25000.0,
+      socialSecurity: 750.0,
       createdAt: DateTime.now().subtract(const Duration(days: 30)),
       updatedAt: DateTime.now().subtract(const Duration(days: 1)),
     ),
@@ -24,8 +25,9 @@ class PayrollService {
       lastName: 'มีสุข',
       payrollType: PayrollType.daily,
       salary: 500.0,
+      socialSecurity: 0.0,
       createdAt: DateTime.now().subtract(const Duration(days: 25)),
-      updatedAt: DateTime.now().subtract(const Duration(days: 2)),
+      updatedAt: DateTime.now().subtract(const Duration(days: 1)),
     ),
     PayrollEmployee(
       id: '3',
@@ -34,6 +36,7 @@ class PayrollService {
       lastName: 'เก่งกาจ',
       payrollType: PayrollType.monthly,
       salary: 35000.0,
+      socialSecurity: 750.0,
       createdAt: DateTime.now().subtract(const Duration(days: 20)),
       updatedAt: DateTime.now().subtract(const Duration(days: 3)),
     ),
@@ -96,6 +99,7 @@ class PayrollService {
     required String lastName,
     required PayrollType payrollType,
     required double salary,
+    required double socialSecurity,
   }) async {
     await Future.delayed(
       const Duration(milliseconds: 500),
@@ -108,6 +112,7 @@ class PayrollService {
       lastName: lastName,
       payrollType: payrollType,
       salary: salary,
+      socialSecurity: socialSecurity,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -142,6 +147,6 @@ class PayrollService {
   Future<void> exportPayslips(List<String> employeeIds) async {
     await Future.delayed(const Duration(seconds: 2)); // Simulate PDF generation
     // In real implementation, this would generate and export PDF files
-    print('Exporting payslips for employees: $employeeIds');
+    // TODO: Implement actual PDF export functionality
   }
 }

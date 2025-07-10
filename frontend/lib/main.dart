@@ -12,6 +12,7 @@ import 'modules/hrm/announcement/announcement_repository.dart';
 import 'modules/hrm/announcement/bloc/announcement_cubit.dart';
 import 'screens/splash_screen.dart';
 import 'screens/org_code_screen.dart';
+import 'screens/organization_registration_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/language_select_screen.dart';
@@ -74,6 +75,7 @@ class _SunErpAppState extends State<SunErpApp> {
         '/': (context) => const SplashScreen(),
         '/language': (context) => const LanguageSelectScreen(),
         '/org': (context) => const OrgCodeScreen(),
+        '/register': (context) => const OrganizationRegistrationScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
       },

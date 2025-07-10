@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import '../attendance_screen.dart';
+import '../services/attendance_ot_integration_service.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 
 class AttendanceEditDialog extends StatefulWidget {
@@ -22,6 +23,12 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
   DateTime? otStart;
   DateTime? otEnd;
   double otRate = 1.5;
+  String? otRequestId;
+  String? otReason;
+  bool isLoadingOtData = false;
+
+  final AttendanceOtIntegrationService _otIntegrationService =
+      AttendanceOtIntegrationService();
 
   @override
   void initState() {
@@ -31,6 +38,15 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
       widget.today.month,
       widget.today.day,
     );
+    _loadAttendanceAndOtData();
+  }
+
+  Future<void> _loadAttendanceAndOtData() async {
+    setState(() {
+      isLoadingOtData = true;
+    });
+
+    // Load existing attendance data
     final rec =
         widget.employee.records[selectedDate] ??
         {
@@ -40,11 +56,33 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
           'otEnd': null,
           'otRate': 1.5,
         };
+
     checkIn = rec['in'];
     checkOut = rec['out'];
-    otStart = rec['otStart'];
-    otEnd = rec['otEnd'];
-    otRate = rec['otRate'] ?? 1.5;
+
+    // Try to load approved OT data first
+    final approvedOtData = await _otIntegrationService
+        .getApprovedOtForEmployeeAndDate(widget.employee.id, selectedDate);
+
+    if (approvedOtData != null) {
+      // Use approved OT data
+      otStart = approvedOtData['otStart'];
+      otEnd = approvedOtData['otEnd'];
+      otRate = approvedOtData['otRate'] ?? 1.5;
+      otRequestId = approvedOtData['otRequestId'];
+      otReason = approvedOtData['otReason'];
+    } else {
+      // Use existing manual data
+      otStart = rec['otStart'];
+      otEnd = rec['otEnd'];
+      otRate = rec['otRate'] ?? 1.5;
+      otRequestId = rec['otRequestId'];
+      otReason = rec['otReason'];
+    }
+
+    setState(() {
+      isLoadingOtData = false;
+    });
   }
 
   Future<void> _pickTime(
@@ -96,21 +134,9 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               if (picked != null) {
                 setState(() {
                   selectedDate = picked;
-                  final rec =
-                      widget.employee.records[selectedDate] ??
-                      {
-                        'in': null,
-                        'out': null,
-                        'otStart': null,
-                        'otEnd': null,
-                        'otRate': 1.5,
-                      };
-                  checkIn = rec['in'];
-                  checkOut = rec['out'];
-                  otStart = rec['otStart'];
-                  otEnd = rec['otEnd'];
-                  otRate = rec['otRate'] ?? 1.5;
                 });
+                // Reload data for the new selected date
+                await _loadAttendanceAndOtData();
               }
             },
           ),
@@ -184,6 +210,65 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               ],
             ),
             const Divider(),
+            // OT Section with approved data indicator
+            if (isLoadingOtData)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            else ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'OT ${otRequestId != null ? "(อนุมัติแล้ว)" : ""}',
+                      style: TextStyle(
+                        color: SunTheme.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  if (otRequestId != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade100,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'อนุมัติ',
+                        style: TextStyle(
+                          color: Colors.green.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              if (otReason != null) ...[
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.blue.shade200),
+                  ),
+                  child: Text(
+                    'เหตุผล: $otReason',
+                    style: TextStyle(color: Colors.blue.shade700, fontSize: 13),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
+            ],
             Row(
               children: [
                 Expanded(
@@ -193,21 +278,29 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => _pickTime(
-                    context,
-                    otStart,
-                    (dt) => setState(() => otStart = dt),
-                  ),
+                  onPressed: otRequestId != null
+                      ? null
+                      : () => _pickTime(
+                          context,
+                          otStart,
+                          (dt) => setState(() => otStart = dt),
+                        ),
                   child: Text(
                     _formatTime(otStart),
-                    style: TextStyle(color: SunTheme.primary),
+                    style: TextStyle(
+                      color: otRequestId != null
+                          ? Colors.grey
+                          : SunTheme.primary,
+                    ),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.clear),
-                  onPressed: () => setState(() => otStart = null),
+                  onPressed: otRequestId != null
+                      ? null
+                      : () => setState(() => otStart = null),
                   tooltip: l10n.cancel,
-                  color: SunTheme.error,
+                  color: otRequestId != null ? Colors.grey : SunTheme.error,
                 ),
               ],
             ),
@@ -220,21 +313,29 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => _pickTime(
-                    context,
-                    otEnd,
-                    (dt) => setState(() => otEnd = dt),
-                  ),
+                  onPressed: otRequestId != null
+                      ? null
+                      : () => _pickTime(
+                          context,
+                          otEnd,
+                          (dt) => setState(() => otEnd = dt),
+                        ),
                   child: Text(
                     _formatTime(otEnd),
-                    style: TextStyle(color: SunTheme.primary),
+                    style: TextStyle(
+                      color: otRequestId != null
+                          ? Colors.grey
+                          : SunTheme.primary,
+                    ),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.clear),
-                  onPressed: () => setState(() => otEnd = null),
+                  onPressed: otRequestId != null
+                      ? null
+                      : () => setState(() => otEnd = null),
                   tooltip: l10n.cancel,
-                  color: SunTheme.error,
+                  color: otRequestId != null ? Colors.grey : SunTheme.error,
                 ),
               ],
             ),
@@ -254,12 +355,18 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
                           value: r,
                           child: Text(
                             'x$r',
-                            style: TextStyle(color: SunTheme.textPrimary),
+                            style: TextStyle(
+                              color: otRequestId != null
+                                  ? Colors.grey
+                                  : SunTheme.textPrimary,
+                            ),
                           ),
                         ),
                       )
                       .toList(),
-                  onChanged: (v) => setState(() => otRate = v ?? 1.5),
+                  onChanged: otRequestId != null
+                      ? null
+                      : (v) => setState(() => otRate = v ?? 1.5),
                   dropdownColor: SunTheme.cardColor,
                 ),
               ],
@@ -284,6 +391,8 @@ class _AttendanceEditDialogState extends State<AttendanceEditDialog> {
               'otStart': otStart,
               'otEnd': otEnd,
               'otRate': otRate,
+              'otRequestId': otRequestId,
+              'otReason': otReason,
             };
             Navigator.pop(context);
           },

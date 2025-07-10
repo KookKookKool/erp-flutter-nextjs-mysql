@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +19,20 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorText;
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  String? _orgCode;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOrgCode();
+  }
+
+  Future<void> _loadOrgCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _orgCode = prefs.getString('org_code');
+    });
+  }
 
   @override
   void dispose() {
@@ -29,18 +46,67 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
       _errorText = null;
     });
-    // TODO: ตรวจสอบ username/password กับ backend
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      _isLoading = false;
-      if (_usernameController.text.trim().isEmpty ||
-          _passwordController.text.isEmpty) {
+
+    final email = _usernameController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _isLoading = false;
         _errorText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+      });
+      return;
+    }
+
+    if (_orgCode == null || _orgCode!.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _errorText = 'ไม่พบรหัสองค์กร กรุณาเลือกองค์กรก่อน';
+      });
+      return;
+    }
+
+    try {
+      final result = await ApiService.login(
+        orgCode: _orgCode!,
+        email: email,
+        password: password,
+      );
+
+      if (result['statusCode'] == 200) {
+        final data = result['body'];
+
+        // Save login data to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', data['token']);
+        await prefs.setString('user_data', json.encode(data['user']));
+        await prefs.setString('org_data', json.encode(data['organization']));
+
+        if (_rememberMe) {
+          await prefs.setString('saved_email', email);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        // ไปหน้า home
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
       } else {
-        // ไปหน้า home (mock)
-        Navigator.of(context).pushReplacementNamed('/home');
+        final error = result['body'];
+        setState(() {
+          _isLoading = false;
+          _errorText = error['error'] ?? 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ';
+        });
       }
-    });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+      });
+    }
   }
 
   @override

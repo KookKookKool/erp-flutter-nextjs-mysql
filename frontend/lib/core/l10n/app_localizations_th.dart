@@ -645,4 +645,247 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get payrollNoEmployeeData =>
       'พนักงานทั้งหมดมีข้อมูลเงินเดือนแล้ว หรือยังไม่มีข้อมูลพนักงานในระบบ';
+
+  @override
+  String get payrollSocialSecurity => 'ประกันสังคม';
+
+  @override
+  String get payrollSocialSecurityLabel => 'จำนวนเงินประกันสังคม';
+
+  @override
+  String get payrollSocialSecurityHint => 'กรอกจำนวนเงินประกันสังคม';
+
+  @override
+  String get payrollSalaryLabel => 'จำนวนเงินเดือน';
+
+  @override
+  String get payrollSalaryHintMonthly => 'เช่น 25000';
+
+  @override
+  String get payrollSalaryHintDaily => 'เช่น 500';
+
+  @override
+  String get payrollSalaryRequired => 'กรุณากรอกจำนวนเงินเดือน';
+
+  @override
+  String get payrollSalaryInvalid => 'จำนวนเงินเดือนไม่ถูกต้อง';
+
+  @override
+  String get payrollBaht => 'บาท';
+
+  @override
+  String get payrollSocialSecurityInvalid => 'จำนวนเงินประกันสังคมไม่ถูกต้อง';
+
+  @override
+  String get connectionError =>
+      'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง';
+
+  @override
+  String get success => 'สำเร็จ';
+
+  @override
+  String get ok => 'ตกลง';
+
+  @override
+  String get newMemberRegistration => 'สมัครสมาชิกองค์กรใหม่';
+
+  @override
+  String get previousStep => 'ขั้นตอนก่อนหน้า';
+
+  @override
+  String get nextStep => 'ขั้นตอนถัดไป';
+
+  @override
+  String get submitRequest => 'ส่งคำขอ';
+
+  @override
+  String get organizationInfo => 'ข้อมูลองค์กร';
+
+  @override
+  String get orgName => 'ชื่อองค์กร *';
+
+  @override
+  String get pleaseEnterOrgName => 'กรุณากรอกชื่อองค์กร';
+
+  @override
+  String get orgCode => 'รหัสองค์กร *';
+
+  @override
+  String get codeForLogin => 'รหัสสำหรับเข้าสู่ระบบ';
+
+  @override
+  String get pleaseGenerateOrgCode => 'กรุณาสร้างรหัสองค์กร';
+
+  @override
+  String get generateNewCode => 'สร้างรหัสใหม่';
+
+  @override
+  String get orgEmail => 'อีเมลองค์กร *';
+
+  @override
+  String get pleaseEnterEmail => 'กรุณากรอกอีเมล';
+
+  @override
+  String get invalidEmailFormat => 'รูปแบบอีเมลไม่ถูกต้อง';
+
+  @override
+  String get orgPhone => 'หมายเลขโทรศัพท์ *';
+
+  @override
+  String get pleaseEnterPhone => 'กรุณากรอกหมายเลขโทรศัพท์';
+
+  @override
+  String get orgAddress => 'ที่อยู่ *';
+
+  @override
+  String get pleaseEnterAddress => 'กรุณากรอกที่อยู่';
+
+  @override
+  String get orgDescription => 'รายละเอียด *';
+
+  @override
+  String get pleaseEnterDescription => 'กรุณากรอกรายละเอียด';
+
+  @override
+  String get adminInfo => 'ข้อมูลผู้ดูแลระบบ';
+
+  @override
+  String get adminDescription => 'บุคคลนี้จะเป็นผู้ดูแลระบบขององค์กรของคุณ';
+
+  @override
+  String get adminName => 'ชื่อผู้ดูแลระบบ *';
+
+  @override
+  String get pleaseEnterAdminName => 'กรุณากรอกชื่อผู้ดูแลระบบ';
+
+  @override
+  String get adminEmail => 'อีเมลผู้ดูแลระบบ *';
+
+  @override
+  String get passwordRequirement => 'อย่างน้อย 6 ตัวอักษร';
+
+  @override
+  String get pleaseEnterPassword => 'กรุณากรอกรหัสผ่าน';
+
+  @override
+  String get passwordTooShort => 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+
+  @override
+  String get confirmPassword => 'ยืนยันรหัสผ่าน *';
+
+  @override
+  String get pleaseConfirmPassword => 'กรุณายืนยันรหัสผ่าน';
+
+  @override
+  String get passwordMismatch => 'รหัสผ่านไม่ตรงกัน';
+
+  @override
+  String get confirmationInfo => 'ข้อมูลยืนยัน';
+
+  @override
+  String get note => 'หมายเหตุ';
+
+  @override
+  String get waitingApprovalNote =>
+      'คำขอสมัครของคุณได้ถูกส่งแล้วและกำลังรออนุมัติจากทีมผู้ดูแล คุณจะได้รับอีเมลแจ้งเตือนเมื่อได้รับการอนุมัติ';
+
+  @override
+  String get businessTypeLabel => 'ประเภทธุรกิจ *';
+
+  @override
+  String get businessTypeRetail => 'ค้าปลีก';
+
+  @override
+  String get businessTypeWholesale => 'ค้าส่ง';
+
+  @override
+  String get businessTypeManufacturing => 'ผลิต';
+
+  @override
+  String get businessTypeService => 'บริการ';
+
+  @override
+  String get businessTypeTechnology => 'เทคโนโลยี';
+
+  @override
+  String get businessTypeEducation => 'การศึกษา';
+
+  @override
+  String get businessTypeHealthcare => 'สุขภาพ';
+
+  @override
+  String get businessTypeFinance => 'การเงิน';
+
+  @override
+  String get businessTypeConstruction => 'ก่อสร้าง';
+
+  @override
+  String get businessTypeFood => 'อาหารและเครื่องดื่ม';
+
+  @override
+  String get businessTypeLogistics => 'โลจิสติกส์';
+
+  @override
+  String get businessTypeTourism => 'ท่องเที่ยว';
+
+  @override
+  String get businessTypeOther => 'อื่นๆ';
+
+  @override
+  String get pleaseSelectBusinessType => 'กรุณาเลือกประเภทธุรกิจ';
+
+  @override
+  String get employeeCountLabel => 'จำนวนพนักงาน *';
+
+  @override
+  String get employeeCount_1_10 => '1-10 คน';
+
+  @override
+  String get employeeCount_11_50 => '11-50 คน';
+
+  @override
+  String get employeeCount_51_100 => '51-100 คน';
+
+  @override
+  String get employeeCount_101_500 => '101-500 คน';
+
+  @override
+  String get employeeCount_501_1000 => '501-1000 คน';
+
+  @override
+  String get employeeCount_1000plus => 'มากกว่า 1000 คน';
+
+  @override
+  String get pleaseSelectEmployeeCount => 'กรุณาเลือกจำนวนพนักงาน';
+
+  @override
+  String get websiteLabel => 'เว็บไซต์';
+
+  @override
+  String get websiteInvalidFormat =>
+      'เว็บไซต์ต้องขึ้นต้นด้วย http:// หรือ https://';
+
+  @override
+  String get pleaseEnterOrgCode => 'กรุณากรอกรหัสองค์กร';
+
+  @override
+  String get invalidOrgCode => 'รหัสองค์กรไม่ถูกต้อง';
+
+  @override
+  String get orgNotFound => 'ไม่พบรหัสองค์กรนี้ในระบบ';
+
+  @override
+  String get orgNotApproved => 'องค์กรยังไม่สามารถเข้าใช้งานได้';
+
+  @override
+  String get orgCheckError => 'เกิดข้อผิดพลาดในการตรวจสอบองค์กร';
+
+  @override
+  String get serverConnectionError => 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+
+  @override
+  String get back => 'ย้อนกลับ';
+
+  @override
+  String get languageSelection => 'เลือกภาษา';
 }

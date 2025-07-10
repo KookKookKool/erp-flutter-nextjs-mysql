@@ -38,10 +38,14 @@ class EmployeeCard extends StatelessWidget {
                 employee.image != null
                     ? CircleAvatar(
                         backgroundImage: FileImage(employee.image!),
-                        backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
+                        backgroundColor: SunTheme.sunOrange.withValues(
+                          alpha: 0.1,
+                        ),
                       )
                     : CircleAvatar(
-                        backgroundColor: SunTheme.sunOrange.withOpacity(0.1),
+                        backgroundColor: SunTheme.sunOrange.withValues(
+                          alpha: 0.1,
+                        ),
                         child: Icon(Icons.person, color: SunTheme.sunOrange),
                       ),
                 const SizedBox(width: 16),

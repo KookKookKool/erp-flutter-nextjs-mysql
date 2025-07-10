@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Main Admin Users (System Level)
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  VIEWER
+}
+
+// Organizations (Tenants)
+model Organization {
+  id          String   @id @default(cuid())
+  orgCode     String   @unique
+  orgName     String
+  orgEmail    String
+  orgPhone    String?
+  orgAddress  String?
+  description String?
+  
+  // Admin Info
+  adminName     String
+  adminEmail    String
+  adminPassword String
+  
+  // Status
+  status        OrgStatus @default(PENDING)
+  isActive      Boolean   @default(false)
+  
+  // Subscription
+  subscriptionPlan   SubscriptionPlan @default(BASIC)
+  subscriptionStart  DateTime?
+  subscriptionEnd    DateTime?
+  
+  // Database Schema
+  schemaName    String?   // Database schema name for this org
+  
+  // Metadata
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  approvedAt    DateTime?
+  approvedBy    String?   // AdminUser ID
+  
+  // Relations
+  users         OrgUser[]
+  
+  @@map("organizations")
+}
+
+enum OrgStatus {
+  PENDING     // รอการอนุมัติ
+  APPROVED    // อนุมัติแล้ว
+  REJECTED    // ปฏิเสธ
+  SUSPENDED   // ระงับการใช้งาน
+  EXPIRED     // หมดอายุ
+}
+
+enum SubscriptionPlan {
+  BASIC
+  STANDARD
+  PREMIUM
+  ENTERPRISE
+}
+
+// Organization Users (Tenant Level)
+model OrgUser {
+  id       String @id @default(cuid())
+  email    String
+  name     String
+  password String
+  role     UserRole @default(USER)
+  isActive Boolean  @default(true)
+  
+  // Organization relation
+  orgId    String
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([email, orgId])
+  @@map("org_users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+  VIEWER
+}
+
+// Audit Log for Admin Actions
+model AdminAuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String   // "APPROVE_ORG", "REJECT_ORG", "CREATE_SCHEMA", etc.
+  target    String   // Organization ID or other target
+  details   Json?    // Additional details about the action
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  
+  @@map("admin_audit_logs")
+}
+
+// System Settings
+model SystemSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+  description String?
+  updatedAt DateTime @updatedAt
+  
+  @@map("system_settings")
+}

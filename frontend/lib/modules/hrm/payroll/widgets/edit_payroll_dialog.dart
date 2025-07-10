@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/payroll_employee.dart';
 import '../../../../core/theme/sun_theme.dart';
+import '../../../../core/l10n/app_localizations.dart';
 
 class EditPayrollDialog extends StatefulWidget {
   final PayrollEmployee employee;
@@ -20,6 +21,7 @@ class EditPayrollDialog extends StatefulWidget {
 class _EditPayrollDialogState extends State<EditPayrollDialog> {
   final _formKey = GlobalKey<FormState>();
   final _salaryController = TextEditingController();
+  final _socialSecurityController = TextEditingController();
 
   late PayrollType _selectedPayrollType;
   bool _isLoading = false;
@@ -29,11 +31,14 @@ class _EditPayrollDialogState extends State<EditPayrollDialog> {
     super.initState();
     _selectedPayrollType = widget.employee.payrollType;
     _salaryController.text = widget.employee.salary.toStringAsFixed(0);
+    _socialSecurityController.text = widget.employee.socialSecurity
+        .toStringAsFixed(0);
   }
 
   @override
   void dispose() {
     _salaryController.dispose();
+    _socialSecurityController.dispose();
     super.dispose();
   }
 
@@ -41,27 +46,29 @@ class _EditPayrollDialogState extends State<EditPayrollDialog> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
     setState(() {
       _isLoading = true;
     });
-
     try {
       final salary = double.parse(_salaryController.text.replaceAll(',', ''));
+      final socialSecurity =
+          double.tryParse(_socialSecurityController.text.replaceAll(',', '')) ??
+          0.0;
       final updatedEmployee = widget.employee.copyWith(
         payrollType: _selectedPayrollType,
         salary: salary,
+        socialSecurity: socialSecurity,
       );
-
       await widget.onUpdate(updatedEmployee);
-
       if (mounted) {
         Navigator.of(context).pop();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.error)),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -175,7 +182,7 @@ class _EditPayrollDialogState extends State<EditPayrollDialog> {
 
               // Salary input
               Text(
-                'เงินเดือน (บาท)',
+                AppLocalizations.of(context)!.payrollSalaryLabel,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -187,21 +194,56 @@ class _EditPayrollDialogState extends State<EditPayrollDialog> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: InputDecoration(
                   hintText: _selectedPayrollType == PayrollType.monthly
-                      ? 'เช่น 25000'
-                      : 'เช่น 500',
+                      ? AppLocalizations.of(context)!.payrollSalaryHintMonthly
+                      : AppLocalizations.of(context)!.payrollSalaryHintDaily,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   prefixIcon: const Icon(Icons.attach_money),
-                  suffixText: 'บาท',
+                  suffixText: AppLocalizations.of(context)!.payrollBaht,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'กรุณากรอกจำนวนเงิน';
+                    return AppLocalizations.of(context)!.payrollSalaryRequired;
                   }
                   final amount = double.tryParse(value.replaceAll(',', ''));
                   if (amount == null || amount <= 0) {
-                    return 'กรุณากรอกจำนวนเงินที่ถูกต้อง';
+                    return AppLocalizations.of(context)!.payrollSalaryInvalid;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              // Social Security input
+              Text(
+                AppLocalizations.of(context)!.payrollSocialSecurityLabel,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _socialSecurityController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(
+                    context,
+                  )!.payrollSocialSecurityHint,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  prefixIcon: const Icon(Icons.security),
+                  suffixText: AppLocalizations.of(context)!.payrollBaht,
+                ),
+                validator: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    final amount = double.tryParse(value.replaceAll(',', ''));
+                    if (amount == null || amount < 0) {
+                      return AppLocalizations.of(
+                        context,
+                      )!.payrollSocialSecurityInvalid;
+                    }
                   }
                   return null;
                 },

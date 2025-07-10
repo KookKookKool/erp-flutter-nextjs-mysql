@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/services/api_service.dart';
 
 class OrgCodeScreen extends StatefulWidget {
   const OrgCodeScreen({super.key});
@@ -26,37 +27,75 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
       _isLoading = true;
       _errorText = null;
     });
-    // TODO: ตรวจสอบรหัสองค์กรกับ backend
-    await Future.delayed(const Duration(seconds: 1));
-    if (_orgCodeController.text.trim().isEmpty) {
+
+    final orgCode = _orgCodeController.text.trim();
+    final localizations = AppLocalizations.of(context)!;
+
+    if (orgCode.isEmpty) {
       setState(() {
         _isLoading = false;
-        _errorText = 'กรุณากรอกรหัสองค์กร';
+        _errorText = localizations.pleaseEnterOrgCode;
       });
-    } else if (_orgCodeController.text.trim().length < 4) {
+      return;
+    }
+
+    if (orgCode.length < 4) {
       setState(() {
         _isLoading = false;
-        _errorText = 'รหัสองค์กรไม่ถูกต้อง';
+        _errorText = localizations.invalidOrgCode;
       });
-    } else {
-      // Save org code to SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('org_code', _orgCodeController.text.trim());
-      setState(() {
-        _isLoading = false;
-      });
-      // ไปหน้า login
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/login');
+      return;
+    }
+
+    try {
+      // ตรวจสอบสถานะองค์กรกับ backend
+      final result = await ApiService.getOrganizationStatus(orgCode);
+
+      if (result['statusCode'] == 200) {
+        final data = result['body'];
+
+        if (data['status'] == 'APPROVED' && data['canLogin'] == true) {
+          // Save org code to SharedPreferences
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('org_code', orgCode.toUpperCase());
+
+          setState(() {
+            _isLoading = false;
+          });
+
+          // ไปหน้า login
+          if (mounted) {
+            Navigator.of(context).pushReplacementNamed('/login');
+          }
+        } else {
+          setState(() {
+            _isLoading = false;
+            _errorText = data['message'] ?? localizations.orgNotApproved;
+          });
+        }
+      } else if (result['statusCode'] == 404) {
+        final error = result['body'];
+        setState(() {
+          _isLoading = false;
+          _errorText = error['message'] ?? localizations.orgNotFound;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _errorText = localizations.orgCheckError;
+        });
       }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorText = localizations.serverConnectionError;
+      });
     }
   }
 
   void _registerOrg() {
-    // TODO: ไปหน้าสมัครใช้งานองค์กรใหม่
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('ฟีเจอร์สมัครใช้งานองค์กรอยู่ระหว่างพัฒนา')),
-    );
+    // ไปหน้าสมัครใช้งานองค์กรใหม่
+    Navigator.of(context).pushNamed('/register');
   }
 
   @override
@@ -64,6 +103,17 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
     final textTheme = Theme.of(context).textTheme;
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.brown),
+          tooltip: localizations.back,
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/language');
+          },
+        ),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth > 600;
@@ -111,6 +161,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
                           horizontal: 16,
                         ),
                       ),
+                      onSubmitted: (_) => _submit(),
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
