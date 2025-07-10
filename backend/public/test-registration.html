@@ -157,39 +157,6 @@
             </div>
 
             <div class="form-group">
-                <label for="businessType">ประเภธ ุรกิจ *</label>
-                <select id="businessType" name="businessType" required>
-                    <option value="">เลือกประเภทธุรกิจ</option>
-                    <option value="RETAIL">ค้าปลีก (Retail)</option>
-                    <option value="WHOLESALE">ค้าส่ง (Wholesale)</option>
-                    <option value="MANUFACTURING">ผลิต (Manufacturing)</option>
-                    <option value="SERVICE">บริการ (Service)</option>
-                    <option value="TECHNOLOGY">เทคโนโลยี (Technology)</option>
-                    <option value="EDUCATION">การศึกษา (Education)</option>
-                    <option value="HEALTHCARE">สุขภาพ (Healthcare)</option>
-                    <option value="FINANCE">การเงิน (Finance)</option>
-                    <option value="CONSTRUCTION">ก่อสร้าง (Construction)</option>
-                    <option value="FOOD">อาหารและเครื่องดื่ม (Food & Beverage)</option>
-                    <option value="LOGISTICS">โลจิสติกส์ (Logistics)</option>
-                    <option value="TOURISM">ท่องเที่ยว (Tourism)</option>
-                    <option value="OTHER">อื่นๆ (Other)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="employeeCount">จำนวนพนักงาน *</label>
-                <select id="employeeCount" name="employeeCount" required>
-                    <option value="">เลือกจำนวนพนักงาน</option>
-                    <option value="1-10">1-10 คน</option>
-                    <option value="11-50">11-50 คน</option>
-                    <option value="51-100">51-100 คน</option>
-                    <option value="101-500">101-500 คน</option>
-                    <option value="501-1000">501-1000 คน</option>
-                    <option value="1000+">มากกว่า 1000 คน</option>
-                </select>
-            </div>
-
-            <div class="form-group">
                 <label for="contactName">ชื่อผู้ติดต่อ *</label>
                 <input type="text" id="contactName" name="contactName" required>
                 <div class="field-hint">ชื่อ-นามสกุล ผู้ติดต่อหลัก</div>
@@ -208,27 +175,59 @@
             </div>
 
             <div class="form-group">
-                <label for="companyRegistrationNumber">เลขทะเบียน บริษัท / หจก. *</label>
-                <input type="text" id="companyRegistrationNumber" name="companyRegistrationNumber" required
-                    pattern="[0-9]{13}" maxlength="13" inputmode="numeric">
+                <label for="companyRegistrationNumber">เลขทะเบียน บริษัท / หจก.</label>
+                <input type="text" id="companyRegistrationNumber" name="companyRegistrationNumber" maxlength="13"
+                    inputmode="numeric">
                 <div class="field-hint">เลขทะเบียน บริษัท / หจก. 13 หลัก (ตัวเลขเท่านั้น)</div>
             </div>
 
             <div class="form-group">
-                <label for="taxId">เลขประจำตัวผู้เสียภาษี *</label>
-                <input type="text" id="taxId" name="taxId" required pattern="[0-9]{13}" maxlength="13"
-                    inputmode="numeric">
+                <label for="taxId">เลขประจำตัวผู้เสียภาษี</label>
+                <input type="text" id="taxId" name="taxId" maxlength="13" inputmode="numeric">
                 <div class="field-hint">เลขประจำตัวผู้เสียภาษี 13 หลัก (ตัวเลขเท่านั้น)</div>
-            </div>
-
-            <div class="form-group">
-                <label for="address">ที่อยู่องค์กร *</label>
-                <textarea id="address" name="address" required placeholder="ที่อยู่สำนักงานใหญ่"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="website">เว็บไซต์</label>
                 <input type="url" id="website" name="website" placeholder="https://example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="businessType">ประเภทธุรกิจ</label>
+                <select id="businessType" name="businessType">
+                    <option value="">เลือกประเภทธุรกิจ</option>
+                    <option value="RETAIL">ค้าปลีก (Retail)</option>
+                    <option value="WHOLESALE">ค้าส่ง (Wholesale)</option>
+                    <option value="MANUFACTURING">ผลิต (Manufacturing)</option>
+                    <option value="SERVICE">บริการ (Service)</option>
+                    <option value="TECHNOLOGY">เทคโนโลยี (Technology)</option>
+                    <option value="EDUCATION">การศึกษา (Education)</option>
+                    <option value="HEALTHCARE">สุขภาพ (Healthcare)</option>
+                    <option value="FINANCE">การเงิน (Finance)</option>
+                    <option value="CONSTRUCTION">ก่อสร้าง (Construction)</option>
+                    <option value="FOOD">อาหารและเครื่องดื่ม (Food & Beverage)</option>
+                    <option value="LOGISTICS">โลจิสติกส์ (Logistics)</option>
+                    <option value="TOURISM">ท่องเที่ยว (Tourism)</option>
+                    <option value="OTHER">อื่นๆ (Other)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="employeeCount">จำนวนพนักงาน</label>
+                <select id="employeeCount" name="employeeCount">
+                    <option value="">เลือกจำนวนพนักงาน</option>
+                    <option value="1-10">1-10 คน</option>
+                    <option value="11-50">11-50 คน</option>
+                    <option value="51-100">51-100 คน</option>
+                    <option value="101-500">101-500 คน</option>
+                    <option value="501-1000">501-1000 คน</option>
+                    <option value="1000+">มากกว่า 1000 คน</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="address">ที่อยู่องค์กร *</label>
+                <textarea id="address" name="address" required placeholder="ที่อยู่สำนักงานใหญ่"></textarea>
             </div>
 
             <div class="form-group">
@@ -372,7 +371,10 @@
                 orgEmail: formDataObj.contactEmail, // ใช้ contactEmail เป็น orgEmail
                 orgPhone: formDataObj.contactPhone,
                 orgAddress: formDataObj.address || '',
-                orgDescription: `ประเภทธุรกิจ: ${formDataObj.businessType}, จำนวนพนักงาน: ${formDataObj.employeeCount}, เว็บไซต์: ${formDataObj.website || 'ไม่มี'}, รายละเอียด: ${formDataObj.description || 'ไม่มี'}`,
+                orgDescription: formDataObj.description || '', // ส่งเฉพาะรายละเอียดเพิ่มเติม
+                businessType: formDataObj.businessType || '',
+                employeeCount: formDataObj.employeeCount || '',
+                website: formDataObj.website || '',
                 companyRegistrationNumber: formDataObj.companyRegistrationNumber,
                 taxId: formDataObj.taxId,
                 adminName: formDataObj.contactName, // ใช้ contactName เป็น adminName

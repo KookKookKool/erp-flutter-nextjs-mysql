@@ -1,4 +1,5 @@
 {
+  "/admin/organizations/page": "app/admin/organizations/page.js",
   "/api/admin/organizations/[id]/route": "app/api/admin/organizations/[id]/route.js",
   "/api/hrm/employees/route": "app/api/hrm/employees/route.js",
   "/admin/organizations/[id]/page": "app/admin/organizations/[id]/page.js"

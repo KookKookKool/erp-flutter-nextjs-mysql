@@ -43,6 +43,9 @@ model Organization {
   // New business fields
   companyRegistrationNumber String? // เลขทะเบียน บริษัท / หจก. 13 หลัก
   taxId                    String? // เลขประจำตัวผู้เสียภาษี 13 หลัก
+  businessType             String? // ประเภทธุรกิจ
+  employeeCount            String? // จำนวนพนักงาน
+  website                  String? // เว็บไซต์
   
   // Admin Info
   adminName     String
