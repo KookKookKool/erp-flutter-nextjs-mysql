@@ -111,6 +111,9 @@ class ApiService {
     required String orgDescription,
     required String companyRegistrationNumber,
     required String taxId,
+    required String businessType, // เพิ่ม
+    required String employeeCount, // เพิ่ม
+    required String website, // เพิ่ม
     required String adminName,
     required String adminEmail,
     required String adminPassword,
@@ -126,6 +129,9 @@ class ApiService {
       'orgDescription': orgDescription,
       'companyRegistrationNumber': companyRegistrationNumber,
       'taxId': taxId,
+      'businessType': businessType, // เพิ่ม
+      'employeeCount': employeeCount, // เพิ่ม
+      'website': website, // เพิ่ม
       'adminName': adminName,
       'adminEmail': adminEmail,
       'adminPassword': adminPassword,

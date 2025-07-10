@@ -133,15 +133,18 @@ class _OrganizationRegistrationScreenState
       final result = await ApiService.registerOrganization(
         orgName: _orgNameController.text.trim(),
         orgCode: _orgCodeController.text.trim(),
-        orgEmail: _orgEmailController.text.trim(), // Use as orgEmail
+        orgEmail: _orgEmailController.text.trim(),
         orgPhone: _orgPhoneController.text.trim(),
         orgAddress: _orgAddressController.text.trim(),
         orgDescription: description,
         companyRegistrationNumber: _companyRegistrationNumberController.text
             .trim(),
         taxId: _taxIdController.text.trim(),
+        businessType: _selectedBusinessType, // ส่งแยก
+        employeeCount: _selectedEmployeeCount, // ส่งแยก
+        website: _websiteController.text.trim(), // ส่งแยก
         adminName: _adminNameController.text.trim(),
-        adminEmail: _adminEmailController.text.trim(), // adminEmail separate
+        adminEmail: _adminEmailController.text.trim(),
         adminPassword: _adminPasswordController.text,
       );
 
@@ -668,11 +671,7 @@ class _OrganizationRegistrationScreenState
             label: localizations.websiteLabel,
             keyboardType: TextInputType.url,
             validator: (value) {
-              if (value != null && value.isNotEmpty) {
-                if (!RegExp(r'^https?://').hasMatch(value)) {
-                  return localizations.websiteInvalidFormat;
-                }
-              }
+              // ไม่ต้องบังคับ http/https
               return null;
             },
           ),

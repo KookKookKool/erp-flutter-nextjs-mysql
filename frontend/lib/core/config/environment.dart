@@ -2,7 +2,7 @@
 class Environment {
   // API Configuration - Fixed for security
   static const String _prodApiUrl = 'https://your-production-domain.com/api';
-  static const String _devApiUrl = 'http://localhost:3000/api';
+  static const String _devApiUrl = 'http://10.0.2.2:3000/api';
 
   // App Configuration
   static const String _prodAppName = 'ERP System';

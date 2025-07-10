@@ -4,8 +4,12 @@ export function middleware(request: NextRequest) {
   // Handle CORS for all routes
   const response = NextResponse.next();
 
-  const origin = request.headers.get("origin") || "*";
-  response.headers.set("Access-Control-Allow-Origin", origin);
+  const origin = request.headers.get("origin");
+  if (origin) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
+  } else {
+    response.headers.set("Access-Control-Allow-Origin", "*");
+  }
   response.headers.set("Vary", "Origin");
   response.headers.set("Access-Control-Allow-Credentials", "true");
   response.headers.set(
