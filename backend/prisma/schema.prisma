@@ -40,6 +40,10 @@ model Organization {
   orgAddress  String?
   description String?
   
+  // New business fields
+  companyRegistrationNumber String? // เลขทะเบียน บริษัท / หจก. 13 หลัก
+  taxId                    String? // เลขประจำตัวผู้เสียภาษี 13 หลัก
+  
   // Admin Info
   adminName     String
   adminEmail    String
@@ -86,12 +90,13 @@ enum SubscriptionPlan {
 
 // Organization Users (Tenant Level)
 model OrgUser {
-  id       String @id @default(cuid())
-  email    String
-  name     String
-  password String
-  role     UserRole @default(USER)
-  isActive Boolean  @default(true)
+  id         String @id @default(cuid())
+  employeeId String? // Employee ID for HRM system
+  email      String
+  name       String
+  password   String
+  role       UserRole @default(USER)
+  isActive   Boolean  @default(true)
   
   // Organization relation
   orgId    String
@@ -101,6 +106,7 @@ model OrgUser {
   updatedAt DateTime @updatedAt
   
   @@unique([email, orgId])
+  @@unique([employeeId, orgId])
   @@map("org_users")
 }
 

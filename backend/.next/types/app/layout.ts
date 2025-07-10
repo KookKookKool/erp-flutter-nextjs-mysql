@@ -1,4 +1,4 @@
-// File: D:\flutter\erp_fluter_nextjs_tidb\backend\app\layout.tsx
+// File: D:\flutter\erp_fluter_nextjs_mysql\backend\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

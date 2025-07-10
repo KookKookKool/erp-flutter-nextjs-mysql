@@ -1,4 +1,4 @@
-// File: D:\flutter\erp_fluter_nextjs_tidb\backend\app\api\org-status\[orgCode]\route.ts
+// File: D:\flutter\erp_fluter_nextjs_mysql\backend\app\api\org-status\[orgCode]\route.ts
 import * as entry from '../../../../../../app/api/org-status/[orgCode]/route.js'
 import type { NextRequest } from 'next/server.js'
 

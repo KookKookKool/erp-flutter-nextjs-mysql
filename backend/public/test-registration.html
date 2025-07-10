@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,37 +13,46 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
+
         .form-container {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
         }
-        input, select, textarea {
+
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         textarea {
             resize: vertical;
             height: 80px;
         }
+
         .button-group {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
+
         button {
             flex: 1;
             padding: 12px;
@@ -52,27 +62,34 @@
             font-size: 16px;
             font-weight: bold;
         }
+
         .generate-btn {
             background-color: #4CAF50;
             color: white;
         }
+
         .generate-btn:hover {
             background-color: #45a049;
         }
+
         .submit-btn {
             background-color: #2196F3;
             color: white;
         }
+
         .submit-btn:hover {
             background-color: #1976D2;
         }
+
         .clear-btn {
             background-color: #f44336;
             color: white;
         }
+
         .clear-btn:hover {
             background-color: #d32f2f;
         }
+
         .result {
             margin-top: 20px;
             padding: 15px;
@@ -80,26 +97,31 @@
             border: 1px solid #ddd;
             background-color: #f9f9f9;
         }
+
         .success {
             background-color: #d4edda;
             border-color: #c3e6cb;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             border-color: #f5c6cb;
             color: #721c24;
         }
+
         .info {
             background-color: #d1ecf1;
             border-color: #bee5eb;
             color: #0c5460;
         }
+
         .field-hint {
             font-size: 12px;
             color: #666;
             margin-top: 3px;
         }
+
         .random-data {
             background-color: #fff3cd;
             border: 1px solid #ffeaa7;
@@ -109,10 +131,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="form-container">
         <h1>🏢 ทดสอบการสมัครองค์กร - Random Data Generator</h1>
-        
+
         <div class="random-data">
             <strong>💡 คำแนะนำ:</strong> กดปุ่ม "สร้างข้อมูล Random" เพื่อสร้างข้อมูลทดสอบที่ไม่ซ้ำกัน<br>
             <strong>🔑 รหัสผ่าน Admin:</strong> temp123456 (สำหรับการทดสอบ)<br>
@@ -128,7 +151,8 @@
 
             <div class="form-group">
                 <label for="orgCode">รหัสองค์กร *</label>
-                <input type="text" id="orgCode" name="orgCode" required maxlength="10" style="text-transform: uppercase;">
+                <input type="text" id="orgCode" name="orgCode" required maxlength="10"
+                    style="text-transform: uppercase;">
                 <div class="field-hint">รหัสองค์กร 3-10 ตัวอักษร (ภาษาอังกฤษ/ตัวเลข)</div>
             </div>
 
@@ -179,13 +203,27 @@
 
             <div class="form-group">
                 <label for="contactPhone">เบอร์โทรศัพท์ *</label>
-                <input type="tel" id="contactPhone" name="contactPhone" required>
-                <div class="field-hint">เบอร์โทรศัพท์ที่สามารถติดต่อได้</div>
+                <input type="tel" id="contactPhone" name="contactPhone" required pattern="[0-9]*" inputmode="numeric">
+                <div class="field-hint">เบอร์โทรศัพท์ที่สามารถติดต่อได้ (ตัวเลขเท่านั้น)</div>
             </div>
 
             <div class="form-group">
-                <label for="address">ที่อยู่องค์กร</label>
-                <textarea id="address" name="address" placeholder="ที่อยู่สำนักงานใหญ่"></textarea>
+                <label for="companyRegistrationNumber">เลขทะเบียน บริษัท / หจก. *</label>
+                <input type="text" id="companyRegistrationNumber" name="companyRegistrationNumber" required
+                    pattern="[0-9]{13}" maxlength="13" inputmode="numeric">
+                <div class="field-hint">เลขทะเบียน บริษัท / หจก. 13 หลัก (ตัวเลขเท่านั้น)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="taxId">เลขประจำตัวผู้เสียภาษี *</label>
+                <input type="text" id="taxId" name="taxId" required pattern="[0-9]{13}" maxlength="13"
+                    inputmode="numeric">
+                <div class="field-hint">เลขประจำตัวผู้เสียภาษี 13 หลัก (ตัวเลขเท่านั้น)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">ที่อยู่องค์กร *</label>
+                <textarea id="address" name="address" required placeholder="ที่อยู่สำนักงานใหญ่"></textarea>
             </div>
 
             <div class="form-group">
@@ -195,7 +233,8 @@
 
             <div class="form-group">
                 <label for="description">รายละเอียดเพิ่มเติม</label>
-                <textarea id="description" name="description" placeholder="รายละเอียดเกี่ยวกับองค์กรหรือความต้องการพิเศษ"></textarea>
+                <textarea id="description" name="description"
+                    placeholder="รายละเอียดเกี่ยวกับองค์กรหรือความต้องการพิเศษ"></textarea>
             </div>
 
             <div class="button-group">
@@ -239,39 +278,45 @@
         function generateRandomData() {
             const timestamp = Date.now().toString().slice(-6);
             const randomSuffix = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            
+
             // Generate unique org code
             const orgCode = 'TEST' + timestamp;
-            
+
             // Generate random company name
             const companyName = companyNames[Math.floor(Math.random() * companyNames.length)] + ' จำกัด';
-            
+
             // Generate random contact name
             const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
             const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
             const contactName = firstName + ' ' + lastName;
-            
+
             // Generate random email based on org code
             const contactEmail = `admin.${orgCode.toLowerCase()}@test-company.com`;
-            
-            // Generate random phone
+
+            // Generate random phone (numbers only)
             const contactPhone = '08' + Math.floor(Math.random() * 90000000 + 10000000);
-            
+
+            // Generate random company registration number (13 digits)
+            const companyRegistrationNumber = '1' + Math.floor(Math.random() * 900000000000 + 100000000000).toString();
+
+            // Generate random tax ID (13 digits)
+            const taxId = '3' + Math.floor(Math.random() * 900000000000 + 100000000000).toString();
+
             // Generate random business type
             const businessType = businessTypes[Math.floor(Math.random() * businessTypes.length)];
-            
+
             // Generate random employee count
             const employeeCount = employeeCounts[Math.floor(Math.random() * employeeCounts.length)];
-            
+
             // Generate address
             const address = `${Math.floor(Math.random() * 999 + 1)} ถนนเทสต์ แขวงเทสต์ เขตเทสต์ กรุงเทพมหานคร 10110`;
-            
+
             // Generate website
             const website = `https://${orgCode.toLowerCase()}.test-company.com`;
-            
+
             // Generate description
             const description = `องค์กรทดสอบสำหรับการพัฒนาระบบ ERP รหัส ${orgCode} สร้างเมื่อ ${new Date().toLocaleDateString('th-TH')}`;
-            
+
             // Fill form
             document.getElementById('orgName').value = companyName;
             document.getElementById('orgCode').value = orgCode;
@@ -280,12 +325,14 @@
             document.getElementById('contactName').value = contactName;
             document.getElementById('contactEmail').value = contactEmail;
             document.getElementById('contactPhone').value = contactPhone;
+            document.getElementById('companyRegistrationNumber').value = companyRegistrationNumber;
+            document.getElementById('taxId').value = taxId;
             document.getElementById('address').value = address;
             document.getElementById('website').value = website;
             document.getElementById('description').value = description;
-            
+
             showResult('สร้างข้อมูลทดสอบเรียบร้อย! ✅', 'success');
-            
+
             setTimeout(() => {
                 hideResult();
             }, 2000);
@@ -294,7 +341,7 @@
         function clearForm() {
             document.getElementById('registrationForm').reset();
             showResult('ล้างข้อมูลเรียบร้อย! 🗑️', 'info');
-            
+
             setTimeout(() => {
                 hideResult();
             }, 2000);
@@ -312,12 +359,12 @@
         }
 
         // Form submission
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+        document.getElementById('registrationForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const formDataObj = Object.fromEntries(formData.entries());
-            
+
             // Transform form data to match API requirements
             const data = {
                 orgName: formDataObj.orgName,
@@ -326,13 +373,15 @@
                 orgPhone: formDataObj.contactPhone,
                 orgAddress: formDataObj.address || '',
                 orgDescription: `ประเภทธุรกิจ: ${formDataObj.businessType}, จำนวนพนักงาน: ${formDataObj.employeeCount}, เว็บไซต์: ${formDataObj.website || 'ไม่มี'}, รายละเอียด: ${formDataObj.description || 'ไม่มี'}`,
+                companyRegistrationNumber: formDataObj.companyRegistrationNumber,
+                taxId: formDataObj.taxId,
                 adminName: formDataObj.contactName, // ใช้ contactName เป็น adminName
                 adminEmail: formDataObj.contactEmail, // ใช้ contactEmail เป็น adminEmail
                 adminPassword: 'temp123456' // รหัสผ่านชั่วคราว
             };
-            
+
             showResult('กำลังส่งคำขอสมัคร... ⏳', 'info');
-            
+
             try {
                 const response = await fetch('/api/register', {
                     method: 'POST',
@@ -341,12 +390,12 @@
                     },
                     body: JSON.stringify(data)
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (response.ok) {
                     showResult(`✅ สมัครสำเร็จ! Organization ID: ${result.organization?.id || 'N/A'}`, 'success');
-                    
+
                     // Auto generate new data for next test
                     setTimeout(() => {
                         generateRandomData();
@@ -361,14 +410,36 @@
         });
 
         // Auto-generate data on page load
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             generateRandomData();
         });
 
         // Auto uppercase org code
-        document.getElementById('orgCode').addEventListener('input', function(e) {
+        document.getElementById('orgCode').addEventListener('input', function (e) {
             e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Numeric only validation for phone
+        document.getElementById('contactPhone').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+
+        // Numeric only validation for company registration number
+        document.getElementById('companyRegistrationNumber').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            if (e.target.value.length > 13) {
+                e.target.value = e.target.value.substring(0, 13);
+            }
+        });
+
+        // Numeric only validation for tax ID
+        document.getElementById('taxId').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            if (e.target.value.length > 13) {
+                e.target.value = e.target.value.substring(0, 13);
+            }
         });
     </script>
 </body>
+
 </html>

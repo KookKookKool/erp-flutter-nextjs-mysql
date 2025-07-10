@@ -356,6 +356,60 @@ abstract class AppLocalizations {
   /// **'Employee List'**
   String get employeeListTitle;
 
+  /// No description provided for @companyRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Registration Number'**
+  String get companyRegistrationNumber;
+
+  /// No description provided for @companyRegistrationNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'13-digit company registration number'**
+  String get companyRegistrationNumberHint;
+
+  /// No description provided for @pleaseEnterCompanyRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter company registration number'**
+  String get pleaseEnterCompanyRegistrationNumber;
+
+  /// No description provided for @invalidCompanyRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Company registration number must be 13 digits'**
+  String get invalidCompanyRegistrationNumber;
+
+  /// No description provided for @taxId.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax ID'**
+  String get taxId;
+
+  /// No description provided for @taxIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'13-digit tax identification number'**
+  String get taxIdHint;
+
+  /// No description provided for @pleaseEnterTaxId.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter tax ID'**
+  String get pleaseEnterTaxId;
+
+  /// No description provided for @invalidTaxId.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax ID must be 13 digits'**
+  String get invalidTaxId;
+
+  /// No description provided for @invalidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must contain only numbers'**
+  String get invalidPhoneNumber;
+
   /// No description provided for @employeeListContent.
   ///
   /// In en, this message translates to:
@@ -775,6 +829,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Employee ID'**
   String get employeeIdLabel;
+
+  /// No description provided for @employeeCodeOrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Code / Email'**
+  String get employeeCodeOrEmail;
+
+  /// No description provided for @employeeCodeOrEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter employee code or email address'**
+  String get employeeCodeOrEmailHint;
+
+  /// No description provided for @pleaseEnterAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter all required fields'**
+  String get pleaseEnterAllFields;
+
+  /// No description provided for @orgCodeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization code not found. Please select an organization first'**
+  String get orgCodeNotFound;
 
   /// No description provided for @level.
   ///
@@ -1783,6 +1861,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Language'**
   String get languageSelection;
+
+  /// No description provided for @registrationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration error occurred'**
+  String get registrationError;
+
+  /// No description provided for @serverConnectionErrorDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Server connection error'**
+  String get serverConnectionErrorDetail;
+
+  /// No description provided for @businessTypeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Type'**
+  String get businessTypeSummary;
+
+  /// No description provided for @employeeCountSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Count'**
+  String get employeeCountSummary;
+
+  /// No description provided for @websiteSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get websiteSummary;
+
+  /// No description provided for @descriptionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get descriptionSummary;
+
+  /// No description provided for @noWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get noWebsite;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get noDescription;
+
+  /// No description provided for @businessTypeRetailTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Retail'**
+  String get businessTypeRetailTh;
+
+  /// No description provided for @businessTypeWholesaleTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Wholesale'**
+  String get businessTypeWholesaleTh;
+
+  /// No description provided for @businessTypeManufacturingTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Manufacturing'**
+  String get businessTypeManufacturingTh;
+
+  /// No description provided for @businessTypeServiceTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get businessTypeServiceTh;
+
+  /// No description provided for @businessTypeTechnologyTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get businessTypeTechnologyTh;
+
+  /// No description provided for @businessTypeEducationTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get businessTypeEducationTh;
+
+  /// No description provided for @businessTypeHealthcareTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get businessTypeHealthcareTh;
+
+  /// No description provided for @businessTypeFinanceTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get businessTypeFinanceTh;
+
+  /// No description provided for @businessTypeConstructionTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Construction'**
+  String get businessTypeConstructionTh;
+
+  /// No description provided for @businessTypeFoodTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Beverage'**
+  String get businessTypeFoodTh;
+
+  /// No description provided for @businessTypeLogisticsTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Logistics'**
+  String get businessTypeLogisticsTh;
+
+  /// No description provided for @businessTypeTourismTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Tourism'**
+  String get businessTypeTourismTh;
+
+  /// No description provided for @businessTypeOtherTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get businessTypeOtherTh;
+
+  /// No description provided for @phoneNumberOnlyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must contain only numbers'**
+  String get phoneNumberOnlyError;
+
+  /// No description provided for @companyRegistrationNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Registration Number *'**
+  String get companyRegistrationNumberLabel;
+
+  /// No description provided for @companyRegistrationNumberHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'13-digit company registration number'**
+  String get companyRegistrationNumberHelperText;
+
+  /// No description provided for @pleaseEnterCompanyRegistrationNumberTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter company registration number'**
+  String get pleaseEnterCompanyRegistrationNumberTh;
+
+  /// No description provided for @taxIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax ID *'**
+  String get taxIdLabel;
+
+  /// No description provided for @taxIdHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'13-digit tax identification number'**
+  String get taxIdHelperText;
+
+  /// No description provided for @pleaseEnterTaxIdTh.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter tax ID'**
+  String get pleaseEnterTaxIdTh;
+
+  /// No description provided for @companyRegistrationSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Registration Number'**
+  String get companyRegistrationSummary;
+
+  /// No description provided for @taxIdSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax ID'**
+  String get taxIdSummary;
+
+  /// No description provided for @addressSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get addressSummary;
 }
 
 class _AppLocalizationsDelegate

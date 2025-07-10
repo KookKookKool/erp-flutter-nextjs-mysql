@@ -140,6 +140,36 @@ class AppLocalizationsTh extends AppLocalizations {
   String get employeeListTitle => 'รายชื่อพนักงาน';
 
   @override
+  String get companyRegistrationNumber => 'เลขทะเบียน บริษัท / หจก.';
+
+  @override
+  String get companyRegistrationNumberHint =>
+      'เลขทะเบียน บริษัท / หจก. 13 หลัก';
+
+  @override
+  String get pleaseEnterCompanyRegistrationNumber =>
+      'กรุณากรอกเลขทะเบียน บริษัท / หจก.';
+
+  @override
+  String get invalidCompanyRegistrationNumber =>
+      'เลขทะเบียน บริษัท / หจก. ต้องเป็นตัวเลข 13 หลัก';
+
+  @override
+  String get taxId => 'เลขประจำตัวผู้เสียภาษี';
+
+  @override
+  String get taxIdHint => 'เลขประจำตัวผู้เสียภาษี 13 หลัก';
+
+  @override
+  String get pleaseEnterTaxId => 'กรุณากรอกเลขประจำตัวผู้เสียภาษี';
+
+  @override
+  String get invalidTaxId => 'เลขประจำตัวผู้เสียภาษี ต้องเป็นตัวเลข 13 หลัก';
+
+  @override
+  String get invalidPhoneNumber => 'เบอร์โทรศัพท์ต้องเป็นตัวเลขเท่านั้น';
+
+  @override
   String get employeeListContent => 'เนื้อหารายชื่อพนักงาน';
 
   @override
@@ -348,6 +378,18 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get employeeIdLabel => 'รหัสพนักงาน';
+
+  @override
+  String get employeeCodeOrEmail => 'รหัสพนักงาน / อีเมล';
+
+  @override
+  String get employeeCodeOrEmailHint => 'กรอกรหัสพนักงานหรืออีเมล';
+
+  @override
+  String get pleaseEnterAllFields => 'กรุณากรอกข้อมูลให้ครบถ้วน';
+
+  @override
+  String get orgCodeNotFound => 'ไม่พบรหัสองค์กร กรุณาเลือกองค์กรก่อน';
 
   @override
   String get level => 'ระดับ';
@@ -888,4 +930,100 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get languageSelection => 'เลือกภาษา';
+
+  @override
+  String get registrationError => 'เกิดข้อผิดพลาดในการลงทะเบียน';
+
+  @override
+  String get serverConnectionErrorDetail =>
+      'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+
+  @override
+  String get businessTypeSummary => 'ประเภทธุรกิจ';
+
+  @override
+  String get employeeCountSummary => 'จำนวนพนักงาน';
+
+  @override
+  String get websiteSummary => 'เว็บไซต์';
+
+  @override
+  String get descriptionSummary => 'รายละเอียด';
+
+  @override
+  String get noWebsite => 'ไม่มี';
+
+  @override
+  String get noDescription => 'ไม่มี';
+
+  @override
+  String get businessTypeRetailTh => 'ค้าปลีก (Retail)';
+
+  @override
+  String get businessTypeWholesaleTh => 'ค้าส่ง (Wholesale)';
+
+  @override
+  String get businessTypeManufacturingTh => 'ผลิต (Manufacturing)';
+
+  @override
+  String get businessTypeServiceTh => 'บริการ (Service)';
+
+  @override
+  String get businessTypeTechnologyTh => 'เทคโนโลยี (Technology)';
+
+  @override
+  String get businessTypeEducationTh => 'การศึกษา (Education)';
+
+  @override
+  String get businessTypeHealthcareTh => 'สุขภาพ (Healthcare)';
+
+  @override
+  String get businessTypeFinanceTh => 'การเงิน (Finance)';
+
+  @override
+  String get businessTypeConstructionTh => 'ก่อสร้าง (Construction)';
+
+  @override
+  String get businessTypeFoodTh => 'อาหารและเครื่องดื่ม (Food & Beverage)';
+
+  @override
+  String get businessTypeLogisticsTh => 'โลจิสติกส์ (Logistics)';
+
+  @override
+  String get businessTypeTourismTh => 'ท่องเที่ยว (Tourism)';
+
+  @override
+  String get businessTypeOtherTh => 'อื่นๆ (Other)';
+
+  @override
+  String get phoneNumberOnlyError => 'เบอร์โทรศัพท์ต้องเป็นตัวเลขเท่านั้น';
+
+  @override
+  String get companyRegistrationNumberLabel => 'เลขทะเบียน บริษัท / หจก. *';
+
+  @override
+  String get companyRegistrationNumberHelperText =>
+      'เลขทะเบียน บริษัท / หจก. 13 หลัก';
+
+  @override
+  String get pleaseEnterCompanyRegistrationNumberTh =>
+      'กรุณากรอกเลขทะเบียน บริษัท / หจก.';
+
+  @override
+  String get taxIdLabel => 'เลขประจำตัวผู้เสียภาษี *';
+
+  @override
+  String get taxIdHelperText => 'เลขประจำตัวผู้เสียภาษี 13 หลัก';
+
+  @override
+  String get pleaseEnterTaxIdTh => 'กรุณากรอกเลขประจำตัวผู้เสียภาษี';
+
+  @override
+  String get companyRegistrationSummary => 'เลขทะเบียน บริษัท / หจก.';
+
+  @override
+  String get taxIdSummary => 'เลขประจำตัวผู้เสียภาษี';
+
+  @override
+  String get addressSummary => 'ที่อยู่';
 }

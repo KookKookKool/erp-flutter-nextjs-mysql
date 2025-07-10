@@ -1,4 +1,4 @@
-// File: D:\flutter\erp_fluter_nextjs_tidb\backend\app\admin\organizations\[id]\page.tsx
+// File: D:\flutter\erp_fluter_nextjs_mysql\backend\app\admin\organizations\[id]\page.tsx
 import * as entry from '../../../../../../app/admin/organizations/[id]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

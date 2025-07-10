@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import 'package:frontend/core/services/api_service.dart';
+import 'package:frontend/modules/auth/services/employee_auth_service.dart';
+import 'package:frontend/core/utils/web_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -13,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _employeeIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorText;
@@ -24,36 +25,43 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _loadOrgCode();
+    _loadOrgCodeAndSavedData();
   }
 
-  Future<void> _loadOrgCode() async {
+  Future<void> _loadOrgCodeAndSavedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _orgCode = prefs.getString('org_code');
+      final savedEmployeeId = prefs.getString('saved_employee_id');
+      if (savedEmployeeId != null) {
+        _employeeIdController.text = savedEmployeeId;
+        _rememberMe = true;
+      }
     });
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _employeeIdController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _login() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       _isLoading = true;
       _errorText = null;
     });
 
-    final email = _usernameController.text.trim();
+    final employeeId = _employeeIdController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (employeeId.isEmpty || password.isEmpty) {
       setState(() {
         _isLoading = false;
-        _errorText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+        _errorText = localizations.pleaseEnterAllFields;
       });
       return;
     }
@@ -61,15 +69,18 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_orgCode == null || _orgCode!.isEmpty) {
       setState(() {
         _isLoading = false;
-        _errorText = 'ไม่พบรหัสองค์กร กรุณาเลือกองค์กรก่อน';
+        _errorText = localizations.orgCodeNotFound;
       });
       return;
     }
 
     try {
-      final result = await ApiService.login(
+      // Use Employee Auth Service with dynamic baseUrl
+      String baseUrl = getWebHostNonNull(port: 3000);
+      final authService = EmployeeAuthService(baseUrl: baseUrl);
+      final result = await authService.loginWithEmployeeId(
         orgCode: _orgCode!,
-        email: email,
+        employeeId: employeeId,
         password: password,
       );
 
@@ -79,11 +90,18 @@ class _LoginScreenState extends State<LoginScreen> {
         // Save login data to SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', data['token']);
-        await prefs.setString('user_data', json.encode(data['user']));
+        await prefs.setString('employee_data', json.encode(data['employee']));
         await prefs.setString('org_data', json.encode(data['organization']));
+        await prefs.setString(
+          'permissions',
+          json.encode(data['permissions'] ?? {}),
+        );
+        await prefs.setString('login_type', 'employee');
 
         if (_rememberMe) {
-          await prefs.setString('saved_email', email);
+          await prefs.setString('saved_employee_id', employeeId);
+        } else {
+          await prefs.remove('saved_employee_id');
         }
 
         setState(() {
@@ -98,13 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final error = result['body'];
         setState(() {
           _isLoading = false;
-          _errorText = error['error'] ?? 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ';
+          _errorText = error['error'] ?? localizations.serverConnectionError;
         });
       }
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
+        _errorText = localizations.serverConnectionError;
       });
     }
   }
@@ -156,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 32),
                     TextField(
-                      controller: _usernameController,
+                      controller: _employeeIdController,
                       enabled: !_isLoading,
                       textAlign: TextAlign.center,
                       style: textTheme.bodyLarge?.copyWith(
@@ -171,8 +189,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         errorText: _errorText,
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        labelText: localizations.username,
+                        labelText: localizations.employeeCodeOrEmail,
                         labelStyle: textTheme.bodyMedium?.copyWith(
+                          color: SunTheme.textSecondary,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.badge_outlined,
                           color: SunTheme.textSecondary,
                         ),
                         contentPadding: const EdgeInsets.symmetric(

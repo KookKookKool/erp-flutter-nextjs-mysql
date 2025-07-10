@@ -12,7 +12,9 @@ interface Organization {
   orgEmail: string
   orgPhone: string
   orgAddress: string
-  orgDescription: string
+  description: string
+  companyRegistrationNumber: string
+  taxId: string
   adminName: string
   adminEmail: string
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED' | 'EXPIRED'
@@ -26,6 +28,7 @@ interface Organization {
   isActive: boolean
   users: Array<{
     id: string
+    employee_id?: string
     email: string
     name: string
     role: string
@@ -49,25 +52,36 @@ export default function OrganizationDetailPage() {
     orgPhone: '',
     orgAddress: '',
     orgDescription: '',
+    companyRegistrationNumber: '',
+    taxId: '',
     adminName: '',
     adminEmail: ''
   })
   
-  // User management states
+  // User management states (แก้ไขให้ตรงกับ Flutter)
   const [showUserModal, setShowUserModal] = useState(false)
   const [editingUser, setEditingUser] = useState<any>(null)
   const [userForm, setUserForm] = useState({
-    name: '',
+    employee_id: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    role: 'USER',
+    phone: '',
+    position: '',
+    level: 'Junior',
+    start_date: '',
     password: '',
-    isActive: true
+    is_active: true
   })
   const [isUserUpdating, setIsUserUpdating] = useState(false)
   
   // Permission management states
   const [showPermissionModal, setShowPermissionModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<any>(null)
+
+  // Employee management states (แทน users)
+  const [employees, setEmployees] = useState<any[]>([])
+  const [isEmployeeLoading, setIsEmployeeLoading] = useState(true)
   
   const router = useRouter()
   const params = useParams()
@@ -82,6 +96,37 @@ export default function OrganizationDetailPage() {
 
     fetchOrganization()
   }, [params.id, router])
+
+  // เรียก fetchEmployees เมื่อ organization โหลดเสร็จ
+  useEffect(() => {
+    if (organization && organization.schemaName) {
+      fetchEmployees()
+    }
+  }, [organization])
+
+  // เรียก fetchEmployees หลังจาก organization ถูกโหลดแล้ว
+  useEffect(() => {
+    if (organization && organization.status === 'APPROVED' && organization.schemaName) {
+      fetchEmployees()
+    }
+  }, [organization])
+
+  // Update editForm when editing mode is enabled
+  useEffect(() => {
+    if (isEditing && organization) {
+      setEditForm({
+        orgName: organization.orgName || '',
+        orgEmail: organization.orgEmail || '',
+        orgPhone: organization.orgPhone || '',
+        orgAddress: organization.orgAddress || '',
+        orgDescription: organization.description || '',
+        companyRegistrationNumber: organization.companyRegistrationNumber || '',
+        taxId: organization.taxId || '',
+        adminName: organization.adminName || '',
+        adminEmail: organization.adminEmail || ''
+      })
+    }
+  }, [isEditing, organization])
 
   const fetchOrganization = async () => {
     try {
@@ -103,6 +148,8 @@ export default function OrganizationDetailPage() {
           orgPhone: data.organization.orgPhone || '',
           orgAddress: data.organization.orgAddress || '',
           orgDescription: data.organization.orgDescription || '',
+          companyRegistrationNumber: data.organization.companyRegistrationNumber || '',
+          taxId: data.organization.taxId || '',
           adminName: data.organization.adminName || '',
           adminEmail: data.organization.adminEmail || ''
         })
@@ -126,6 +173,61 @@ export default function OrganizationDetailPage() {
       alert('เกิดข้อผิดพลาดในการดึงข้อมูล')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // ดึง employee list จาก unified API
+  const fetchEmployees = async () => {
+    setIsEmployeeLoading(true)
+    try {
+      const token = localStorage.getItem('adminToken')
+      const orgCode = organization?.orgCode
+      console.log('fetchEmployees called with orgCode:', orgCode)
+      
+      if (!token) {
+        console.log('No admin token available')
+        setEmployees([])
+        return
+      }
+      
+      if (!orgCode) {
+        console.log('No orgCode available, organization status:', organization?.status)
+        setEmployees([])
+        return
+      }
+
+      console.log('Making API call to /api/hrm/employees')
+      const response = await fetch(`/api/hrm/employees`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-Org-Code': orgCode,
+        }
+      })
+      
+      console.log('API /api/hrm/employees status:', response.status)
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('API error response:', errorData)
+        setEmployees([])
+        return
+      }
+      
+      const data = await response.json()
+      console.log('API /api/hrm/employees data:', data)
+      
+      if (data.status === 'success' && data.employees) {
+        setEmployees(data.employees)
+        console.log('Set employees:', data.employees.length, 'items')
+      } else {
+        console.log('No employees in response or invalid response format')
+        setEmployees([])
+      }
+    } catch (e) {
+      console.error('fetchEmployees error:', e)
+      setEmployees([])
+    } finally {
+      setIsEmployeeLoading(false)
     }
   }
 
@@ -261,7 +363,9 @@ export default function OrganizationDetailPage() {
         orgEmail: organization.orgEmail || '',
         orgPhone: organization.orgPhone || '',
         orgAddress: organization.orgAddress || '',
-        orgDescription: organization.orgDescription || '',
+        orgDescription: organization.description || '',
+        companyRegistrationNumber: organization.companyRegistrationNumber || '',
+        taxId: organization.taxId || '',
         adminName: organization.adminName || '',
         adminEmail: organization.adminEmail || ''
       })
@@ -311,135 +415,108 @@ export default function OrganizationDetailPage() {
   const handleAddUser = () => {
     setEditingUser(null)
     setUserForm({
-      name: '',
+      employee_id: '',
+      first_name: '',
+      last_name: '',
       email: '',
-      role: 'USER',
+      phone: '',
+      position: '',
+      level: 'Junior',
+      start_date: '',
       password: '',
-      isActive: true
+      is_active: true
     })
     setShowUserModal(true)
   }
 
-  const handleEditUser = (user: any) => {
-    setEditingUser(user)
-    
-    // สำหรับ Super Admin แสดงเฉพาะฟิลด์รหัสผ่าน
-    if (user.role === 'SUPER_ADMIN') {
-      setUserForm({
-        name: user.name || '',
-        email: user.email || '',
-        role: user.role || 'SUPER_ADMIN',
-        password: '',
-        isActive: user.isActive !== false
-      })
-    } else {
-      setUserForm({
-        name: user.name || '',
-        email: user.email || '',
-        role: user.role || 'USER',
-        password: '',
-        isActive: user.isActive !== false
-      })
-    }
-    
+  const handleEditUser = (emp: any) => {
+    setEditingUser(emp)
+    setUserForm({
+      employee_id: emp.employee_id || '',
+      first_name: emp.first_name || '',
+      last_name: emp.last_name || '',
+      email: emp.email || '',
+      phone: emp.phone || '',
+      position: emp.position || '',
+      level: emp.level || 'Junior',
+      start_date: emp.start_date ? emp.start_date.split('T')[0] : '',
+      password: '',
+      is_active: emp.is_active !== false
+    })
     setShowUserModal(true)
   }
 
   const handleSaveUser = async () => {
-    if (!organization?.schemaName) {
-      alert('ไม่พบข้อมูล schema ขององค์กร')
+    if (!organization?.orgCode) return
+    // Validate
+    if (!userForm.first_name || !userForm.last_name || !userForm.employee_id || !userForm.email) {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน')
       return
     }
-
-    // ตรวจสอบข้อมูลตาม role
-    if (editingUser?.role === 'SUPER_ADMIN') {
-      // สำหรับ Super Admin ต้องมีรหัสผ่านใหม่ถ้าต้องการเปลี่ยน
-      if (!userForm.password) {
-        alert('กรุณากรอกรหัสผ่านใหม่สำหรับ Super Admin')
-        return
-      }
-    } else {
-      // สำหรับผู้ใช้อื่น ๆ
-      if (!userForm.name || !userForm.email) {
-        alert('กรุณากรอกชื่อและอีเมลให้ครบถ้วน')
-        return
-      }
-
-      if (!editingUser && !userForm.password) {
-        alert('กรุณากรอกรหัสผ่านสำหรับผู้ใช้ใหม่')
-        return
-      }
+    if (!editingUser && !userForm.password) {
+      alert('กรุณากรอกรหัสผ่านสำหรับผู้ใช้ใหม่')
+      return
     }
-
     setIsUserUpdating(true)
     try {
       const token = localStorage.getItem('adminToken')
-      const url = editingUser 
-        ? `/api/admin/organizations/${organization.id}/users/${editingUser.id}`
-        : `/api/admin/organizations/${organization.id}/users`
-      
+      const orgCode = organization.orgCode
       const method = editingUser ? 'PUT' : 'POST'
-      
+      const url = '/api/hrm/employees' + (editingUser ? `?id=${editingUser.id}` : '')
+      const body = { ...userForm }
+      if (!editingUser) body.start_date = new Date().toISOString().split('T')[0]
       const response = await fetch(url, {
         method,
         headers: {
           'Authorization': `Bearer ${token}`,
+          'X-Org-Code': orgCode,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          ...userForm,
-          schemaName: organization.schemaName
-        })
+        body: JSON.stringify(body)
       })
-
-      if (response.ok) {
-        const result = await response.json()
-        if (editingUser?.role === 'SUPER_ADMIN') {
-          alert('เปลี่ยนรหัสผ่าน Super Admin เรียบร้อยแล้ว')
-        } else {
-          alert(result.message || 'บันทึกข้อมูลผู้ใช้เรียบร้อยแล้ว')
-        }
+      const data = await response.json()
+      if (response.ok && data.status === 'success') {
+        alert('บันทึกข้อมูลพนักงานเรียบร้อยแล้ว')
         setShowUserModal(false)
-        fetchOrganization() // Refresh data
+        fetchEmployees()
       } else {
-        const error = await response.json()
-        alert(`เกิดข้อผิดพลาด: ${error.error}`)
+        alert(data.error || 'เกิดข้อผิดพลาด')
       }
-    } catch (error) {
+    } catch (e) {
       alert('เกิดข้อผิดพลาดในการเชื่อมต่อ')
     } finally {
       setIsUserUpdating(false)
     }
   }
 
-  const handleDeleteUser = async (user: any) => {
-    if (!organization?.schemaName) return
-    
-    if (!confirm(`คุณต้องการลบผู้ใช้ "${user.name}" หรือไม่?`)) return
+  const handleDeleteUser = async (emp: any) => {
+    if (emp.level === 'SuperAdmin') {
+      alert('ไม่สามารถลบ Super Admin ได้')
+      return
+    }
 
+    if (!organization?.orgCode) return
+    if (!confirm(`คุณต้องการลบพนักงาน "${emp.first_name} ${emp.last_name}" หรือไม่?`)) return
     setIsUserUpdating(true)
     try {
       const token = localStorage.getItem('adminToken')
-      const response = await fetch(`/api/admin/organizations/${organization.id}/users/${user.id}`, {
+      const orgCode = organization.orgCode
+      const url = `/api/hrm/employees?id=${emp.id}`
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          schemaName: organization.schemaName
-        })
+          'X-Org-Code': orgCode
+        }
       })
-
-      if (response.ok) {
-        const result = await response.json()
-        alert(result.message || 'ลบผู้ใช้เรียบร้อยแล้ว')
-        fetchOrganization() // Refresh data
+      const data = await response.json()
+      if (response.ok && data.status === 'success') {
+        alert('ลบพนักงานเรียบร้อยแล้ว')
+        fetchEmployees()
       } else {
-        const error = await response.json()
-        alert(`เกิดข้อผิดพลาด: ${error.error}`)
+        alert(data.error || 'เกิดข้อผิดพลาด')
       }
-    } catch (error) {
+    } catch (e) {
       alert('เกิดข้อผิดพลาดในการเชื่อมต่อ')
     } finally {
       setIsUserUpdating(false)
@@ -464,6 +541,7 @@ export default function OrganizationDetailPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          employeeId: user.employee_id,
           name: user.name,
           email: user.email,
           role: user.role,
@@ -487,7 +565,14 @@ export default function OrganizationDetailPage() {
     }
   }
 
-  const handleManagePermissions = (user: any) => {
+  const handleManagePermissions = (emp: any) => {
+    // Convert employee data to user format for PermissionModal
+    const user = {
+      id: emp.id,
+      name: `${emp.first_name} ${emp.last_name}`,
+      email: emp.email,
+      role: emp.level || 'Employee'
+    }
     setSelectedUser(user)
     setShowPermissionModal(true)
   }
@@ -656,6 +741,46 @@ export default function OrganizationDetailPage() {
                   )}
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    เลขทะเบียน บริษัท / หจก.
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editForm.companyRegistrationNumber}
+                      onChange={(e) => setEditForm({...editForm, companyRegistrationNumber: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="เลขทะเบียน บริษัท / หจก. 13 หลัก"
+                      maxLength={13}
+                    />
+                  ) : (
+                    <div className="text-lg bg-gray-50 p-3 rounded">
+                      {organization.companyRegistrationNumber || '-'}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    เลขประจำตัวผู้เสียภาษี
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editForm.taxId}
+                      onChange={(e) => setEditForm({...editForm, taxId: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="เลขประจำตัวผู้เสียภาษี 13 หลัก"
+                      maxLength={13}
+                    />
+                  ) : (
+                    <div className="text-lg bg-gray-50 p-3 rounded">
+                      {organization.taxId || '-'}
+                    </div>
+                  )}
+                </div>
+
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     ที่อยู่
@@ -689,7 +814,7 @@ export default function OrganizationDetailPage() {
                     />
                   ) : (
                     <div className="text-lg bg-gray-50 p-3 rounded">
-                      {organization.orgDescription || '-'}
+                      {organization.description || '-'}
                     </div>
                   )}
                 </div>
@@ -762,98 +887,75 @@ export default function OrganizationDetailPage() {
             <div className="card p-6 mt-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-medium text-gray-900">
-                  จัดการผู้ใช้ในระบบ ({organization.users?.length || 0})
+                  จัดการพนักงาน ({employees.length})
                 </h2>
                 <button
                   onClick={handleAddUser}
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
-                  disabled={!organization.schemaName || isUserUpdating}
+                  disabled={!organization?.schemaName || isUserUpdating || organization?.status !== 'APPROVED'}
                 >
-                  เพิ่มผู้ใช้
+                  เพิ่มพนักงาน
                 </button>
               </div>
-              
-              {!organization.schemaName ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>องค์กรยังไม่ได้รับการอนุมัติ ไม่สามารถจัดการผู้ใช้ได้</p>
-                </div>
-              ) : organization.users && organization.users.length > 0 ? (
+              {isEmployeeLoading ? (
+                <div className="text-center py-8 text-gray-500">กำลังโหลดข้อมูล...</div>
+              ) : employees.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="min-w-full table-auto">
                     <thead>
                       <tr>
-                        <th className="w-48">ชื่อ</th>
-                        <th className="w-64">อีเมล</th>
-                        <th className="w-32">บทบาท</th>
+                        <th className="w-32">รหัสพนักงาน</th>
+                        <th className="w-40">ชื่อ</th>
+                        <th className="w-40">นามสกุล</th>
+                        <th className="w-56">อีเมล</th>
+                        <th className="w-32">ตำแหน่ง</th>
+                        <th className="w-32">ระดับ</th>
                         <th className="w-24">สถานะ</th>
-                        <th className="w-40">วันที่สร้าง</th>
-                        <th className="w-64">การจัดการ</th>
+                        <th className="w-40">วันที่เริ่มงาน</th>
+                        <th className="w-80">การจัดการ</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {organization.users.map((user) => (
-                        <tr key={user.id}>
-                          <td className="font-medium">{user.name}</td>
-                          <td className="text-sm text-gray-600">{user.email}</td>
+                      {employees.map((emp) => (
+                        <tr key={emp.id}>
+                          <td className="font-mono text-sm">{emp.employee_id}</td>
+                          <td>{emp.first_name}</td>
+                          <td>{emp.last_name}</td>
+                          <td>{emp.email}</td>
+                          <td>{emp.position}</td>
+                          <td>{emp.level}</td>
                           <td>
-                            <div className="flex flex-col">
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                user.role === 'SUPER_ADMIN' 
-                                  ? 'bg-red-100 text-red-800' 
-                                  : 'bg-blue-100 text-blue-800'
-                              }`}>
-                                {user.role === 'SUPER_ADMIN' ? 'Super Admin' : getRolePermissions(user.role).label}
-                              </span>
-                              <span className="text-xs text-gray-500 mt-1">
-                                {user.role === 'SUPER_ADMIN' 
-                                  ? 'ผู้ดูแลระบบสูงสุด - สิทธิ์ครบทุกสิทธิ์' 
-                                  : getRolePermissions(user.role).description
-                                }
-                              </span>
-                            </div>
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${emp.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {emp.is_active ? 'ใช้งาน' : 'ปิดใช้งาน'}
+                            </span>
                           </td>
-                          <td>
-                            <button
-                              onClick={() => toggleUserStatus(user)}
-                              disabled={isUserUpdating}
-                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full transition-colors ${
-                                user.isActive 
-                                  ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                                  : 'bg-red-100 text-red-800 hover:bg-red-200'
-                              } disabled:opacity-50`}
-                            >
-                              {user.isActive ? 'ใช้งาน' : 'ปิดใช้งาน'}
-                            </button>
-                          </td>
-                          <td className="text-sm text-gray-500">
-                            {formatDate(user.createdAt)}
-                          </td>
+                          <td>{emp.start_date ? new Date(emp.start_date).toLocaleDateString('th-TH') : '-'}</td>
                           <td>
                             <div className="flex space-x-2">
                               <button
-                                onClick={() => handleEditUser(user)}
+                                onClick={() => handleEditUser(emp)}
                                 disabled={isUserUpdating}
                                 className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
                               >
-                                {user.role === 'SUPER_ADMIN' ? 'เปลี่ยนรหัสผ่าน' : 'แก้ไข'}
+                                แก้ไข
                               </button>
-                              {user.role !== 'SUPER_ADMIN' && (
-                                <>
-                                  <button
-                                    onClick={() => handleManagePermissions(user)}
-                                    disabled={isUserUpdating}
-                                    className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
-                                  >
-                                    จัดการสิทธิ์
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteUser(user)}
-                                    disabled={isUserUpdating}
-                                    className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
-                                  >
-                                    ลบ
-                                  </button>
-                                </>
+                              {emp.level !== 'SuperAdmin' && (
+                                <button
+                                  onClick={() => handleManagePermissions(emp)}
+                                  disabled={isUserUpdating}
+                                  className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+                                >
+                                  สิทธิ์
+                                </button>
+                              )}
+                              {emp.level !== 'SuperAdmin' && (
+                                <button
+                                  onClick={() => handleDeleteUser(emp)}
+                                  disabled={isUserUpdating}
+                                  className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                                >
+                                  ลบ
+                                </button>
                               )}
                             </div>
                           </td>
@@ -864,8 +966,22 @@ export default function OrganizationDetailPage() {
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-500">
-                  <p>ยังไม่มีผู้ใช้ในระบบ</p>
-                  <p className="text-sm mt-2">คลิก "เพิ่มผู้ใช้" เพื่อเริ่มต้น</p>
+                  {organization?.status !== 'APPROVED' ? (
+                    <>
+                      <p>องค์กรนี้ยังไม่ได้รับการอนุมัติ</p>
+                      <p className="text-sm mt-2">ต้องอนุมัติองค์กรก่อนจึงจะสามารถจัดการพนักงานได้</p>
+                    </>
+                  ) : !organization?.schemaName ? (
+                    <>
+                      <p>ระบบฐานข้อมูลยังไม่พร้อม</p>
+                      <p className="text-sm mt-2">โปรดติดต่อผู้ดูแลระบบ</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>ยังไม่มีพนักงานในระบบ</p>
+                      <p className="text-sm mt-2">คลิก "เพิ่มพนักงาน" เพื่อเริ่มต้น</p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -1239,158 +1355,147 @@ export default function OrganizationDetailPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
-              {editingUser?.role === 'SUPER_ADMIN' 
-                ? 'เปลี่ยนรหัสผ่าน Super Admin' 
-                : editingUser 
-                  ? 'แก้ไขข้อมูลผู้ใช้' 
-                  : 'เพิ่มผู้ใช้ใหม่'
-              }
+              {editingUser && editingUser.level === 'SuperAdmin' ? 'เปลี่ยนรหัสผ่าน Super Admin' : editingUser ? 'แก้ไขข้อมูลพนักงาน' : 'เพิ่มพนักงานใหม่'}
             </h3>
-            
             <div className="space-y-4">
-              {editingUser?.role === 'SUPER_ADMIN' ? (
+              {editingUser && editingUser.level === 'SuperAdmin' ? (
                 <>
-                  {/* แสดงข้อมูล Super Admin (อ่านอย่างเดียว) */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ชื่อผู้ใช้
-                    </label>
-                    <div className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-600">
-                      {userForm.name}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">ไม่สามารถแก้ไขชื่อ Super Admin ได้</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">อีเมล (อ่านอย่างเดียว)</label>
+                    <input
+                      type="text"
+                      value={editingUser.email}
+                      disabled
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                    />
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      อีเมล
-                    </label>
-                    <div className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-600">
-                      {userForm.email}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">อีเมล Super Admin ถูกสร้างอัตโนมัติจากรหัสองค์กร</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      รหัสผ่านใหม่ <span className="text-red-500">*</span>
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">รหัสผ่านใหม่ <span className="text-red-500">*</span></label>
                     <input
                       type="password"
                       value={userForm.password}
-                      onChange={(e) => setUserForm({...userForm, password: e.target.value})}
+                      onChange={e => setUserForm({...userForm, password: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="กรอกรหัสผ่านใหม่สำหรับ Super Admin"
-                      required
                     />
-                    <p className="text-xs text-gray-500 mt-1">รหัสผ่านใหม่สำหรับ Super Admin</p>
-                  </div>
-
-                  <div className="bg-red-50 p-3 rounded-md">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-red-800">
-                          ข้อมูล Super Admin
-                        </h3>
-                        <div className="mt-2 text-sm text-red-700">
-                          <ul className="list-disc pl-5 space-y-1">
-                            <li>Super Admin มีสิทธิ์ครบทุกสิทธิ์ในระบบ</li>
-                            <li>ไม่สามารถลบหรือปิดใช้งาน Super Admin ได้</li>
-                            <li>สามารถเปลี่ยนรหัสผ่านได้เท่านั้น</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </>
               ) : (
                 <>
-                  {/* ฟอร์มสำหรับผู้ใช้ทั่วไป */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ชื่อผู้ใช้
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">รหัสพนักงาน</label>
                     <input
                       type="text"
-                      value={userForm.name}
-                      onChange={(e) => setUserForm({...userForm, name: e.target.value})}
+                      value={userForm.employee_id}
+                      onChange={e => setUserForm({...userForm, employee_id: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="ชื่อผู้ใช้"
+                      placeholder="รหัสพนักงาน (เช่น EMP001)"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      อีเมล
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">ชื่อ</label>
+                    <input
+                      type="text"
+                      value={userForm.first_name}
+                      onChange={e => setUserForm({...userForm, first_name: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="ชื่อ"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">นามสกุล</label>
+                    <input
+                      type="text"
+                      value={userForm.last_name}
+                      onChange={e => setUserForm({...userForm, last_name: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="นามสกุล"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">อีเมล</label>
                     <input
                       type="email"
                       value={userForm.email}
-                      onChange={(e) => setUserForm({...userForm, email: e.target.value})}
+                      onChange={e => setUserForm({...userForm, email: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="อีเมล"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      รหัสผ่าน {!editingUser && <span className="text-red-500">*</span>}
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">เบอร์โทรศัพท์</label>
+                    <input
+                      type="tel"
+                      value={userForm.phone}
+                      onChange={e => setUserForm({...userForm, phone: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="เบอร์โทรศัพท์"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">ตำแหน่ง</label>
+                    <input
+                      type="text"
+                      value={userForm.position}
+                      onChange={e => setUserForm({...userForm, position: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="ตำแหน่ง"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">ระดับ</label>
+                    <select
+                      value={userForm.level}
+                      onChange={e => setUserForm({...userForm, level: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="Junior">Junior</option>
+                      <option value="Senior">Senior</option>
+                      <option value="Manager">Manager</option>
+                      <option value="Director">Director</option>
+                      {editingUser && editingUser.level === 'SuperAdmin' && (
+                        <option value="SuperAdmin">SuperAdmin</option>
+                      )}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">วันที่เริ่มงาน</label>
+                    <input
+                      type="date"
+                      value={userForm.start_date}
+                      onChange={e => setUserForm({...userForm, start_date: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">รหัสผ่าน {editingUser ? '' : <span className="text-red-500">*</span>}</label>
                     <input
                       type="password"
                       value={userForm.password}
-                      onChange={(e) => setUserForm({...userForm, password: e.target.value})}
+                      onChange={e => setUserForm({...userForm, password: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder={editingUser ? "ใส่รหัสผ่านใหม่หากต้องการเปลี่ยน" : "รหัสผ่าน"}
+                      placeholder={editingUser ? 'ใส่รหัสผ่านใหม่หากต้องการเปลี่ยน' : 'รหัสผ่าน'}
                     />
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      บทบาท
-                    </label>
-                    <select
-                      value={userForm.role}
-                      onChange={(e) => setUserForm({...userForm, role: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="USER">ผู้ใช้งาน</option>
-                      <option value="ADMIN">ผู้ดูแลระบบ</option>
-                      <option value="MANAGER">ผู้จัดการ</option>
-                      <option value="VIEWER">ผู้ดู</option>
-                    </select>
-                  </div>
-
                   <div className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={userForm.isActive}
-                      onChange={(e) => setUserForm({...userForm, isActive: e.target.checked})}
+                      checked={userForm.is_active}
+                      onChange={e => setUserForm({...userForm, is_active: e.target.checked})}
                       className="mr-2"
                     />
-                    <span className="text-sm text-gray-700">เปิดใช้งานผู้ใช้</span>
+                    <span className="text-sm text-gray-700">เปิดใช้งานพนักงาน</span>
                   </div>
                 </>
               )}
             </div>
-
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={handleSaveUser}
                 disabled={isUserUpdating}
                 className="flex-1 btn btn-primary disabled:opacity-50"
               >
-                {isUserUpdating 
-                  ? 'กำลังบันทึก...' 
-                  : editingUser?.role === 'SUPER_ADMIN' 
-                    ? 'เปลี่ยนรหัสผ่าน' 
-                    : 'บันทึกข้อมูลผู้ใช้'
-                }
+                {isUserUpdating ? 'กำลังบันทึก...' : (editingUser && editingUser.level === 'SuperAdmin' ? 'เปลี่ยนรหัสผ่าน' : 'บันทึกข้อมูลพนักงาน')}
               </button>
               <button
                 onClick={() => setShowUserModal(false)}

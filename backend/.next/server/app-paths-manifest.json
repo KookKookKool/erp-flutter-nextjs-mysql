@@ -1,8 +1,5 @@
 {
-  "/admin/organizations/page": "app/admin/organizations/page.js",
-  "/api/register/route": "app/api/register/route.js",
-  "/admin/organizations/[id]/page": "app/admin/organizations/[id]/page.js",
-  "/api/admin/organizations/route": "app/api/admin/organizations/route.js",
-  "/api/org-status/[orgCode]/route": "app/api/org-status/[orgCode]/route.js",
-  "/api/admin/organizations/[id]/route": "app/api/admin/organizations/[id]/route.js"
+  "/api/admin/organizations/[id]/route": "app/api/admin/organizations/[id]/route.js",
+  "/api/hrm/employees/route": "app/api/hrm/employees/route.js",
+  "/admin/organizations/[id]/page": "app/admin/organizations/[id]/page.js"
 }

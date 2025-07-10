@@ -296,17 +296,19 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
           newPermissions[moduleKey] = {}
           const moduleStructure = MODULE_STRUCTURE[moduleKey as keyof typeof MODULE_STRUCTURE]
           
-          Object.keys(moduleStructure.submodules).forEach(submoduleKey => {
-            newPermissions[moduleKey][submoduleKey] = {
-              read: false,
-              create: false,
-              update: false,
-              delete: false,
-              approve: false,
-              export: false,
-              import: false
-            }
-          })
+          if (moduleStructure && moduleStructure.submodules) {
+            Object.keys(moduleStructure.submodules).forEach(submoduleKey => {
+              newPermissions[moduleKey][submoduleKey] = {
+                read: false,
+                create: false,
+                update: false,
+                delete: false,
+                approve: false,
+                export: false,
+                import: false
+              }
+            })
+          }
         }
         
         return newPermissions
@@ -332,17 +334,24 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
   const handleSelectAllModule = (moduleKey: string, granted: boolean) => {
     const moduleStructure = MODULE_STRUCTURE[moduleKey as keyof typeof MODULE_STRUCTURE]
     
+    if (!moduleStructure) {
+      console.warn(`Module structure not found for key: ${moduleKey}`)
+      return
+    }
+    
     setPermissions(prev => {
       const newPermissions = { ...prev }
       
       if (!newPermissions[moduleKey]) {
         newPermissions[moduleKey] = {}
-      }        Object.entries(moduleStructure.submodules).forEach(([submoduleKey, submodule]) => {
-          newPermissions[moduleKey][submoduleKey] = {}
-          submodule.permissions.forEach((permission: string) => {
-            newPermissions[moduleKey][submoduleKey][permission] = granted
-          })
+      }
+      
+      Object.entries(moduleStructure.submodules || {}).forEach(([submoduleKey, submodule]) => {
+        newPermissions[moduleKey][submoduleKey] = {}
+        ;(submodule.permissions || []).forEach((permission: string) => {
+          newPermissions[moduleKey][submoduleKey][permission] = granted
         })
+      })
       
       return newPermissions
     })
@@ -350,6 +359,12 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
 
   const handleSelectAllSubmodule = (moduleKey: string, submoduleKey: string, granted: boolean) => {
     const moduleStructure = MODULE_STRUCTURE[moduleKey as keyof typeof MODULE_STRUCTURE]
+    
+    if (!moduleStructure || !moduleStructure.submodules || !moduleStructure.submodules[submoduleKey]) {
+      console.warn(`Submodule not found for key: ${moduleKey}.${submoduleKey}`)
+      return
+    }
+    
     const submodule = moduleStructure.submodules[submoduleKey]
     
     setPermissions(prev => ({
@@ -358,7 +373,7 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
         ...prev[moduleKey],
         [submoduleKey]: {
           ...prev[moduleKey]?.[submoduleKey],
-          ...Object.fromEntries(submodule.permissions.map((permission: string) => [permission, granted]))
+          ...Object.fromEntries((submodule.permissions || []).map((permission: string) => [permission, granted]))
         }
       }
     }))
@@ -431,6 +446,12 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
               {selectedModules.map(moduleKey => {
                 const module = MODULE_STRUCTURE[moduleKey as keyof typeof MODULE_STRUCTURE]
                 
+                // ถ้าไม่พบ module ให้ข้าม
+                if (!module) {
+                  console.warn(`Module not found for key: ${moduleKey}`)
+                  return null
+                }
+                
                 return (
                   <div key={moduleKey} className="border border-gray-200 rounded-lg">
                     <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
@@ -456,7 +477,7 @@ export default function PermissionModal({ isOpen, onClose, user, orgId, onSave }
                     </div>
 
                     <div className="p-4 space-y-4">
-                      {Object.entries(module.submodules).map(([submoduleKey, submodule]) => (
+                      {Object.entries(module.submodules || {}).map(([submoduleKey, submodule]) => (
                         <div key={submoduleKey} className="border border-gray-100 rounded-lg p-3">
                           <div className="flex items-center justify-between mb-3">
                             <div>

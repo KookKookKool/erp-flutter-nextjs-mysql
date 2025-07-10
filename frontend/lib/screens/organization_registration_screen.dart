@@ -27,6 +27,9 @@ class _OrganizationRegistrationScreenState
   final TextEditingController _orgDescriptionController =
       TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _companyRegistrationNumberController =
+      TextEditingController();
+  final TextEditingController _taxIdController = TextEditingController();
 
   // Business Info
   String _selectedBusinessType = '';
@@ -46,7 +49,7 @@ class _OrganizationRegistrationScreenState
   @override
   void initState() {
     super.initState();
-    _generateOrgCode(); // สร้างรหัสองค์กรตอนเริ่มต้น
+    _generateOrgCode(); // Generate initial org code
   }
 
   @override
@@ -58,6 +61,8 @@ class _OrganizationRegistrationScreenState
     _orgAddressController.dispose();
     _orgDescriptionController.dispose();
     _websiteController.dispose();
+    _companyRegistrationNumberController.dispose();
+    _taxIdController.dispose();
     _adminNameController.dispose();
     _adminEmailController.dispose();
     _adminPasswordController.dispose();
@@ -68,7 +73,7 @@ class _OrganizationRegistrationScreenState
 
   void _nextPage() {
     if (_currentPage == 0) {
-      // ตรวจสอบ validation ของฟอร์มก่อน
+      // Validate form before proceeding
       if (_formKey.currentState!.validate() && _validateOrgInfo()) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
@@ -76,7 +81,7 @@ class _OrganizationRegistrationScreenState
         );
       }
     } else if (_currentPage == 1) {
-      // ตรวจสอบ validation ของฟอร์มก่อน
+      // Validate form before proceeding
       if (_formKey.currentState!.validate() && _validateAdminInfo()) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
@@ -98,6 +103,9 @@ class _OrganizationRegistrationScreenState
         _orgCodeController.text.isNotEmpty &&
         _orgEmailController.text.isNotEmpty &&
         _orgPhoneController.text.isNotEmpty &&
+        _orgAddressController.text.isNotEmpty &&
+        _companyRegistrationNumberController.text.isNotEmpty &&
+        _taxIdController.text.isNotEmpty &&
         _selectedBusinessType.isNotEmpty &&
         _selectedEmployeeCount.isNotEmpty;
   }
@@ -118,26 +126,22 @@ class _OrganizationRegistrationScreenState
     });
 
     try {
-      // สร้าง description ที่รวมข้อมูลเพิ่มเติมแบบเดียวกับ HTML
+      // Create description that combines additional info like HTML
       final description =
-          'ประเภทธุรกิจ: $_selectedBusinessType, จำนวนพนักงาน: $_selectedEmployeeCount, เว็บไซต์: ${_websiteController.text.isEmpty ? 'ไม่มี' : _websiteController.text}, รายละเอียด: ${_orgDescriptionController.text.isEmpty ? 'ไม่มี' : _orgDescriptionController.text}';
-
-      // Debug: แสดงข้อมูลที่จะส่ง
-      print('Sending registration data:');
-      print('orgName: ${_orgNameController.text.trim()}');
-      print('orgCode: ${_orgCodeController.text.trim()}');
-      print('orgEmail: ${_orgEmailController.text.trim()}');
-      print('description: $description');
+          '${AppLocalizations.of(context)?.businessTypeSummary}: $_selectedBusinessType, ${AppLocalizations.of(context)?.employeeCountSummary}: $_selectedEmployeeCount, ${AppLocalizations.of(context)?.websiteSummary}: ${_websiteController.text.isEmpty ? AppLocalizations.of(context)?.noWebsite : _websiteController.text}, ${AppLocalizations.of(context)?.descriptionSummary}: ${_orgDescriptionController.text.isEmpty ? AppLocalizations.of(context)?.noDescription : _orgDescriptionController.text}';
 
       final result = await ApiService.registerOrganization(
         orgName: _orgNameController.text.trim(),
         orgCode: _orgCodeController.text.trim(),
-        orgEmail: _orgEmailController.text.trim(), // ใช้เป็น orgEmail
+        orgEmail: _orgEmailController.text.trim(), // Use as orgEmail
         orgPhone: _orgPhoneController.text.trim(),
         orgAddress: _orgAddressController.text.trim(),
         orgDescription: description,
+        companyRegistrationNumber: _companyRegistrationNumberController.text
+            .trim(),
+        taxId: _taxIdController.text.trim(),
         adminName: _adminNameController.text.trim(),
-        adminEmail: _adminEmailController.text.trim(), // adminEmail แยกต่างหาก
+        adminEmail: _adminEmailController.text.trim(), // adminEmail separate
         adminPassword: _adminPasswordController.text,
       );
 
@@ -154,15 +158,15 @@ class _OrganizationRegistrationScreenState
           _showErrorDialog(
             error['error'] ??
                 error['message'] ??
-                'เกิดข้อผิดพลาดในการลงทะเบียน',
+                (AppLocalizations.of(context)?.registrationError ??
+                    'Registration error occurred'),
           );
         }
       }
     } catch (e) {
-      print('Exception in _submitRegistration: $e'); // Debug
       if (mounted) {
         _showErrorDialog(
-          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ${e.toString()}',
+          '${AppLocalizations.of(context)?.serverConnectionErrorDetail ?? 'Server connection error'}: ${e.toString()}',
         );
       }
     } finally {
@@ -226,7 +230,7 @@ class _OrganizationRegistrationScreenState
     );
   }
 
-  // สร้างรหัสองค์กรอัตโนมัติ
+  // Generate organization code automatically
   void _generateOrgCode() {
     // org_ + timestamp + random 3 digits
     final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -236,54 +240,34 @@ class _OrganizationRegistrationScreenState
   }
 
   String _getBusinessTypeLabel(String value) {
+    final localizations = AppLocalizations.of(context);
     switch (value) {
       case 'RETAIL':
-        return 'ค้าปลีก (Retail)';
+        return localizations?.businessTypeRetailTh ?? 'Retail';
       case 'WHOLESALE':
-        return 'ค้าส่ง (Wholesale)';
+        return localizations?.businessTypeWholesaleTh ?? 'Wholesale';
       case 'MANUFACTURING':
-        return 'ผลิต (Manufacturing)';
+        return localizations?.businessTypeManufacturingTh ?? 'Manufacturing';
       case 'SERVICE':
-        return 'บริการ (Service)';
+        return localizations?.businessTypeServiceTh ?? 'Service';
       case 'TECHNOLOGY':
-        return 'เทคโนโลยี (Technology)';
+        return localizations?.businessTypeTechnologyTh ?? 'Technology';
       case 'EDUCATION':
-        return 'การศึกษา (Education)';
+        return localizations?.businessTypeEducationTh ?? 'Education';
       case 'HEALTHCARE':
-        return 'สุขภาพ (Healthcare)';
+        return localizations?.businessTypeHealthcareTh ?? 'Healthcare';
       case 'FINANCE':
-        return 'การเงิน (Finance)';
+        return localizations?.businessTypeFinanceTh ?? 'Finance';
       case 'CONSTRUCTION':
-        return 'ก่อสร้าง (Construction)';
+        return localizations?.businessTypeConstructionTh ?? 'Construction';
       case 'FOOD':
-        return 'อาหารและเครื่องดื่ม (Food & Beverage)';
+        return localizations?.businessTypeFoodTh ?? 'Food & Beverage';
       case 'LOGISTICS':
-        return 'โลจิสติกส์ (Logistics)';
+        return localizations?.businessTypeLogisticsTh ?? 'Logistics';
       case 'TOURISM':
-        return 'ท่องเที่ยว (Tourism)';
+        return localizations?.businessTypeTourismTh ?? 'Tourism';
       case 'OTHER':
-        return 'อื่นๆ (Other)';
-      default:
-        return value;
-    }
-  }
-
-  // ใน _buildConfirmationCard (organization info) ให้เปลี่ยน label business type/employee count เป็น localizations ด้วย
-  String _employeeCountLabel(String value) {
-    final localizations = AppLocalizations.of(context)!;
-    switch (value) {
-      case '1-10':
-        return localizations.employeeCount_1_10;
-      case '11-50':
-        return localizations.employeeCount_11_50;
-      case '51-100':
-        return localizations.employeeCount_51_100;
-      case '101-500':
-        return localizations.employeeCount_101_500;
-      case '501-1000':
-        return localizations.employeeCount_501_1000;
-      case '1000+':
-        return localizations.employeeCount_1000plus;
+        return localizations?.businessTypeOtherTh ?? 'Other';
       default:
         return value;
     }
@@ -523,8 +507,49 @@ class _OrganizationRegistrationScreenState
             controller: _orgPhoneController,
             label: localizations.orgPhone,
             keyboardType: TextInputType.phone,
-            validator: (value) =>
-                value?.isEmpty == true ? localizations.pleaseEnterPhone : null,
+            validator: (value) {
+              if (value?.isEmpty == true) return localizations.pleaseEnterPhone;
+              if (value != null &&
+                  value.isNotEmpty &&
+                  !RegExp(r'^\d+$').hasMatch(value)) {
+                return localizations.phoneNumberOnlyError;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+
+          _buildTextField(
+            controller: _companyRegistrationNumberController,
+            label: localizations.companyRegistrationNumberLabel,
+            keyboardType: TextInputType.number,
+            helperText: localizations.companyRegistrationNumberHelperText,
+            validator: (value) {
+              if (value?.isEmpty == true) {
+                return localizations.pleaseEnterCompanyRegistrationNumberTh;
+              }
+              if (value != null && !RegExp(r'^\d{13}$').hasMatch(value)) {
+                return localizations.invalidCompanyRegistrationNumber;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+
+          _buildTextField(
+            controller: _taxIdController,
+            label: localizations.taxIdLabel,
+            keyboardType: TextInputType.number,
+            helperText: localizations.taxIdHelperText,
+            validator: (value) {
+              if (value?.isEmpty == true) {
+                return localizations.pleaseEnterTaxIdTh;
+              }
+              if (value != null && !RegExp(r'^\d{13}$').hasMatch(value)) {
+                return localizations.invalidTaxId;
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16),
 
@@ -885,14 +910,18 @@ class _OrganizationRegistrationScreenState
               '${localizations.orgEmail.replaceAll(' *', '')}: ${_orgEmailController.text}',
               if (_orgPhoneController.text.isNotEmpty)
                 '${localizations.orgPhone.replaceAll(' *', '')}: ${_orgPhoneController.text}',
-              'ประเภทธุรกิจ: ${_getBusinessTypeLabel(_selectedBusinessType)}',
-              'จำนวนพนักงาน: $_selectedEmployeeCount',
+              if (_companyRegistrationNumberController.text.isNotEmpty)
+                '${localizations.companyRegistrationSummary}: ${_companyRegistrationNumberController.text}',
+              if (_taxIdController.text.isNotEmpty)
+                '${localizations.taxIdSummary}: ${_taxIdController.text}',
+              '${localizations.businessTypeSummary}: ${_getBusinessTypeLabel(_selectedBusinessType)}',
+              '${localizations.employeeCountSummary}: $_selectedEmployeeCount',
               if (_websiteController.text.isNotEmpty)
-                'เว็บไซต์: ${_websiteController.text}',
+                '${localizations.websiteSummary}: ${_websiteController.text}',
               if (_orgAddressController.text.isNotEmpty)
-                'ที่อยู่: ${_orgAddressController.text}',
+                '${localizations.addressSummary}: ${_orgAddressController.text}',
               if (_orgDescriptionController.text.isNotEmpty)
-                'รายละเอียด: ${_orgDescriptionController.text}',
+                '${localizations.descriptionSummary}: ${_orgDescriptionController.text}',
             ],
           ),
           const SizedBox(height: 16),
@@ -1055,40 +1084,6 @@ class _OrganizationRegistrationScreenState
       ),
       style: const TextStyle(color: SunTheme.textPrimary),
       dropdownColor: Colors.white,
-    );
-  }
-
-  void _clearForm() {
-    setState(() {
-      _orgNameController.clear();
-      _generateOrgCode(); // สร้างรหัสใหม่
-      _orgEmailController.clear();
-      _orgPhoneController.clear();
-      _selectedBusinessType = '';
-      _selectedEmployeeCount = '';
-      _websiteController.clear();
-      _orgAddressController.clear();
-      _orgDescriptionController.clear();
-      _adminNameController.clear();
-      _adminEmailController.clear();
-      _adminPasswordController.clear();
-      _confirmPasswordController.clear();
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
-          children: [
-            Icon(Icons.delete_sweep, color: Colors.white),
-            SizedBox(width: 8),
-            Text('🗑️ ล้างข้อมูลเรียบร้อย!'),
-          ],
-        ),
-        backgroundColor: Colors.blue,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
     );
   }
 }

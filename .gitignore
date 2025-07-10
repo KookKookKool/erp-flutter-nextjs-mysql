@@ -1,0 +1,119 @@
+# Dependencies
+node_modules/
+*/node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+backend/.next/
+backend/out/
+backend/.vercel/
+.next/
+out/
+.vercel/
+
+# Production builds
+backend/build/
+backend/dist/
+build/
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Flutter environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Flutter/Dart specific
+frontend/.dart_tool/
+frontend/.packages
+frontend/.pub-cache/
+frontend/.pub/
+frontend/build/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+
+# Flutter build artifacts
+**/ios/Flutter/.last_build_id
+frontend/app.*.symbols
+frontend/app.*.map.json
+
+# Android build artifacts  
+frontend/android/app/debug/
+frontend/android/app/profile/
+frontend/android/app/release/
+
+# Flutter miscellaneous
+*.class
+*.pyc
+.buildlog/
+.history
+migrate_working_dir/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test files
+*test*.js
+*test*.ts
+TESTING.md
+
+# Build artifacts  
+*.tmp.dart*
+*.symbol_map
+*.track.dill
+.packages
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Analysis
+analysis_result.txt

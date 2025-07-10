@@ -7,8 +7,20 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Redirect to admin panel
-    router.push('/admin/login')
+    // Redirect to admin panel with timeout to ensure component is mounted
+    const timer = setTimeout(() => {
+      router.push('/admin/login')
+    }, 100)
+    
+    // Fallback redirect after 2 seconds
+    const fallbackTimer = setTimeout(() => {
+      window.location.href = '/admin/login'
+    }, 2000)
+    
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(fallbackTimer)
+    }
   }, [router])
 
   return (

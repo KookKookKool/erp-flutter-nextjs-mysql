@@ -1,93 +1,95 @@
-import mysql from 'mysql2/promise'
-import prisma from './prisma'
-import bcrypt from 'bcryptjs'
-import { v4 as uuidv4 } from 'uuid'
-import { PrismaClient } from '@prisma/client'
+import mysql from "mysql2/promise";
+import prisma from "./prisma";
+import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
+import { PrismaClient } from "@prisma/client";
 
 export class DatabaseManager {
-  private static instance: DatabaseManager
-  private connections: Map<string, mysql.Connection> = new Map()
-  private orgClients: Map<string, PrismaClient> = new Map()
+  private static instance: DatabaseManager;
+  private connections: Map<string, mysql.Connection> = new Map();
+  private orgClients: Map<string, PrismaClient> = new Map();
 
   static getInstance(): DatabaseManager {
     if (!DatabaseManager.instance) {
-      DatabaseManager.instance = new DatabaseManager()
+      DatabaseManager.instance = new DatabaseManager();
     }
-    return DatabaseManager.instance
+    return DatabaseManager.instance;
   }
 
   // สร้าง Database Schema ใหม่สำหรับองค์กร
-  async createOrganizationSchema(orgCode: string, adminData?: {
-    adminName: string,
-    adminEmail: string,
-    orgName: string
-  }): Promise<string> {
-    const schemaName = `org_${orgCode.toLowerCase()}`
-    
+  async createOrganizationSchema(
+    orgCode: string,
+    adminData?: {
+      adminName: string;
+      adminEmail: string;
+      orgName: string;
+    }
+  ): Promise<string> {
+    const schemaName = `org_${orgCode.toLowerCase()}`;
+
     // สร้าง connection ไปยัง MySQL
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: 'erp_main'
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: "erp_main",
+    });
 
     try {
       // สร้าง Database Schema
-      await connection.query(`CREATE DATABASE IF NOT EXISTS \`${schemaName}\``)
-      
+      await connection.query(`CREATE DATABASE IF NOT EXISTS \`${schemaName}\``);
+
       // สร้างตาราง Users สำหรับองค์กรนี้
-      await connection.query(`USE \`${schemaName}\``)
-      
+      await connection.query(`USE \`${schemaName}\``);
+
       // สร้างตารางพื้นฐานสำหรับ ERP
-      await this.createBasicTables(connection)
-      
+      await this.createBasicTables(connection);
+
       // ปิด connection เดิม
-      await connection.end()
-      
+      await connection.end();
+
       // Populate default role permissions
-      await this.populateDefaultRolePermissions(schemaName)
-      
-      console.log(`✅ Created schema: ${schemaName}`)
-      return schemaName
-      
+      await this.populateDefaultRolePermissions(schemaName);
+
+      console.log(`✅ Created schema: ${schemaName}`);
+      return schemaName;
     } catch (error) {
-      console.error(`❌ Error creating schema ${schemaName}:`, error)
-      throw error
+      console.error(`❌ Error creating schema ${schemaName}:`, error);
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // สร้างตารางพื้นฐานสำหรับ ERP ในแต่ละองค์กร
   private async createBasicTables(connection: mysql.Connection) {
     // สร้างตารางระบบพื้นฐาน
-    await this.createSystemTables(connection)
-    
+    await this.createSystemTables(connection);
+
     // สร้างตาราง HRM Module
-    await this.createHRMTables(connection)
-    
+    await this.createHRMTables(connection);
+
     // สร้างตาราง Accounting Module
-    await this.createAccountingTables(connection)
-    
+    await this.createAccountingTables(connection);
+
     // สร้างตาราง Sales Module
-    await this.createSalesTables(connection)
-    
+    await this.createSalesTables(connection);
+
     // สร้างตาราง Inventory Module
-    await this.createInventoryTables(connection)
-    
+    await this.createInventoryTables(connection);
+
     // สร้างตาราง Purchasing Module
-    await this.createPurchasingTables(connection)
-    
+    await this.createPurchasingTables(connection);
+
     // สร้างตาราง CRM Module
-    await this.createCRMTables(connection)
-    
+    await this.createCRMTables(connection);
+
     // สร้างตาราง Project Module
-    await this.createProjectTables(connection)
-    
+    await this.createProjectTables(connection);
+
     // สร้างตาราง Settings Module
-    await this.createSettingsTables(connection)
+    await this.createSettingsTables(connection);
   }
 
   // สร้างตารางระบบพื้นฐาน
@@ -96,13 +98,23 @@ export class DatabaseManager {
       // Users table สำหรับองค์กร
       `CREATE TABLE IF NOT EXISTS users (
         id VARCHAR(191) NOT NULL PRIMARY KEY,
+        employee_id VARCHAR(191) NULL UNIQUE,
         email VARCHAR(191) NOT NULL UNIQUE,
         name VARCHAR(191) NOT NULL,
+        first_name VARCHAR(191) NULL,
+        last_name VARCHAR(191) NULL,
+        phone VARCHAR(50) NULL,
+        position VARCHAR(191) NULL,
+        department VARCHAR(191) NULL,
+        level ENUM('SuperAdmin', 'Admin', 'Manager', 'Senior', 'Junior', 'Employee') DEFAULT 'Employee',
+        start_date DATE NULL,
+        profile_image VARCHAR(500) NULL,
         password VARCHAR(191) NOT NULL,
         role ENUM('SUPER_ADMIN', 'ADMIN', 'MANAGER', 'USER', 'VIEWER') DEFAULT 'USER',
         is_active BOOLEAN DEFAULT TRUE,
         created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-        updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+        updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+        INDEX idx_employee_id (employee_id)
       )`,
 
       // User permissions table สำหรับจัดการสิทธิ์แบบละเอียด
@@ -133,11 +145,11 @@ export class DatabaseManager {
         updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
         INDEX idx_role_module (role, module, submodule),
         UNIQUE KEY unique_role_permission (role, module, submodule, permission)
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -161,7 +173,11 @@ export class DatabaseManager {
         birth_date DATE,
         id_card VARCHAR(20),
         salary DECIMAL(15,2),
+        password VARCHAR(191),
+        is_active BOOLEAN DEFAULT TRUE,
         status ENUM('ACTIVE', 'INACTIVE', 'TERMINATED') DEFAULT 'ACTIVE',
+        level ENUM('SuperAdmin', 'Admin', 'Manager', 'Senior', 'Junior', 'Employee') DEFAULT 'Employee',
+        profile_image VARCHAR(500),
         created_by VARCHAR(191),
         updated_by VARCHAR(191),
         created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
@@ -169,6 +185,7 @@ export class DatabaseManager {
         INDEX idx_employee_code (employee_code),
         INDEX idx_department (department_id),
         INDEX idx_user (user_id),
+        INDEX idx_email (email),
         INDEX idx_status (status),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
       )`,
@@ -291,11 +308,11 @@ export class DatabaseManager {
         INDEX idx_published (is_published, published_at),
         INDEX idx_expires (expires_at),
         FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -376,11 +393,11 @@ export class DatabaseManager {
         INDEX idx_type (type),
         INDEX idx_transaction_date (transaction_date),
         INDEX idx_reference (reference_id, reference_type)
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -456,11 +473,11 @@ export class DatabaseManager {
         INDEX idx_quotation (quotation_id),
         INDEX idx_product (product_id),
         FOREIGN KEY (quotation_id) REFERENCES sales_quotations(id) ON DELETE CASCADE
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -550,11 +567,11 @@ export class DatabaseManager {
         INDEX idx_transaction_date (transaction_date),
         INDEX idx_reference (reference_type, reference_id),
         FOREIGN KEY (product_id) REFERENCES inventory_products(id) ON DELETE CASCADE
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -629,11 +646,11 @@ export class DatabaseManager {
         INDEX idx_order (order_id),
         INDEX idx_product (product_id),
         FOREIGN KEY (order_id) REFERENCES purchasing_orders(id) ON DELETE CASCADE
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -714,11 +731,11 @@ export class DatabaseManager {
         INDEX idx_assigned_to (assigned_to),
         FOREIGN KEY (customer_id) REFERENCES crm_customers(id) ON DELETE CASCADE,
         FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -802,11 +819,11 @@ export class DatabaseManager {
         FOREIGN KEY (project_id) REFERENCES project_projects(id) ON DELETE CASCADE,
         FOREIGN KEY (task_id) REFERENCES project_tasks(id) ON DELETE CASCADE,
         FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
@@ -857,125 +874,278 @@ export class DatabaseManager {
         INDEX idx_user_notification (user_id, notification_type),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         UNIQUE KEY unique_user_notification_type (user_id, notification_type)
-      )`
-    ]
+      )`,
+    ];
 
     for (const sql of tables) {
-      await connection.query(sql)
+      await connection.query(sql);
     }
   }
 
   // สร้าง Super Admin User เริ่มต้นสำหรับองค์กร
-  async createInitialAdminUser(schemaName: string, adminData: {
-    email: string
-    name: string
-    orgCode: string
-    password?: string
-  }): Promise<{ email: string, password: string }> {
+  async createInitialAdminUser(
+    schemaName: string,
+    adminData: {
+      email: string;
+      name: string;
+      orgCode: string;
+      password?: string;
+    }
+  ): Promise<{ email: string; password: string }> {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
-      const userId = uuidv4()
-      const defaultPassword = adminData.password || '123456'
-      const hashedPassword = await bcrypt.hash(defaultPassword, 10)
-      
+      const userId = uuidv4();
+      const defaultPassword = adminData.password || "123456";
+      const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
       // สร้างอีเมลในรูปแบบ admin_รหัสองค์กร
-      const adminEmail = `admin_${adminData.orgCode}`
-      const adminName = 'Super Admin'
+      const adminEmail = `admin_${adminData.orgCode}`;
+      const adminName = "Super Admin";
 
       // สร้าง Super Admin User
-      await connection.query(`
-        INSERT INTO users (id, email, name, password, role, is_active, created_at, updated_at)
-        VALUES (?, ?, ?, ?, 'SUPER_ADMIN', TRUE, NOW(), NOW())
-      `, [userId, adminEmail, adminName, hashedPassword])
+      await connection.query(
+        `
+        INSERT INTO users (
+          id, employee_id, email, name, first_name, last_name, 
+          level, password, role, is_active, start_date, created_at, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, NOW(), NOW(), NOW())
+      `,
+        [
+          userId,
+          `SA${adminData.orgCode}`,
+          adminEmail,
+          adminName,
+          "Super",
+          "Admin",
+          "SuperAdmin",
+          hashedPassword,
+          "SUPER_ADMIN",
+        ]
+      );
 
       // เพิ่มสิทธิ์ทุกสิทธิ์ให้กับ Super Admin
-      await this.grantAllPermissions(connection, userId)
+      await this.grantAllPermissions(connection, userId);
 
-      console.log(`✅ Created Super Admin user for schema: ${schemaName}`)
-      console.log(`📧 Super Admin Email: ${adminEmail}`)
-      console.log(`🔑 Super Admin Password: ${defaultPassword}`)
-      
+      console.log(`✅ Created Super Admin user for schema: ${schemaName}`);
+      console.log(`📧 Super Admin Email: ${adminEmail}`);
+      console.log(`🔑 Super Admin Password: ${defaultPassword}`);
+
       return {
         email: adminEmail,
-        password: defaultPassword
-      }
-      
+        password: defaultPassword,
+      };
     } catch (error) {
-      console.error(`❌ Error creating Super Admin user for ${schemaName}:`, error)
-      throw error
+      console.error(
+        `❌ Error creating Super Admin user for ${schemaName}:`,
+        error
+      );
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // เพิ่มสิทธิ์ทุกสิทธิ์ให้กับ Super Admin
-  private async grantAllPermissions(connection: mysql.Connection, userId: string): Promise<void> {
+  private async grantAllPermissions(
+    connection: mysql.Connection,
+    userId: string
+  ): Promise<void> {
     const allPermissions = [
       // HRM Module
-      { module: 'HRM', submodule: 'employees', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'HRM', submodule: 'payroll', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'HRM', submodule: 'attendance', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'HRM', submodule: 'leave', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'HRM', submodule: 'performance', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Accounting Module
-      { module: 'Accounting', submodule: 'accounts', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Accounting', submodule: 'journal', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Accounting', submodule: 'reports', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Accounting', submodule: 'budget', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Accounting', submodule: 'assets', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Sales Module
-      { module: 'Sales', submodule: 'customers', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Sales', submodule: 'orders', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Sales', submodule: 'invoices', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Sales', submodule: 'quotes', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Sales', submodule: 'reports', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Inventory Module
-      { module: 'Inventory', submodule: 'products', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Inventory', submodule: 'stock', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Inventory', submodule: 'warehouse', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Inventory', submodule: 'categories', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Inventory', submodule: 'adjustments', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Purchasing Module
-      { module: 'Purchasing', submodule: 'suppliers', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Purchasing', submodule: 'purchase_orders', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Purchasing', submodule: 'receipts', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Purchasing', submodule: 'payments', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Purchasing', submodule: 'reports', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // CRM Module
-      { module: 'CRM', submodule: 'leads', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'CRM', submodule: 'contacts', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'CRM', submodule: 'opportunities', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'CRM', submodule: 'campaigns', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'CRM', submodule: 'reports', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Project Module
-      { module: 'Project', submodule: 'projects', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Project', submodule: 'tasks', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Project', submodule: 'time_tracking', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Project', submodule: 'resources', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Project', submodule: 'reports', permissions: ['view', 'create', 'edit', 'delete'] },
-      
-      // Settings Module
-      { module: 'Settings', submodule: 'users', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Settings', submodule: 'roles', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Settings', submodule: 'permissions', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Settings', submodule: 'system', permissions: ['view', 'create', 'edit', 'delete'] },
-      { module: 'Settings', submodule: 'backup', permissions: ['view', 'create', 'edit', 'delete'] }
-    ]
+      {
+        module: "hrm",
+        submodule: "employee",
+        permissions: ["read", "create", "update", "delete", "export", "import"],
+      },
+      {
+        module: "hrm",
+        submodule: "attendance",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      {
+        module: "hrm",
+        submodule: "payroll",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      {
+        module: "hrm",
+        submodule: "leave",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      {
+        module: "hrm",
+        submodule: "announcement",
+        permissions: ["read", "create", "update", "delete"],
+      },
 
-    const permissionQueries = []
+      // Accounting Module
+      {
+        module: "accounting",
+        submodule: "income",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+      {
+        module: "accounting",
+        submodule: "finance",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      {
+        module: "accounting",
+        submodule: "report",
+        permissions: ["read", "export"],
+      },
+
+      // Sales Module
+      {
+        module: "sales",
+        submodule: "customer",
+        permissions: ["read", "create", "update", "delete", "export", "import"],
+      },
+      {
+        module: "sales",
+        submodule: "quotation",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      { module: "sales", submodule: "report", permissions: ["read", "export"] },
+
+      // Inventory Module
+      {
+        module: "inventory",
+        submodule: "product",
+        permissions: ["read", "create", "update", "delete", "export", "import"],
+      },
+      {
+        module: "inventory",
+        submodule: "stock",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+      {
+        module: "inventory",
+        submodule: "transaction",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+
+      // Purchasing Module
+      {
+        module: "purchasing",
+        submodule: "order",
+        permissions: [
+          "read",
+          "create",
+          "update",
+          "delete",
+          "approve",
+          "export",
+        ],
+      },
+      {
+        module: "purchasing",
+        submodule: "supplier",
+        permissions: ["read", "create", "update", "delete", "export", "import"],
+      },
+      {
+        module: "purchasing",
+        submodule: "report",
+        permissions: ["read", "export"],
+      },
+
+      // CRM Module
+      {
+        module: "crm",
+        submodule: "customer",
+        permissions: ["read", "create", "update", "delete", "export", "import"],
+      },
+      { module: "crm", submodule: "history", permissions: ["read", "export"] },
+      {
+        module: "crm",
+        submodule: "activity",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+
+      // Project Module
+      {
+        module: "project",
+        submodule: "task",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+      {
+        module: "project",
+        submodule: "status",
+        permissions: ["read", "update", "export"],
+      },
+      {
+        module: "project",
+        submodule: "notification",
+        permissions: ["read", "create", "update", "delete"],
+      },
+
+      // Settings Module
+      {
+        module: "settings",
+        submodule: "user",
+        permissions: ["read", "create", "update", "delete", "export"],
+      },
+      {
+        module: "settings",
+        submodule: "permission",
+        permissions: ["read", "create", "update", "delete"],
+      },
+      {
+        module: "settings",
+        submodule: "config",
+        permissions: ["read", "update"],
+      },
+      {
+        module: "settings",
+        submodule: "notification",
+        permissions: ["read", "update"],
+      },
+    ];
+
+    const permissionQueries = [];
     for (const modulePerms of allPermissions) {
       for (const permission of modulePerms.permissions) {
         permissionQueries.push([
@@ -984,39 +1154,43 @@ export class DatabaseManager {
           modulePerms.module,
           modulePerms.submodule,
           permission,
-          true // has_permission
-        ])
+          true, // has_permission
+        ]);
       }
     }
 
     if (permissionQueries.length > 0) {
       const sql = `
         INSERT INTO user_permissions (id, user_id, module, submodule, permission, has_permission)
-        VALUES ${permissionQueries.map(() => '(?, ?, ?, ?, ?, ?)').join(', ')}
-      `
-      const flatValues = permissionQueries.flat()
-      await connection.query(sql, flatValues)
-      
-      console.log(`✅ Granted ${permissionQueries.length} permissions to Super Admin`)
+        VALUES ${permissionQueries.map(() => "(?, ?, ?, ?, ?, ?)").join(", ")}
+      `;
+      const flatValues = permissionQueries.flat();
+      await connection.query(sql, flatValues);
+
+      console.log(
+        `✅ Granted ${permissionQueries.length} permissions to Super Admin`
+      );
     }
   }
 
   // รับ Connection สำหรับ Schema ขององค์กร
-  async getOrganizationConnection(schemaName: string): Promise<mysql.Connection> {
+  async getOrganizationConnection(
+    schemaName: string
+  ): Promise<mysql.Connection> {
     if (this.connections.has(schemaName)) {
-      return this.connections.get(schemaName)!
+      return this.connections.get(schemaName)!;
     }
 
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
-    this.connections.set(schemaName, connection)
-    return connection
+    this.connections.set(schemaName, connection);
+    return connection;
   }
 
   // Get Prisma client for organization schema
@@ -1024,39 +1198,42 @@ export class DatabaseManager {
     try {
       // Get organization from main database
       const org = await prisma.organization.findUnique({
-        where: { id: orgId }
-      })
+        where: { id: orgId },
+      });
 
       if (!org) {
-        return null
+        return null;
       }
 
-      const schemaName = `org_${org.orgCode.toLowerCase()}`
-      
+      const schemaName = `org_${org.orgCode.toLowerCase()}`;
+
       // Check if client already exists
       if (this.orgClients.has(schemaName)) {
-        return this.orgClients.get(schemaName)!
+        return this.orgClients.get(schemaName)!;
       }
 
       // Create new Prisma client for this organization schema
       const orgClient = new PrismaClient({
         datasources: {
           db: {
-            url: `mysql://erp_app:erp_app_pass123@localhost:3306/${schemaName}`
-          }
-        }
-      })
+            url: `mysql://erp_app:erp_app_pass123@localhost:3306/${schemaName}`,
+          },
+        },
+      });
 
       // Test connection
-      await orgClient.$connect()
-      
+      await orgClient.$connect();
+
       // Cache the client
-      this.orgClients.set(schemaName, orgClient)
-      
-      return orgClient
+      this.orgClients.set(schemaName, orgClient);
+
+      return orgClient;
     } catch (error) {
-      console.error(`Error getting organization client for org ${orgId}:`, error)
-      return null
+      console.error(
+        `Error getting organization client for org ${orgId}:`,
+        error
+      );
+      return null;
     }
   }
 
@@ -1064,55 +1241,57 @@ export class DatabaseManager {
   async disconnectOrganizationClient(orgId: string): Promise<void> {
     try {
       const org = await prisma.organization.findUnique({
-        where: { id: orgId }
-      })
+        where: { id: orgId },
+      });
 
-      if (!org) return
+      if (!org) return;
 
-      const schemaName = `org_${org.orgCode.toLowerCase()}`
-      const client = this.orgClients.get(schemaName)
-      
+      const schemaName = `org_${org.orgCode.toLowerCase()}`;
+      const client = this.orgClients.get(schemaName);
+
       if (client) {
-        await client.$disconnect()
-        this.orgClients.delete(schemaName)
+        await client.$disconnect();
+        this.orgClients.delete(schemaName);
       }
     } catch (error) {
-      console.error(`Error disconnecting organization client for org ${orgId}:`, error)
+      console.error(
+        `Error disconnecting organization client for org ${orgId}:`,
+        error
+      );
     }
   }
 
   // ลบ Schema ขององค์กร (ใช้เมื่อปฏิเสธหรือลบองค์กร)
   async deleteOrganizationSchema(schemaNameOrOrgCode: string): Promise<void> {
     // ตรวจสอบว่าเป็น schema name หรือ org code
-    let schemaName: string
-    if (schemaNameOrOrgCode.startsWith('org_')) {
-      schemaName = schemaNameOrOrgCode
+    let schemaName: string;
+    if (schemaNameOrOrgCode.startsWith("org_")) {
+      schemaName = schemaNameOrOrgCode;
     } else {
-      schemaName = `org_${schemaNameOrOrgCode.toLowerCase()}`
+      schemaName = `org_${schemaNameOrOrgCode.toLowerCase()}`;
     }
-    
+
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123'
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+    });
 
     try {
       // ลบ database schema
-      await connection.query(`DROP DATABASE IF EXISTS \`${schemaName}\``)
-      
+      await connection.query(`DROP DATABASE IF EXISTS \`${schemaName}\``);
+
       // ลบ connection จาก Map ถ้ามี
-      this.connections.delete(schemaName)
-      this.orgClients.delete(schemaName)
-      
-      console.log(`🗑️ Deleted schema: ${schemaName}`)
-      
+      this.connections.delete(schemaName);
+      this.orgClients.delete(schemaName);
+
+      console.log(`🗑️ Deleted schema: ${schemaName}`);
     } catch (error) {
-      console.error(`❌ Error deleting schema ${schemaName}:`, error)
-      throw error
+      console.error(`❌ Error deleting schema ${schemaName}:`, error);
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
@@ -1120,375 +1299,922 @@ export class DatabaseManager {
   async closeAllConnections(): Promise<void> {
     for (const [schemaName, connection] of this.connections) {
       try {
-        await connection.end()
-        console.log(`🔌 Closed connection for: ${schemaName}`)
+        await connection.end();
+        console.log(`🔌 Closed connection for: ${schemaName}`);
       } catch (error) {
-        console.error(`❌ Error closing connection for ${schemaName}:`, error)
+        console.error(`❌ Error closing connection for ${schemaName}:`, error);
       }
     }
-    this.connections.clear()
+    this.connections.clear();
   }
 
   // ดึงข้อมูล users จาก organization schema
   async getOrganizationUsers(schemaName: string): Promise<any[]> {
-    if (!schemaName) return []
-    
+    if (!schemaName) return [];
+
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
       const [rows] = await connection.query(`
         SELECT id, email, name, role, is_active as isActive, created_at as createdAt
         FROM users
         ORDER BY created_at DESC
-      `)
-      
-      return rows as any[]
-      
+      `);
+
+      return rows as any[];
     } catch (error) {
-      console.error(`❌ Error fetching users from ${schemaName}:`, error)
-      return []
+      console.error(`❌ Error fetching users from ${schemaName}:`, error);
+      return [];
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // สร้าง User ใหม่ใน Organization Schema
-  async createOrganizationUser(schemaName: string, userData: {
-    name: string
-    email: string
-    password: string
-    role: string
-    isActive: boolean
-  }): Promise<string> {
+  async createOrganizationUser(
+    schemaName: string,
+    userData: {
+      name: string;
+      email: string;
+      password: string;
+      role: string;
+      isActive: boolean;
+      employeeId?: string; // เพิ่ม employeeId
+    }
+  ): Promise<string> {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
-      const userId = uuidv4()
-      const hashedPassword = await bcrypt.hash(userData.password, 10)
+      const userId = uuidv4();
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-      await connection.query(`
-        INSERT INTO users (id, email, name, password, role, is_active, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
-      `, [userId, userData.email, userData.name, hashedPassword, userData.role, userData.isActive])
+      await connection.query(
+        `
+        INSERT INTO users (id, email, name, password, role, is_active, created_at, updated_at${
+          userData.employeeId ? ", employee_id" : ""
+        })
+        VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW()${
+          userData.employeeId ? ", ?" : ""
+        })
+      `,
+        [
+          userId,
+          userData.email,
+          userData.name,
+          hashedPassword,
+          userData.role,
+          userData.isActive,
+          ...(userData.employeeId ? [userData.employeeId] : []),
+        ]
+      );
 
-      console.log(`✅ Created user: ${userData.email} in schema: ${schemaName}`)
-      return userId
-      
+      console.log(
+        `✅ Created user: ${userData.email} in schema: ${schemaName}`
+      );
+      return userId;
     } catch (error) {
-      console.error(`❌ Error creating user in ${schemaName}:`, error)
-      throw error
+      console.error(`❌ Error creating user in ${schemaName}:`, error);
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // แก้ไข User ใน Organization Schema
-  async updateOrganizationUser(schemaName: string, userId: string, userData: {
-    name?: string
-    email?: string
-    password?: string
-    role?: string
-    isActive?: boolean
-  }): Promise<void> {
+  async updateOrganizationUser(
+    schemaName: string,
+    userId: string,
+    userData: {
+      name?: string;
+      email?: string;
+      password?: string;
+      role?: string;
+      isActive?: boolean;
+    }
+  ): Promise<void> {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
-      const updates: string[] = []
-      const values: any[] = []
+      const updates: string[] = [];
+      const values: any[] = [];
 
       if (userData.name !== undefined) {
-        updates.push('name = ?')
-        values.push(userData.name)
+        updates.push("name = ?");
+        values.push(userData.name);
       }
       if (userData.email !== undefined) {
-        updates.push('email = ?')
-        values.push(userData.email)
+        updates.push("email = ?");
+        values.push(userData.email);
       }
       if (userData.password !== undefined) {
-        const hashedPassword = await bcrypt.hash(userData.password, 10)
-        updates.push('password = ?')
-        values.push(hashedPassword)
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        updates.push("password = ?");
+        values.push(hashedPassword);
       }
       if (userData.role !== undefined) {
-        updates.push('role = ?')
-        values.push(userData.role)
+        updates.push("role = ?");
+        values.push(userData.role);
       }
       if (userData.isActive !== undefined) {
-        updates.push('is_active = ?')
-        values.push(userData.isActive)
+        updates.push("is_active = ?");
+        values.push(userData.isActive);
       }
 
-      if (updates.length === 0) return
+      if (updates.length === 0) return;
 
-      updates.push('updated_at = NOW()')
-      values.push(userId)
+      updates.push("updated_at = NOW()");
+      values.push(userId);
 
-      await connection.query(`
-        UPDATE users SET ${updates.join(', ')} WHERE id = ?
-      `, values)
+      await connection.query(
+        `
+        UPDATE users SET ${updates.join(", ")} WHERE id = ?
+      `,
+        values
+      );
 
-      console.log(`✅ Updated user: ${userId} in schema: ${schemaName}`)
-      
+      console.log(`✅ Updated user: ${userId} in schema: ${schemaName}`);
     } catch (error) {
-      console.error(`❌ Error updating user in ${schemaName}:`, error)
-      throw error
+      console.error(`❌ Error updating user in ${schemaName}:`, error);
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // ลบ User จาก Organization Schema
-  async deleteOrganizationUser(schemaName: string, userId: string): Promise<void> {
+  async deleteOrganizationUser(
+    schemaName: string,
+    userId: string
+  ): Promise<void> {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
-      await connection.query('DELETE FROM users WHERE id = ?', [userId])
-      console.log(`✅ Deleted user: ${userId} from schema: ${schemaName}`)
-      
+      await connection.query("DELETE FROM users WHERE id = ?", [userId]);
+      console.log(`✅ Deleted user: ${userId} from schema: ${schemaName}`);
     } catch (error) {
-      console.error(`❌ Error deleting user from ${schemaName}:`, error)
-      throw error
+      console.error(`❌ Error deleting user from ${schemaName}:`, error);
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
     }
   }
 
   // สร้าง Role Templates เริ่มต้น
   async populateDefaultRolePermissions(schemaName: string): Promise<void> {
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: "localhost",
       port: 3306,
-      user: 'erp_app',
-      password: 'erp_app_pass123',
-      database: schemaName
-    })
+      user: "erp_app",
+      password: "erp_app_pass123",
+      database: schemaName,
+    });
 
     try {
       // Define default role permissions directly here to avoid import issues
       const DEFAULT_ROLE_PERMISSIONS = {
         ADMIN: {
           hrm: {
-            employee: { read: true, create: true, update: true, delete: true, export: true, import: true },
-            attendance: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            payroll: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            leave: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            announcement: { read: true, create: true, update: true, delete: true }
+            employee: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+              import: true,
+            },
+            attendance: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            payroll: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            leave: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            announcement: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+            },
           },
           accounting: {
-            income: { read: true, create: true, update: true, delete: true, export: true },
-            finance: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            report: { read: true, export: true }
+            income: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
+            finance: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            report: { read: true, export: true },
           },
           sales: {
-            customer: { read: true, create: true, update: true, delete: true, export: true, import: true },
-            quotation: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            report: { read: true, export: true }
+            customer: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+              import: true,
+            },
+            quotation: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            report: { read: true, export: true },
           },
           inventory: {
-            product: { read: true, create: true, update: true, delete: true, export: true, import: true },
-            stock: { read: true, create: true, update: true, delete: true, export: true },
-            transaction: { read: true, create: true, update: true, delete: true, export: true }
+            product: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+              import: true,
+            },
+            stock: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
+            transaction: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
           },
           purchasing: {
-            order: { read: true, create: true, update: true, delete: true, approve: true, export: true },
-            supplier: { read: true, create: true, update: true, delete: true, export: true, import: true },
-            report: { read: true, export: true }
+            order: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: true,
+              export: true,
+            },
+            supplier: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+              import: true,
+            },
+            report: { read: true, export: true },
           },
           crm: {
-            customer: { read: true, create: true, update: true, delete: true, export: true, import: true },
+            customer: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+              import: true,
+            },
             history: { read: true, export: true },
-            activity: { read: true, create: true, update: true, delete: true, export: true }
+            activity: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
           },
           project: {
-            task: { read: true, create: true, update: true, delete: true, export: true },
+            task: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
             status: { read: true, update: true, export: true },
-            notification: { read: true, create: true, update: true, delete: true }
+            notification: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+            },
           },
           settings: {
-            user: { read: true, create: true, update: true, delete: true, export: true },
-            permission: { read: true, create: true, update: true, delete: true },
+            user: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              export: true,
+            },
+            permission: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+            },
             config: { read: true, update: true },
-            notification: { read: true, update: true }
-          }
+            notification: { read: true, update: true },
+          },
         },
         MANAGER: {
           hrm: {
-            employee: { read: true, create: true, update: true, delete: false, export: true, import: false },
-            attendance: { read: true, create: false, update: true, delete: false, approve: true, export: true },
-            payroll: { read: true, create: false, update: false, delete: false, approve: true, export: true },
-            leave: { read: true, create: true, update: true, delete: false, approve: true, export: true },
-            announcement: { read: true, create: true, update: true, delete: false }
+            employee: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+              import: false,
+            },
+            attendance: {
+              read: true,
+              create: false,
+              update: true,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            payroll: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            leave: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            announcement: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+            },
           },
           accounting: {
-            income: { read: true, create: true, update: true, delete: false, export: true },
-            finance: { read: true, create: false, update: false, delete: false, approve: true, export: true },
-            report: { read: true, export: true }
+            income: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+            },
+            finance: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            report: { read: true, export: true },
           },
           sales: {
-            customer: { read: true, create: true, update: true, delete: false, export: true, import: false },
-            quotation: { read: true, create: true, update: true, delete: false, approve: true, export: true },
-            report: { read: true, export: true }
+            customer: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+              import: false,
+            },
+            quotation: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            report: { read: true, export: true },
           },
           inventory: {
-            product: { read: true, create: true, update: true, delete: false, export: true, import: false },
-            stock: { read: true, create: true, update: true, delete: false, export: true },
-            transaction: { read: true, create: true, update: true, delete: false, export: true }
+            product: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+              import: false,
+            },
+            stock: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+            },
+            transaction: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+            },
           },
           purchasing: {
-            order: { read: true, create: true, update: true, delete: false, approve: true, export: true },
-            supplier: { read: true, create: true, update: true, delete: false, export: true, import: false },
-            report: { read: true, export: true }
+            order: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: true,
+              export: true,
+            },
+            supplier: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+              import: false,
+            },
+            report: { read: true, export: true },
           },
           crm: {
-            customer: { read: true, create: true, update: true, delete: false, export: true, import: false },
+            customer: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+              import: false,
+            },
             history: { read: true, export: false },
-            activity: { read: true, create: true, update: true, delete: false, export: true }
+            activity: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+            },
           },
           project: {
-            task: { read: true, create: true, update: true, delete: false, export: true },
+            task: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: true,
+            },
             status: { read: true, update: true, export: true },
-            notification: { read: true, create: true, update: true, delete: false }
+            notification: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+            },
           },
           settings: {
-            user: { read: true, create: false, update: false, delete: false, export: false },
-            permission: { read: true, create: false, update: false, delete: false },
+            user: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            permission: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+            },
             config: { read: true, update: false },
-            notification: { read: true, update: true }
-          }
+            notification: { read: true, update: true },
+          },
         },
         USER: {
           hrm: {
-            employee: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            attendance: { read: true, create: true, update: true, delete: false, approve: false, export: false },
-            payroll: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            leave: { read: true, create: true, update: true, delete: true, approve: false, export: false },
-            announcement: { read: true, create: false, update: false, delete: false }
+            employee: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            attendance: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            payroll: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            leave: {
+              read: true,
+              create: true,
+              update: true,
+              delete: true,
+              approve: false,
+              export: false,
+            },
+            announcement: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+            },
           },
           accounting: {
-            income: { read: false, create: false, update: false, delete: false, export: false },
-            finance: { read: false, create: false, update: false, delete: false, approve: false, export: false },
-            report: { read: false, export: false }
+            income: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            finance: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            report: { read: false, export: false },
           },
           sales: {
-            customer: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            quotation: { read: true, create: true, update: true, delete: false, approve: false, export: false },
-            report: { read: true, export: false }
+            customer: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            quotation: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            report: { read: true, export: false },
           },
           inventory: {
-            product: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            stock: { read: true, create: false, update: false, delete: false, export: false },
-            transaction: { read: true, create: true, update: false, delete: false, export: false }
+            product: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            stock: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            transaction: {
+              read: true,
+              create: true,
+              update: false,
+              delete: false,
+              export: false,
+            },
           },
           purchasing: {
-            order: { read: true, create: true, update: true, delete: false, approve: false, export: false },
-            supplier: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            report: { read: true, export: false }
+            order: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            supplier: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            report: { read: true, export: false },
           },
           crm: {
-            customer: { read: true, create: false, update: false, delete: false, export: false, import: false },
+            customer: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
             history: { read: true, export: false },
-            activity: { read: true, create: true, update: true, delete: false, export: false }
+            activity: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: false,
+            },
           },
           project: {
-            task: { read: true, create: true, update: true, delete: false, export: false },
+            task: {
+              read: true,
+              create: true,
+              update: true,
+              delete: false,
+              export: false,
+            },
             status: { read: true, update: false, export: false },
-            notification: { read: true, create: false, update: false, delete: false }
+            notification: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+            },
           },
           settings: {
-            user: { read: false, create: false, update: false, delete: false, export: false },
-            permission: { read: false, create: false, update: false, delete: false },
+            user: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            permission: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+            },
             config: { read: false, update: false },
-            notification: { read: true, update: true }
-          }
+            notification: { read: true, update: true },
+          },
         },
         VIEWER: {
           hrm: {
-            employee: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            attendance: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            payroll: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            leave: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            announcement: { read: true, create: false, update: false, delete: false }
+            employee: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            attendance: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            payroll: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            leave: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            announcement: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+            },
           },
           accounting: {
-            income: { read: true, create: false, update: false, delete: false, export: false },
-            finance: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            report: { read: true, export: false }
+            income: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            finance: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            report: { read: true, export: false },
           },
           sales: {
-            customer: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            quotation: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            report: { read: true, export: false }
+            customer: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            quotation: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            report: { read: true, export: false },
           },
           inventory: {
-            product: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            stock: { read: true, create: false, update: false, delete: false, export: false },
-            transaction: { read: true, create: false, update: false, delete: false, export: false }
+            product: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            stock: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            transaction: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
           },
           purchasing: {
-            order: { read: true, create: false, update: false, delete: false, approve: false, export: false },
-            supplier: { read: true, create: false, update: false, delete: false, export: false, import: false },
-            report: { read: true, export: false }
+            order: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              approve: false,
+              export: false,
+            },
+            supplier: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
+            report: { read: true, export: false },
           },
           crm: {
-            customer: { read: true, create: false, update: false, delete: false, export: false, import: false },
+            customer: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+              import: false,
+            },
             history: { read: true, export: false },
-            activity: { read: true, create: false, update: false, delete: false, export: false }
+            activity: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
           },
           project: {
-            task: { read: true, create: false, update: false, delete: false, export: false },
+            task: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
             status: { read: true, update: false, export: false },
-            notification: { read: true, create: false, update: false, delete: false }
+            notification: {
+              read: true,
+              create: false,
+              update: false,
+              delete: false,
+            },
           },
           settings: {
-            user: { read: false, create: false, update: false, delete: false, export: false },
-            permission: { read: false, create: false, update: false, delete: false },
+            user: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+              export: false,
+            },
+            permission: {
+              read: false,
+              create: false,
+              update: false,
+              delete: false,
+            },
             config: { read: false, update: false },
-            notification: { read: true, update: false }
-          }
-        }
-      }
-      
-      // Clear existing role templates
-      await connection.query('DELETE FROM role_templates')
+            notification: { read: true, update: false },
+          },
+        },
+      };
 
-      const rolePermissionRecords = []
+      // Clear existing role templates
+      await connection.query("DELETE FROM role_templates");
+
+      const rolePermissionRecords = [];
 
       // Create records for each role and their permissions
-      for (const [roleName, rolePermissions] of Object.entries(DEFAULT_ROLE_PERMISSIONS)) {
-        for (const [module, modulePermissions] of Object.entries(rolePermissions as any)) {
-          for (const [submodule, submodulePermissions] of Object.entries(modulePermissions as any)) {
-            for (const [permission, granted] of Object.entries(submodulePermissions as any)) {
+      for (const [roleName, rolePermissions] of Object.entries(
+        DEFAULT_ROLE_PERMISSIONS
+      )) {
+        for (const [module, modulePermissions] of Object.entries(
+          rolePermissions as any
+        )) {
+          for (const [submodule, submodulePermissions] of Object.entries(
+            modulePermissions as any
+          )) {
+            for (const [permission, granted] of Object.entries(
+              submodulePermissions as any
+            )) {
               rolePermissionRecords.push([
                 roleName,
                 module,
                 submodule,
                 permission,
-                granted
-              ])
+                granted,
+              ]);
             }
           }
         }
@@ -1496,18 +2222,96 @@ export class DatabaseManager {
 
       // Insert role permissions in batches
       if (rolePermissionRecords.length > 0) {
-        await connection.query(`
+        await connection.query(
+          `
           INSERT INTO role_templates (role, module, submodule, permission, granted)
           VALUES ?
-        `, [rolePermissionRecords])
+        `,
+          [rolePermissionRecords]
+        );
       }
 
-      console.log(`✅ Populated role templates for schema: ${schemaName}`)
+      console.log(`✅ Populated role templates for schema: ${schemaName}`);
     } catch (error) {
-      console.error(`❌ Error populating role templates for ${schemaName}:`, error)
-      throw error
+      console.error(
+        `❌ Error populating role templates for ${schemaName}:`,
+        error
+      );
+      throw error;
     } finally {
-      await connection.end()
+      await connection.end();
+    }
+  }
+
+  // เพิ่มเมธอดสำหรับ migrate users table (add employee_id column ถ้ายังไม่มี)
+  async migrateUsersTable(schemaName: string): Promise<void> {
+    const connection = await this.getOrganizationConnection(schemaName);
+    try {
+      // ตรวจสอบว่ามี column employee_id หรือยัง
+      const [columns] = await connection.query(
+        `SHOW COLUMNS FROM users LIKE 'employee_id'`
+      );
+      if (Array.isArray(columns) && columns.length === 0) {
+        // ถ้ายังไม่มี ให้เพิ่ม column
+        await connection.query(
+          `ALTER TABLE users ADD COLUMN employee_id VARCHAR(191) NULL AFTER id`
+        );
+        // เพิ่ม index ด้วย (optional but recommended)
+        await connection.query(
+          `CREATE INDEX idx_employee_id ON users(employee_id)`
+        );
+        console.log(
+          `[MIGRATE] Added employee_id column to users table in schema ${schemaName}`
+        );
+      } else {
+        console.log(
+          `[MIGRATE] employee_id column already exists in users table of schema ${schemaName}`
+        );
+      }
+    } finally {
+      await connection.end();
+    }
+  }
+
+  // เพิ่มเมธอดสำหรับ migrate hrm_employees table (add password and is_active columns)
+  async migrateHrmEmployeesTable(schemaName: string): Promise<void> {
+    const connection = await this.getOrganizationConnection(schemaName);
+    try {
+      // ตรวจสอบว่ามี column password หรือยัง
+      const [passwordColumns] = await connection.query(
+        `SHOW COLUMNS FROM hrm_employees LIKE 'password'`
+      );
+
+      if (Array.isArray(passwordColumns) && passwordColumns.length === 0) {
+        // เพิ่ม column password
+        await connection.query(
+          `ALTER TABLE hrm_employees ADD COLUMN password VARCHAR(255) NULL AFTER email`
+        );
+        console.log(
+          `[MIGRATE] Added password column to hrm_employees table in schema ${schemaName}`
+        );
+      }
+
+      // ตรวจสอบว่ามี column is_active หรือยัง
+      const [activeColumns] = await connection.query(
+        `SHOW COLUMNS FROM hrm_employees LIKE 'is_active'`
+      );
+
+      if (Array.isArray(activeColumns) && activeColumns.length === 0) {
+        // เพิ่ม column is_active
+        await connection.query(
+          `ALTER TABLE hrm_employees ADD COLUMN is_active BOOLEAN DEFAULT TRUE AFTER password`
+        );
+        console.log(
+          `[MIGRATE] Added is_active column to hrm_employees table in schema ${schemaName}`
+        );
+      }
+
+      console.log(
+        `[MIGRATE] hrm_employees table migration completed for schema ${schemaName}`
+      );
+    } finally {
+      await connection.end();
     }
   }
 }

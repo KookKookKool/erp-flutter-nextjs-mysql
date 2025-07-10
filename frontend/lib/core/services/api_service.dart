@@ -1,39 +1,47 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import '../config/environment.dart';
 
 class ApiService {
-  // เลือก URL ตาม platform
+  // ใช้ Environment configuration แบบ fixed สำหรับความปลอดภัย
   static String get baseUrl {
     if (kIsWeb) {
-      // สำหรับ Web ใช้ localhost
-      return 'http://localhost:3000/api';
+      // สำหรับ Web ใช้ localhost หรือตามที่กำหนดใน Environment
+      return Environment.apiUrl;
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      // สำหรับ Android Emulator อาจต้องใช้ 10.0.2.2 แทน localhost
+      final apiUrl = Environment.apiUrl;
+      if (apiUrl.contains('localhost') && !kDebugMode) {
+        return apiUrl.replaceAll('localhost', '10.0.2.2');
+      }
+      return apiUrl;
     } else {
-      // สำหรับ Android และอื่นๆ ใช้ localhost
-      return 'http://localhost:3000/api';
+      // สำหรับ platform อื่นๆ
+      return Environment.apiUrl;
     }
   }
 
-  // Test connection
-  static Future<Map<String, dynamic>> testConnection() async {
-    try {
-      final response = await http
-          .get(
-            Uri.parse('$baseUrl/test'),
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(const Duration(seconds: 10));
+  // Log API calls in debug mode
+  static void _logApiCall(
+    String method,
+    String url, {
+    Map<String, dynamic>? body,
+  }) {
+    if (Environment.debugMode) {
+      print('🌐 API $method: $url');
+      if (body != null) {
+        print('📤 Body: ${json.encode(body)}');
+      }
+    }
+  }
 
-      return {
-        'statusCode': response.statusCode,
-        'body': {'message': 'Connection successful'},
-      };
-    } catch (e) {
-      print('Connection test failed: $e');
-      return {
-        'statusCode': 500,
-        'body': {'error': 'Connection failed: $e'},
-      };
+  static void _logApiResponse(String url, int statusCode, dynamic body) {
+    if (Environment.debugMode) {
+      print('📥 Response from $url: $statusCode');
+      if (statusCode >= 400) {
+        print('❌ Error: $body');
+      }
     }
   }
 
@@ -41,20 +49,24 @@ class ApiService {
   static Future<Map<String, dynamic>> getOrganizationStatus(
     String orgCode,
   ) async {
+    final url = '/org-status/${orgCode.toUpperCase()}';
+    _logApiCall('GET', '$baseUrl$url');
+
     try {
       final response = await http
           .get(
-            Uri.parse('$baseUrl/org-status/${orgCode.toUpperCase()}'),
+            Uri.parse('$baseUrl$url'),
             headers: {'Content-Type': 'application/json'},
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(Environment.apiTimeout);
 
-      return {
-        'statusCode': response.statusCode,
-        'body': json.decode(response.body),
-      };
+      final responseBody = json.decode(response.body);
+      _logApiResponse('$baseUrl$url', response.statusCode, responseBody);
+
+      return {'statusCode': response.statusCode, 'body': responseBody};
     } catch (e) {
-      print('API Error: $e');
+      _logApiResponse('$baseUrl$url', 500, 'API Error: $e');
+
       return {
         'statusCode': 500,
         'body': {'error': 'เกิดข้อผิดพลาดในการเชื่อมต่อ: $e'},
@@ -64,20 +76,24 @@ class ApiService {
 
   // Get all approved organizations
   static Future<Map<String, dynamic>> getOrganizations() async {
+    const url = '/organizations';
+    _logApiCall('GET', '$baseUrl$url');
+
     try {
       final response = await http
           .get(
-            Uri.parse('$baseUrl/organizations'),
+            Uri.parse('$baseUrl$url'),
             headers: {'Content-Type': 'application/json'},
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(Environment.apiTimeout);
 
-      return {
-        'statusCode': response.statusCode,
-        'body': json.decode(response.body),
-      };
+      final responseBody = json.decode(response.body);
+      _logApiResponse('$baseUrl$url', response.statusCode, responseBody);
+
+      return {'statusCode': response.statusCode, 'body': responseBody};
     } catch (e) {
-      print('API Error: $e');
+      _logApiResponse('$baseUrl$url', 500, 'API Error: $e');
+
       return {
         'statusCode': 500,
         'body': {'error': 'เกิดข้อผิดพลาดในการเชื่อมต่อ: $e'},
@@ -93,50 +109,52 @@ class ApiService {
     required String orgPhone,
     required String orgAddress,
     required String orgDescription,
+    required String companyRegistrationNumber,
+    required String taxId,
     required String adminName,
     required String adminEmail,
     required String adminPassword,
   }) async {
+    const url = '/register';
+
+    final requestBody = {
+      'orgName': orgName,
+      'orgCode': orgCode.toUpperCase(),
+      'orgEmail': orgEmail,
+      'orgPhone': orgPhone,
+      'orgAddress': orgAddress,
+      'orgDescription': orgDescription,
+      'companyRegistrationNumber': companyRegistrationNumber,
+      'taxId': taxId,
+      'adminName': adminName,
+      'adminEmail': adminEmail,
+      'adminPassword': adminPassword,
+    };
+
+    _logApiCall('POST', '$baseUrl$url', body: requestBody);
+
     try {
-      print('Attempting to register with URL: $baseUrl/register');
-
-      final requestBody = {
-        'orgName': orgName,
-        'orgCode': orgCode.toUpperCase(),
-        'orgEmail': orgEmail,
-        'orgPhone': orgPhone,
-        'orgAddress': orgAddress,
-        'orgDescription': orgDescription,
-        'adminName': adminName,
-        'adminEmail': adminEmail,
-        'adminPassword': adminPassword,
-      };
-
-      print('Request body: $requestBody');
-
       final response = await http
           .post(
-            Uri.parse('$baseUrl/register'),
+            Uri.parse('$baseUrl$url'),
             headers: {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
             },
             body: json.encode(requestBody),
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(Environment.apiTimeout);
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      final responseBody = json.decode(response.body);
+      _logApiResponse('$baseUrl$url', response.statusCode, responseBody);
 
-      return {
-        'statusCode': response.statusCode,
-        'body': json.decode(response.body),
-      };
+      return {'statusCode': response.statusCode, 'body': responseBody};
     } catch (e) {
-      print('API Error in registerOrganization: $e');
+      _logApiResponse('$baseUrl$url', 500, 'API Error: $e');
+
       return {
         'statusCode': 500,
-        'body': {'error': 'เกิดข้อผิดพลาดในการเชื่อมต่อ: $e'},
+        'body': {'error': 'เกิดข้อผิดพลาดในการสมัครสมาชิก: $e'},
       };
     }
   }
@@ -147,29 +165,49 @@ class ApiService {
     required String email,
     required String password,
   }) async {
+    const url = '/login';
+
+    final requestBody = {
+      'orgCode': orgCode.toUpperCase(),
+      'email': email,
+      'password': password,
+    };
+
+    _logApiCall('POST', '$baseUrl$url', body: requestBody);
+
     try {
       final response = await http
           .post(
-            Uri.parse('$baseUrl/login'),
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode({
-              'orgCode': orgCode.toUpperCase(),
-              'email': email,
-              'password': password,
-            }),
+            Uri.parse('$baseUrl$url'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: json.encode(requestBody),
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(Environment.apiTimeout);
+
+      final responseBody = json.decode(response.body);
+      _logApiResponse('$baseUrl$url', response.statusCode, responseBody);
+
+      return {'statusCode': response.statusCode, 'body': responseBody};
+    } catch (e) {
+      _logApiResponse('$baseUrl$url', 500, 'API Error: $e');
 
       return {
-        'statusCode': response.statusCode,
-        'body': json.decode(response.body),
-      };
-    } catch (e) {
-      print('API Error: $e');
-      return {
         'statusCode': 500,
-        'body': {'error': 'เกิดข้อผิดพลาดในการเชื่อมต่อ: $e'},
+        'body': {'error': 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ: $e'},
       };
     }
+  }
+
+  // Get API base URL for debugging
+  static String getApiBaseUrl() {
+    return baseUrl;
+  }
+
+  // Get environment info
+  static Map<String, dynamic> getEnvironmentInfo() {
+    return {...Environment.info, 'currentBaseUrl': baseUrl};
   }
 }

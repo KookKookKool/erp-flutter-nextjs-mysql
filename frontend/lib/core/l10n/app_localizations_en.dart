@@ -140,6 +140,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get employeeListTitle => 'Employee List';
 
   @override
+  String get companyRegistrationNumber => 'Company Registration Number';
+
+  @override
+  String get companyRegistrationNumberHint =>
+      '13-digit company registration number';
+
+  @override
+  String get pleaseEnterCompanyRegistrationNumber =>
+      'Please enter company registration number';
+
+  @override
+  String get invalidCompanyRegistrationNumber =>
+      'Company registration number must be 13 digits';
+
+  @override
+  String get taxId => 'Tax ID';
+
+  @override
+  String get taxIdHint => '13-digit tax identification number';
+
+  @override
+  String get pleaseEnterTaxId => 'Please enter tax ID';
+
+  @override
+  String get invalidTaxId => 'Tax ID must be 13 digits';
+
+  @override
+  String get invalidPhoneNumber => 'Phone number must contain only numbers';
+
+  @override
   String get employeeListContent => 'Employee list content here';
 
   @override
@@ -349,6 +379,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get employeeIdLabel => 'Employee ID';
+
+  @override
+  String get employeeCodeOrEmail => 'Employee Code / Email';
+
+  @override
+  String get employeeCodeOrEmailHint => 'Enter employee code or email address';
+
+  @override
+  String get pleaseEnterAllFields => 'Please enter all required fields';
+
+  @override
+  String get orgCodeNotFound =>
+      'Organization code not found. Please select an organization first';
 
   @override
   String get level => 'Level';
@@ -890,4 +933,99 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageSelection => 'Select Language';
+
+  @override
+  String get registrationError => 'Registration error occurred';
+
+  @override
+  String get serverConnectionErrorDetail => 'Server connection error';
+
+  @override
+  String get businessTypeSummary => 'Business Type';
+
+  @override
+  String get employeeCountSummary => 'Employee Count';
+
+  @override
+  String get websiteSummary => 'Website';
+
+  @override
+  String get descriptionSummary => 'Description';
+
+  @override
+  String get noWebsite => 'None';
+
+  @override
+  String get noDescription => 'None';
+
+  @override
+  String get businessTypeRetailTh => 'Retail';
+
+  @override
+  String get businessTypeWholesaleTh => 'Wholesale';
+
+  @override
+  String get businessTypeManufacturingTh => 'Manufacturing';
+
+  @override
+  String get businessTypeServiceTh => 'Service';
+
+  @override
+  String get businessTypeTechnologyTh => 'Technology';
+
+  @override
+  String get businessTypeEducationTh => 'Education';
+
+  @override
+  String get businessTypeHealthcareTh => 'Healthcare';
+
+  @override
+  String get businessTypeFinanceTh => 'Finance';
+
+  @override
+  String get businessTypeConstructionTh => 'Construction';
+
+  @override
+  String get businessTypeFoodTh => 'Food & Beverage';
+
+  @override
+  String get businessTypeLogisticsTh => 'Logistics';
+
+  @override
+  String get businessTypeTourismTh => 'Tourism';
+
+  @override
+  String get businessTypeOtherTh => 'Other';
+
+  @override
+  String get phoneNumberOnlyError => 'Phone number must contain only numbers';
+
+  @override
+  String get companyRegistrationNumberLabel => 'Company Registration Number *';
+
+  @override
+  String get companyRegistrationNumberHelperText =>
+      '13-digit company registration number';
+
+  @override
+  String get pleaseEnterCompanyRegistrationNumberTh =>
+      'Please enter company registration number';
+
+  @override
+  String get taxIdLabel => 'Tax ID *';
+
+  @override
+  String get taxIdHelperText => '13-digit tax identification number';
+
+  @override
+  String get pleaseEnterTaxIdTh => 'Please enter tax ID';
+
+  @override
+  String get companyRegistrationSummary => 'Company Registration Number';
+
+  @override
+  String get taxIdSummary => 'Tax ID';
+
+  @override
+  String get addressSummary => 'Address';
 }
