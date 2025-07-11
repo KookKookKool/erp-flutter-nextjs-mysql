@@ -1,4 +1,9 @@
 {
+  "/admin/login/page": "app/admin/login/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/api/org-status/[orgCode]/route": "app/api/org-status/[orgCode]/route.js",
+  "/api/admin/organizations/[id]/route": "app/api/admin/organizations/[id]/route.js",
+  "/api/auth/employee-login/route": "app/api/auth/employee-login/route.js",
   "/api/hrm/employees/route": "app/api/hrm/employees/route.js",
-  "/api/auth/employee-login/route": "app/api/auth/employee-login/route.js"
+  "/admin/organizations/[id]/page": "app/admin/organizations/[id]/page.js"
 }

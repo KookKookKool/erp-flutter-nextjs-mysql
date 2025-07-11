@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/ot_request.dart';
-import '../services/ot_data_service.dart';
-import 'ot_state.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/services/ot_data_service.dart';
+import 'package:frontend/modules/hrm/attendance/bloc/ot_state.dart';
 
 class OtCubit extends Cubit<OtState> {
   final OtDataService _otDataService;

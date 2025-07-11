@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/bloc/module_cubit.dart';
-import 'user/user_screen.dart';
-import 'permission/permission_screen.dart';
-import 'config/config_screen.dart';
-import 'notification/notification_screen.dart';
-import '../../core/l10n/app_localizations.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
+import 'package:frontend/modules/settings/user/user_screen.dart';
+import 'package:frontend/modules/settings/permission/permission_screen.dart';
+import 'package:frontend/modules/settings/config/config_screen.dart';
+import 'package:frontend/modules/settings/notification/notification_screen.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class SettingsModuleScreen extends StatelessWidget {
   final String? submodule;

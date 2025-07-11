@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import '../models/ot_request.dart';
-import '../bloc/ot_cubit.dart';
-import '../bloc/ot_state.dart';
-import 'ot_request_card.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/bloc/ot_cubit.dart';
+import 'package:frontend/modules/hrm/attendance/bloc/ot_state.dart';
+import 'package:frontend/modules/hrm/attendance/widgets/ot_request_card.dart';
 
 class OtTab extends StatefulWidget {
   final String search;

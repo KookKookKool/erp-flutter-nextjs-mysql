@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import '../attendance_screen.dart';
-import '../bloc/attendance_cubit.dart';
-import 'attendance_card.dart';
-import 'attendance_edit_dialog.dart';
+import 'package:frontend/modules/hrm/attendance/attendance_screen.dart';
+import 'package:frontend/modules/hrm/attendance/bloc/attendance_cubit.dart';
+import 'package:frontend/modules/hrm/attendance/widgets/attendance_card.dart';
+import 'package:frontend/modules/hrm/attendance/widgets/attendance_edit_dialog.dart';
 
 class AttendanceTab extends StatelessWidget {
   final String search;

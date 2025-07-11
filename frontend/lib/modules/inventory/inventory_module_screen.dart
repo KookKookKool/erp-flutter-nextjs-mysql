@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/module_cubit.dart';
-import 'product/product_screen.dart';
-import 'stock/stock_screen.dart';
-import 'transaction/transaction_screen.dart';
+import 'package:frontend/modules/inventory/product/product_screen.dart';
+import 'package:frontend/modules/inventory/stock/stock_screen.dart';
+import 'package:frontend/modules/inventory/transaction/transaction_screen.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 
 class InventoryModuleScreen extends StatelessWidget {

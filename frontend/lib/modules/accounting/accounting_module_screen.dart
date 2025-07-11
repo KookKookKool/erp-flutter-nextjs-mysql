@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/module_cubit.dart';
-import 'income/income_screen.dart';
-import 'finance/finance_screen.dart';
-import 'report/report_screen.dart';
+import 'package:frontend/modules/accounting/income/income_screen.dart';
+import 'package:frontend/modules/accounting/finance/finance_screen.dart';
+import 'package:frontend/modules/accounting/report/report_screen.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 
 class AccountingModuleScreen extends StatelessWidget {

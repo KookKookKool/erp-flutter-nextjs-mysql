@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
-import '../leave_repository.dart';
-import 'leave_status_chip.dart';
+import 'package:frontend/modules/hrm/leave/leave_repository.dart';
+import 'package:frontend/modules/hrm/leave/widgets/leave_status_chip.dart';
 
 class LeaveApprovalCard extends StatelessWidget {
   final Leave leave;

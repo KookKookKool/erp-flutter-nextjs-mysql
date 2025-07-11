@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/debug_utils.dart';
+import 'package:frontend/core/utils/debug_utils.dart';
 
 enum AppStatus { splash, language, org, login, home }
 

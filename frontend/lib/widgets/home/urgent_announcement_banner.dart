@@ -4,7 +4,7 @@ import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/modules/hrm/announcement/bloc/announcement_cubit.dart';
 import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
-import 'announcement_view_dialog.dart';
+import 'package:frontend/widgets/home/announcement_view_dialog.dart';
 
 class UrgentAnnouncementBanner extends StatelessWidget {
   const UrgentAnnouncementBanner({super.key});

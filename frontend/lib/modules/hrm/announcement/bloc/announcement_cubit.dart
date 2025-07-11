@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../announcement_repository.dart';
-import '../models/announcement.dart';
+import 'package:frontend/modules/hrm/announcement/announcement_repository.dart';
+import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
 
 class AnnouncementState {
   final List<Announcement> announcements;

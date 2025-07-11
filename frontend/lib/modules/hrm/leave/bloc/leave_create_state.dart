@@ -1,4 +1,4 @@
-part of 'leave_create_cubit.dart';
+part of 'package:frontend/modules/hrm/leave/bloc/leave_create_cubit.dart';
 
 abstract class LeaveCreateState extends Equatable {
   @override

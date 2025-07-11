@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/module_cubit.dart';
-import 'employee/employee_list_screen.dart';
-import 'attendance/attendance_screen.dart';
-import 'payroll/payroll_screen.dart';
-import 'leave/leave_screen.dart';
-import 'announcement/announcement_screen.dart';
-import '../../core/l10n/app_localizations.dart';
+import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/attendance/attendance_screen.dart';
+import 'package:frontend/modules/hrm/payroll/payroll_screen.dart';
+import 'package:frontend/modules/hrm/leave/leave_screen.dart';
+import 'package:frontend/modules/hrm/announcement/announcement_screen.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class HRMModuleScreen extends StatelessWidget {
   final String? submodule;

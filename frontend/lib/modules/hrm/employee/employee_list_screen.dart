@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import 'widgets/employee_dialog.dart';
-import 'widgets/employee_search_bar.dart';
-import 'widgets/employee_card.dart';
+import 'package:frontend/modules/hrm/employee/widgets/employee_dialog.dart';
+import 'package:frontend/modules/hrm/employee/widgets/employee_search_bar.dart';
+import 'package:frontend/modules/hrm/employee/widgets/employee_card.dart';
 
 class Employee {
   File? image;

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/modules/hrm/announcement/bloc/announcement_cubit.dart';
 import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
-import 'home_announcement_card.dart';
-import 'announcement_summary.dart';
-import 'announcement_view_dialog.dart';
+import 'package:frontend/widgets/home/home_announcement_card.dart';
+import 'package:frontend/widgets/home/announcement_summary.dart';
+import 'package:frontend/widgets/home/announcement_view_dialog.dart';
 
 class HrAnnouncement extends StatelessWidget {
   const HrAnnouncement({super.key});

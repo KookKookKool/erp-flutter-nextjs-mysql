@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
-import '../employee_list_screen.dart';
-import 'employee_card.dart';
+import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/employee/widgets/employee_card.dart';
 
 class EmployeeList extends StatelessWidget {
   final List<Employee> employees;

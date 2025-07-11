@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import '../models/announcement.dart';
+import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
 
 class AddAnnouncementDialog extends StatefulWidget {
   final Future<void> Function(Announcement announcement) onSave;

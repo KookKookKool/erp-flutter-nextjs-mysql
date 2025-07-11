@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../leave_repository.dart';
+import 'package:frontend/modules/hrm/leave/leave_repository.dart';
 
 class LeaveState {
   final List<Leave> leaves;

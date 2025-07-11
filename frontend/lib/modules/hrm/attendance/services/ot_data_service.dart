@@ -1,4 +1,4 @@
-import '../models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
 
 class OtDataService {
   static final List<OtRequest> _otRequests = [];

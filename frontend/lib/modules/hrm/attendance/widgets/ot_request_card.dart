@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import '../models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 
 class OtRequestCard extends StatefulWidget {

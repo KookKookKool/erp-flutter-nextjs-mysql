@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard/dashboard_screen.dart';
+import 'package:frontend/modules/reports/dashboard/dashboard_screen.dart';
 
 class ReportsModuleScreen extends StatelessWidget {
   final String? submodule;

@@ -1,4 +1,4 @@
-import '../models/payroll_employee.dart';
+import 'package:frontend/modules/hrm/payroll/models/payroll_employee.dart';
 
 class PayrollService {
   static final PayrollService _instance = PayrollService._internal();

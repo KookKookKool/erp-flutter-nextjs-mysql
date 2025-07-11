@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../models/payroll_employee.dart';
-import '../services/payroll_service.dart';
+import 'package:frontend/modules/hrm/payroll/models/payroll_employee.dart';
+import 'package:frontend/modules/hrm/payroll/services/payroll_service.dart';
 
 // Events
 abstract class PayrollEvent extends Equatable {

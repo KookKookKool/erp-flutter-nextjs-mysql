@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/employee_model.dart';
+import 'package:frontend/core/auth/models/employee_model.dart';
 
 class EmployeeAuthService {
   final String baseUrl;

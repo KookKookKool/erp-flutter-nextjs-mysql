@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'models/announcement.dart';
+import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
 
 class AnnouncementRepository extends ChangeNotifier {
   final List<Announcement> _announcements = [

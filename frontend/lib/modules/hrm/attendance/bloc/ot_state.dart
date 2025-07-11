@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
 
 abstract class OtState extends Equatable {
   const OtState();

@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../core/theme/sun_theme.dart';
-import '../core/utils/responsive_utils.dart';
-import '../widgets/sun_app_bar.dart';
-import '../widgets/sun_drawer.dart';
-import '../widgets/home/employee_card.dart';
-import '../widgets/home/attendance_buttons.dart';
-import '../widgets/home/leave_button.dart';
-import '../widgets/home/task_list.dart';
-import '../widgets/home/hr_announcement.dart';
-import '../widgets/home/urgent_announcement_banner.dart';
-import '../core/bloc/module_cubit.dart';
-import '../modules/hrm/hrm_module_screen.dart';
-import '../modules/crm/crm_module_screen.dart';
-import '../modules/project/project_module_screen.dart';
-import '../modules/purchasing/purchasing_module_screen.dart';
-import '../modules/sales/sales_module_screen.dart';
-import '../modules/inventory/inventory_module_screen.dart';
-import '../modules/accounting/accounting_module_screen.dart';
-import '../modules/reports/reports_module_screen.dart';
-import '../modules/settings/settings_module_screen.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/utils/responsive_utils.dart';
+import 'package:frontend/widgets/sun_app_bar.dart';
+import 'package:frontend/widgets/sun_drawer.dart';
+import 'package:frontend/widgets/home/employee_card.dart';
+import 'package:frontend/widgets/home/attendance_buttons.dart';
+import 'package:frontend/widgets/home/leave_button.dart';
+import 'package:frontend/widgets/home/task_list.dart';
+import 'package:frontend/widgets/home/hr_announcement.dart';
+import 'package:frontend/widgets/home/urgent_announcement_banner.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
+import 'package:frontend/modules/hrm/hrm_module_screen.dart';
+import 'package:frontend/modules/crm/crm_module_screen.dart';
+import 'package:frontend/modules/project/project_module_screen.dart';
+import 'package:frontend/modules/purchasing/purchasing_module_screen.dart';
+import 'package:frontend/modules/sales/sales_module_screen.dart';
+import 'package:frontend/modules/inventory/inventory_module_screen.dart';
+import 'package:frontend/modules/accounting/accounting_module_screen.dart';
+import 'package:frontend/modules/reports/reports_module_screen.dart';
+import 'package:frontend/modules/settings/settings_module_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

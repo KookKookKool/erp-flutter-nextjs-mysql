@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import '../attendance_screen.dart';
+import 'package:frontend/modules/hrm/attendance/attendance_screen.dart';
 
 class AttendanceCard extends StatelessWidget {
   final EmployeeAttendance emp;

@@ -6,13 +6,13 @@ import 'package:frontend/core/theme/widget_styles.dart';
 import 'package:frontend/core/utils/responsive_utils.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 
-import 'bloc/payroll_bloc.dart';
-import 'models/payroll_employee.dart';
-import 'services/payroll_service.dart';
-import 'widgets/payroll_employee_card.dart';
-import 'widgets/add_payroll_dialog.dart';
-import 'widgets/edit_payroll_dialog.dart';
-import 'widgets/payroll_search_bar.dart';
+import 'package:frontend/modules/hrm/payroll/bloc/payroll_bloc.dart';
+import 'package:frontend/modules/hrm/payroll/models/payroll_employee.dart';
+import 'package:frontend/modules/hrm/payroll/services/payroll_service.dart';
+import 'package:frontend/modules/hrm/payroll/widgets/payroll_employee_card.dart';
+import 'package:frontend/modules/hrm/payroll/widgets/add_payroll_dialog.dart';
+import 'package:frontend/modules/hrm/payroll/widgets/edit_payroll_dialog.dart';
+import 'package:frontend/modules/hrm/payroll/widgets/payroll_search_bar.dart';
 
 class PayrollScreen extends StatelessWidget {
   const PayrollScreen({super.key});

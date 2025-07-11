@@ -1,6 +1,6 @@
 //import 'dart:io';
 import 'package:flutter/material.dart';
-import '/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
 

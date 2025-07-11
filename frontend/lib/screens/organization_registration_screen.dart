@@ -126,9 +126,8 @@ class _OrganizationRegistrationScreenState
     });
 
     try {
-      // Create description that combines additional info like HTML
-      final description =
-          '${AppLocalizations.of(context)?.businessTypeSummary}: $_selectedBusinessType, ${AppLocalizations.of(context)?.employeeCountSummary}: $_selectedEmployeeCount, ${AppLocalizations.of(context)?.websiteSummary}: ${_websiteController.text.isEmpty ? AppLocalizations.of(context)?.noWebsite : _websiteController.text}, ${AppLocalizations.of(context)?.descriptionSummary}: ${_orgDescriptionController.text.isEmpty ? AppLocalizations.of(context)?.noDescription : _orgDescriptionController.text}';
+      // ส่งเฉพาะรายละเอียดที่กรอก ไม่รวมข้อมูลอื่น
+      final description = _orgDescriptionController.text.trim();
 
       final result = await ApiService.registerOrganization(
         orgName: _orgNameController.text.trim(),
@@ -140,9 +139,9 @@ class _OrganizationRegistrationScreenState
         companyRegistrationNumber: _companyRegistrationNumberController.text
             .trim(),
         taxId: _taxIdController.text.trim(),
-        businessType: _selectedBusinessType, // ส่งแยก
-        employeeCount: _selectedEmployeeCount, // ส่งแยก
-        website: _websiteController.text.trim(), // ส่งแยก
+        businessType: _selectedBusinessType,
+        employeeCount: _selectedEmployeeCount,
+        website: _websiteController.text.trim(),
         adminName: _adminNameController.text.trim(),
         adminEmail: _adminEmailController.text.trim(),
         adminPassword: _adminPasswordController.text,
@@ -376,8 +375,8 @@ class _OrganizationRegistrationScreenState
                             side: const BorderSide(color: Colors.white),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: _isLoading ? null : _previousPage,
                           child: Text(

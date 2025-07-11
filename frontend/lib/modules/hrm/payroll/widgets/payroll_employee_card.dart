@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/payroll_employee.dart';
-import '../../../../core/theme/sun_theme.dart';
-import '../../../../core/theme/widget_styles.dart';
-import '../../../../core/l10n/app_localizations.dart';
+import 'package:frontend/modules/hrm/payroll/models/payroll_employee.dart';
+import 'package:frontend/core/theme/sun_theme.dart';
+import 'package:frontend/core/theme/widget_styles.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class PayrollEmployeeCard extends StatelessWidget {
   final PayrollEmployee employee;

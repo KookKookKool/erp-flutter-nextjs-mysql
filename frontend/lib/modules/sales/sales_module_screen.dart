@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/module_cubit.dart';
-import 'customer/customer_screen.dart';
-import 'quotation/quotation_screen.dart';
-import 'report/report_screen.dart';
+import 'package:frontend/modules/sales/customer/customer_screen.dart';
+import 'package:frontend/modules/sales/quotation/quotation_screen.dart';
+import 'package:frontend/modules/sales/report/report_screen.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 
 class SalesModuleScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/employee_model.dart';
-import '../services/employee_auth_service.dart';
+import 'package:frontend/core/auth/models/employee_model.dart';
+import 'package:frontend/core/auth/services/employee_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 

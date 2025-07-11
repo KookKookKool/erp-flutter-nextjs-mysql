@@ -4,12 +4,12 @@ import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import 'widgets/leave_card.dart';
-import 'widgets/leave_search_bar.dart';
-import 'widgets/add_leave_dialog.dart';
-import 'widgets/leave_approval_tab.dart';
-import 'leave_repository.dart';
-import 'bloc/leave_cubit.dart';
+import 'package:frontend/modules/hrm/leave/widgets/leave_card.dart';
+import 'package:frontend/modules/hrm/leave/widgets/leave_search_bar.dart';
+import 'package:frontend/modules/hrm/leave/widgets/add_leave_dialog.dart';
+import 'package:frontend/modules/hrm/leave/widgets/leave_approval_tab.dart';
+import 'package:frontend/modules/hrm/leave/leave_repository.dart';
+import 'package:frontend/modules/hrm/leave/bloc/leave_cubit.dart';
 
 class LeaveScreen extends StatelessWidget {
   const LeaveScreen({super.key});

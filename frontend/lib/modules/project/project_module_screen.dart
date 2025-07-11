@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/bloc/module_cubit.dart';
-import 'task/task_screen.dart';
-import 'status/status_screen.dart';
-import 'notification/notification_screen.dart';
+import 'package:frontend/modules/project/task/task_screen.dart';
+import 'package:frontend/modules/project/status/status_screen.dart';
+import 'package:frontend/modules/project/notification/notification_screen.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 
 class ProjectModuleScreen extends StatelessWidget {

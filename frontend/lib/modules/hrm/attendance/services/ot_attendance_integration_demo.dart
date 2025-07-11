@@ -1,10 +1,10 @@
 // OT Integration Demo
 // This file demonstrates how the OT and Attendance systems are now integrated
 
-import '../models/ot_request.dart';
-import '../services/ot_data_service.dart';
-import '../services/attendance_ot_integration_service.dart';
-import '../attendance_screen.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/services/ot_data_service.dart';
+import 'package:frontend/modules/hrm/attendance/services/attendance_ot_integration_service.dart';
+import 'package:frontend/modules/hrm/attendance/attendance_screen.dart';
 
 /// Example usage of the integrated OT-Attendance system
 class OtAttendanceIntegrationDemo {

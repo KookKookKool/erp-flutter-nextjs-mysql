@@ -4,7 +4,7 @@ import 'package:frontend/core/bloc/app_state_cubit.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/utils/debug_utils.dart';
 
-import '../widgets/sun_logo.dart';
+import 'package:frontend/widgets/sun_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

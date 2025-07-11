@@ -1,6 +1,6 @@
-import '../models/ot_request.dart';
-import '../attendance_screen.dart';
-import 'ot_data_service.dart';
+import 'package:frontend/modules/hrm/attendance/models/ot_request.dart';
+import 'package:frontend/modules/hrm/attendance/attendance_screen.dart';
+import 'package:frontend/modules/hrm/attendance/services/ot_data_service.dart';
 
 /// Service to integrate OT data with Attendance records
 class AttendanceOtIntegrationService {

@@ -4,11 +4,11 @@ import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import 'widgets/announcement_card.dart';
-import 'widgets/announcement_search_bar.dart';
-import 'widgets/add_announcement_dialog.dart';
-import 'bloc/announcement_cubit.dart';
-import 'models/announcement.dart';
+import 'package:frontend/modules/hrm/announcement/widgets/announcement_card.dart';
+import 'package:frontend/modules/hrm/announcement/widgets/announcement_search_bar.dart';
+import 'package:frontend/modules/hrm/announcement/widgets/add_announcement_dialog.dart';
+import 'package:frontend/modules/hrm/announcement/bloc/announcement_cubit.dart';
+import 'package:frontend/modules/hrm/announcement/models/announcement.dart';
 
 class AnnouncementScreen extends StatelessWidget {
   const AnnouncementScreen({super.key});

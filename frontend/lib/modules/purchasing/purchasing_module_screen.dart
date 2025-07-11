@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/bloc/module_cubit.dart';
-import 'order/order_screen.dart';
-import 'supplier/supplier_screen.dart';
-import 'report/report_screen.dart';
-import '../../core/l10n/app_localizations.dart';
+import 'package:frontend/core/bloc/module_cubit.dart';
+import 'package:frontend/modules/purchasing/order/order_screen.dart';
+import 'package:frontend/modules/purchasing/supplier/supplier_screen.dart';
+import 'package:frontend/modules/purchasing/report/report_screen.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class PurchasingModuleScreen extends StatelessWidget {
   final String? submodule;

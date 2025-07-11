@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
-import '../leave_repository.dart';
-import '../bloc/leave_cubit.dart';
-import 'leave_approval_card.dart';
+import 'package:frontend/modules/hrm/leave/leave_repository.dart';
+import 'package:frontend/modules/hrm/leave/bloc/leave_cubit.dart';
+import 'package:frontend/modules/hrm/leave/widgets/leave_approval_card.dart';
 
 class LeaveApprovalTab extends StatefulWidget {
   final String search;

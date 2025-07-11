@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import '../config/environment.dart';
+import 'package:frontend/core/config/environment.dart';
 
 class ApiService {
   // ใช้ Environment configuration แบบ fixed สำหรับความปลอดภัย
