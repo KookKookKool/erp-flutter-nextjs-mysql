@@ -4,8 +4,14 @@ import { AuthService } from "@/lib/auth";
 import { DatabaseManager } from "@/lib/database-manager";
 
 // Add CORS headers
-function addCorsHeaders(response: NextResponse) {
-  response.headers.set("Access-Control-Allow-Origin", "*");
+function addCorsHeaders(response: NextResponse, origin?: string) {
+  // ถ้า origin มาจาก localhost ให้อนุญาต origin นั้น (รองรับทุก port)
+  if (origin && origin.startsWith("http://localhost")) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
+  } else {
+    // ใน production หรือไม่มี origin ให้อนุญาตเฉพาะ domain จริง
+    response.headers.set("Access-Control-Allow-Origin", "*");
+  }
   response.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
@@ -19,11 +25,13 @@ function addCorsHeaders(response: NextResponse) {
 }
 
 export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get("origin") || undefined;
   const response = new NextResponse(null, { status: 200 });
-  return addCorsHeaders(response);
+  return addCorsHeaders(response, origin);
 }
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get("origin") || undefined;
   try {
     console.log("Registration request received");
 
@@ -60,7 +68,7 @@ export async function POST(request: NextRequest) {
         { error: "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน" },
         { status: 400 }
       );
-      return addCorsHeaders(response);
+      return addCorsHeaders(response, origin);
     }
 
     // ตรวจสอบว่า orgCode ซ้ำหรือไม่
@@ -73,7 +81,7 @@ export async function POST(request: NextRequest) {
         { error: "รหัสองค์กรนี้ถูกใช้ไปแล้ว กรุณาสร้างรหัสใหม่" },
         { status: 409 }
       );
-      return addCorsHeaders(response);
+      return addCorsHeaders(response, origin);
     }
 
     // ตรวจสอบว่า email ซ้ำหรือไม่
@@ -88,7 +96,7 @@ export async function POST(request: NextRequest) {
         { error: "อีเมลนี้ถูกใช้ไปแล้ว" },
         { status: 409 }
       );
-      return addCorsHeaders(response);
+      return addCorsHeaders(response, origin);
     }
 
     // Hash password
@@ -124,13 +132,13 @@ export async function POST(request: NextRequest) {
       orgCode: organization.orgCode,
       orgId: organization.id,
     });
-    return addCorsHeaders(response);
+    return addCorsHeaders(response, origin);
   } catch (error) {
     console.error("❌ Registration error:", error);
     const response = NextResponse.json(
       { error: "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองใหม่อีกครั้ง" },
       { status: 500 }
     );
-    return addCorsHeaders(response);
+    return addCorsHeaders(response, origin);
   }
 }

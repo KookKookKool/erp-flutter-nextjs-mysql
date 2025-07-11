@@ -1,8 +1,28 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // Environment configuration for Flutter app
 class Environment {
-  // API Configuration - Fixed for security
-  static const String _prodApiUrl = 'https://your-production-domain.com/api';
-  static const String _devApiUrl = 'http://10.0.2.2:3000/api';
+  // API Configuration - รองรับทั้ง Web และ Mobile/Desktop
+  static String get apiUrl {
+    if (kIsWeb) {
+      // สำหรับ Web ใช้ค่าจาก --dart-define
+      return const String.fromEnvironment('DEV_API_URL', defaultValue: '');
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      // Android Emulator ใช้ ANDROID_EMULATOR_API_URL ถ้ามี
+      return dotenv.env['ANDROID_EMULATOR_API_URL'] ??
+          dotenv.env['DEV_API_URL'] ??
+          '';
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      // iOS ใช้ LOCAL_NETWORK_API_URL ถ้ามี
+      return dotenv.env['LOCAL_NETWORK_API_URL'] ??
+          dotenv.env['DEV_API_URL'] ??
+          '';
+    } else {
+      // Desktop ใช้ DEV_API_URL
+      return dotenv.env['DEV_API_URL'] ?? '';
+    }
+  }
 
   // App Configuration
   static const String _prodAppName = 'ERP System';
@@ -18,12 +38,6 @@ class Environment {
   }
 
   static bool get isDevelopment => !isProduction;
-
-  // Fixed API URL based on environment - no custom URL override for security
-  static String get apiUrl {
-    return isProduction ? _prodApiUrl : _devApiUrl;
-  }
-
   // App name based on environment
   static String get appName {
     return isProduction ? _prodAppName : _devAppName;

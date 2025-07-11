@@ -4,6 +4,17 @@ import { AuthService } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+// Helper type guard for RowDataPacket
+function isRowDataPacket(obj: any): obj is Record<string, any> {
+  return (
+    obj &&
+    typeof obj === "object" &&
+    !Array.isArray(obj) &&
+    !("affectedRows" in obj) &&
+    !("insertId" in obj)
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -50,8 +61,8 @@ export async function POST(request: NextRequest) {
     const connection = await dbManager.getOrganizationConnection(schemaName);
 
     // Find user in org database - try multiple approaches
-    let user: any = null;
-    let employeeData: any = null;
+    let user = null;
+    let employeeData = null;
 
     try {
       // First, try to find in users table by employee_id or email
@@ -66,50 +77,12 @@ export async function POST(request: NextRequest) {
         employeeId,
       ]);
 
-      if (Array.isArray(userResults) && userResults.length > 0) {
-        user = userResults[0] as any;
-      }
-
-      // If not found in users, try hrm_employees table
-      if (!user) {
-        try {
-          const empQuery = `
-            SELECT * FROM hrm_employees 
-            WHERE (employee_code = ? OR email = ?) 
-            AND is_active = 1
-            LIMIT 1
-          `;
-          const [empResults] = await connection.execute(empQuery, [
-            employeeId,
-            employeeId,
-          ]);
-
-          if (Array.isArray(empResults) && empResults.length > 0) {
-            employeeData = empResults[0] as any;
-
-            // Create a user-like object from employee data
-            user = {
-              id: employeeData.id,
-              employee_id: employeeData.employee_code,
-              email: employeeData.email,
-              password: employeeData.password || null,
-              name: `${employeeData.first_name || ""} ${
-                employeeData.last_name || ""
-              }`.trim(),
-              first_name: employeeData.first_name,
-              last_name: employeeData.last_name,
-              phone: employeeData.phone,
-              position: employeeData.position,
-              level: employeeData.level,
-              is_active: employeeData.is_active,
-              created_at: employeeData.created_at,
-              updated_at: employeeData.updated_at,
-            };
-          }
-        } catch (empError) {
-          console.log("hrm_employees table not found or error:", empError);
-        }
-      } else {
+      if (
+        Array.isArray(userResults) &&
+        userResults.length > 0 &&
+        isRowDataPacket(userResults[0])
+      ) {
+        user = userResults[0];
         // If found in users, try to get additional data from hrm_employees
         try {
           const empQuery = `
@@ -117,18 +90,38 @@ export async function POST(request: NextRequest) {
             WHERE (user_id = ? OR employee_code = ? OR email = ?)
             LIMIT 1
           `;
+          // Fix: Use type guard and property guard for user before passing to query
+          const userId = isRowDataPacket(user) && "id" in user ? user.id : null;
+          const empCode =
+            isRowDataPacket(user) && "employee_id" in user
+              ? user.employee_id
+              : employeeId;
+          const emailVal =
+            isRowDataPacket(user) && "email" in user ? user.email : employeeId;
           const [empResults] = await connection.execute(empQuery, [
-            user.id,
-            user.employee_id || employeeId,
-            user.email,
+            userId,
+            empCode,
+            emailVal,
           ]);
 
-          if (Array.isArray(empResults) && empResults.length > 0) {
-            employeeData = empResults[0] as any;
+          if (
+            Array.isArray(empResults) &&
+            empResults.length > 0 &&
+            isRowDataPacket(empResults[0])
+          ) {
+            employeeData = empResults[0];
+          } else {
+            employeeData = null;
           }
         } catch (empError) {
           console.log("Could not fetch hrm_employees data:", empError);
         }
+      } else {
+        // If not found in users, do NOT allow login (do not check hrm_employees for password)
+        return NextResponse.json(
+          { error: "บัญชีนี้ยังไม่ได้ตั้งรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ" },
+          { status: 403 }
+        );
       }
     } catch (error) {
       console.error("Error finding user:", error);
@@ -138,7 +131,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!user) {
+    if (!user || !isRowDataPacket(user)) {
       return NextResponse.json(
         { error: "ไม่พบรหัสพนักงานในระบบ" },
         { status: 404 }
@@ -146,7 +139,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if password exists
-    if (!user.password) {
+    if (!("password" in user) || !user.password) {
       return NextResponse.json(
         { error: "บัญชีนี้ยังไม่ได้ตั้งรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ" },
         { status: 403 }
@@ -167,28 +160,72 @@ export async function POST(request: NextRequest) {
 
     // Combine user and employee data
     const employee = {
-      id: user.id,
-      employee_id: user.employee_id || employeeId,
+      id: "id" in user ? user.id : null,
+      employee_id: "employee_id" in user ? user.employee_id : employeeId,
       first_name:
-        employeeData?.first_name ||
-        user.first_name ||
-        user.name?.split(" ")[0] ||
-        "",
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "first_name" in employeeData
+          ? employeeData.first_name
+          : "first_name" in user
+          ? user.first_name
+          : user.name?.split(" ")[0] || "",
       last_name:
-        employeeData?.last_name ||
-        user.last_name ||
-        user.name?.split(" ").slice(1).join(" ") ||
-        "",
-      email: user.email,
-      phone: employeeData?.phone || user.phone || "",
-      position: employeeData?.position || user.position || "",
-      department: employeeData?.department || user.department || "",
-      level: employeeData?.level || user.level || "Employee",
-      start_date: employeeData?.hire_date || user.start_date || user.created_at,
-      is_active: user.is_active,
-      profile_image: employeeData?.profile_image || user.profile_image,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "last_name" in employeeData
+          ? employeeData.last_name
+          : "last_name" in user
+          ? user.last_name
+          : user.name?.split(" ").slice(1).join(" ") || "",
+      email: "email" in user ? user.email : "",
+      phone:
+        employeeData && isRowDataPacket(employeeData) && "phone" in employeeData
+          ? employeeData.phone
+          : "phone" in user
+          ? user.phone
+          : "",
+      position:
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "position" in employeeData
+          ? employeeData.position
+          : "position" in user
+          ? user.position
+          : "",
+      department:
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "department" in employeeData
+          ? employeeData.department
+          : "department" in user
+          ? user.department
+          : "",
+      level:
+        employeeData && isRowDataPacket(employeeData) && "level" in employeeData
+          ? employeeData.level
+          : "level" in user
+          ? user.level
+          : "Employee",
+      start_date:
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "hire_date" in employeeData
+          ? employeeData.hire_date
+          : "start_date" in user
+          ? user.start_date
+          : user.created_at,
+      is_active: "is_active" in user ? user.is_active : true,
+      profile_image:
+        employeeData &&
+        isRowDataPacket(employeeData) &&
+        "profile_image" in employeeData
+          ? employeeData.profile_image
+          : "profile_image" in user
+          ? user.profile_image
+          : undefined,
+      created_at: "created_at" in user ? user.created_at : undefined,
+      updated_at: "updated_at" in user ? user.updated_at : undefined,
     };
 
     // Get user permissions (basic HRM permissions for employees)

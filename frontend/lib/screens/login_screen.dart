@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/modules/auth/services/employee_auth_service.dart';
-import 'package:frontend/core/utils/web_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontend/core/services/api_service.dart';
 import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
@@ -75,9 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
-      // Use Employee Auth Service with dynamic baseUrl
-      String baseUrl = getWebHostNonNull(port: 3000);
-      final authService = EmployeeAuthService(baseUrl: baseUrl);
+      // ใช้ Employee Auth Service โดยใช้ baseUrl จาก ApiService เพื่อรองรับทุก platform
+      final authService = EmployeeAuthService(baseUrl: ApiService.baseUrl);
       final result = await authService.loginWithEmployeeId(
         orgCode: _orgCode!,
         employeeId: employeeId,

@@ -79,6 +79,13 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
           _isLoading = false;
           _errorText = error['message'] ?? localizations.orgNotFound;
         });
+      } else if (result['statusCode'] == 500 &&
+          result['body'] is Map &&
+          result['body']['error'] != null) {
+        setState(() {
+          _isLoading = false;
+          _errorText = result['body']['error'];
+        });
       } else {
         setState(() {
           _isLoading = false;
@@ -88,7 +95,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorText = localizations.serverConnectionError;
+        _errorText = e.toString(); // แสดง error ที่เกิดขึ้นจริง
       });
     }
   }

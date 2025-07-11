@@ -375,6 +375,9 @@ class _OrganizationRegistrationScreenState
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Colors.white),
                             padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           ),
                           onPressed: _isLoading ? null : _previousPage,
                           child: Text(

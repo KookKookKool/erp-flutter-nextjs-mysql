@@ -14,7 +14,7 @@ class EmployeeAuthService {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/api/auth/employee-login'),
+        Uri.parse('$baseUrl/auth/employee-login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'orgCode': orgCode,
@@ -38,7 +38,7 @@ class EmployeeAuthService {
   }) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/api/hrm/employee/profile?employeeId=$employeeId'),
+        Uri.parse('$baseUrl/hrm/employee/profile?employeeId=$employeeId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -74,7 +74,7 @@ class EmployeeAuthService {
       }
 
       final uri = Uri.parse(
-        '$baseUrl/api/hrm/employee',
+        '$baseUrl/hrm/employee',
       ).replace(queryParameters: queryParams);
 
       final response = await http.get(
@@ -110,7 +110,7 @@ class EmployeeAuthService {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/api/hrm/employee'),
+        Uri.parse('$baseUrl/hrm/employee'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -135,7 +135,7 @@ class EmployeeAuthService {
   }) async {
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/api/hrm/employee/$employeeId'),
+        Uri.parse('$baseUrl/hrm/employee/$employeeId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -159,7 +159,7 @@ class EmployeeAuthService {
   }) async {
     try {
       final response = await http.delete(
-        Uri.parse('$baseUrl/api/hrm/employee/$employeeId'),
+        Uri.parse('$baseUrl/hrm/employee/$employeeId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

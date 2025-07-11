@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/l10n/app_localizations.dart';
 import 'core/theme/sun_theme.dart';
@@ -21,7 +23,11 @@ import 'screens/language_select_screen.dart';
 final globalLeaveRepository = LeaveRepository();
 final globalAnnouncementRepository = AnnouncementRepository();
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb) {
+    await dotenv.load(); // โหลด .env เฉพาะ Mobile/Desktop
+  }
   Bloc.observer = SimpleBlocObserver();
   runApp(
     MultiBlocProvider(

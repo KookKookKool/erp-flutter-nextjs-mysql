@@ -6,19 +6,26 @@ import '../config/environment.dart';
 class ApiService {
   // ใช้ Environment configuration แบบ fixed สำหรับความปลอดภัย
   static String get baseUrl {
+    final apiUrl = Environment.apiUrl;
+    if (apiUrl.isEmpty) {
+      throw Exception(
+        'API base URL is not set. Please check your environment configuration.',
+      );
+    }
     if (kIsWeb) {
-      // สำหรับ Web ใช้ localhost หรือตามที่กำหนดใน Environment
-      return Environment.apiUrl;
+      return apiUrl;
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      // สำหรับ Android Emulator อาจต้องใช้ 10.0.2.2 แทน localhost
-      final apiUrl = Environment.apiUrl;
-      if (apiUrl.contains('localhost') && !kDebugMode) {
+      // Android Emulator: ถ้า apiUrl เป็น localhost ให้ใช้ 10.0.2.2
+      if (apiUrl.contains('localhost')) {
         return apiUrl.replaceAll('localhost', '10.0.2.2');
       }
       return apiUrl;
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      // iOS Simulator: ใช้ IP เครื่องจริง
+      return apiUrl;
     } else {
-      // สำหรับ platform อื่นๆ
-      return Environment.apiUrl;
+      // Desktop หรือ platform อื่น ๆ
+      return apiUrl;
     }
   }
 
