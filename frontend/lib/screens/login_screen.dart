@@ -154,9 +154,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: _isLoading
                               ? null
                               : () {
-                                  Navigator.of(
-                                    context,
-                                  ).pushReplacementNamed('/org');
+                                  if (mounted) {
+                                    Navigator.of(
+                                      context,
+                                    ).pushReplacementNamed('/org');
+                                  }
                                 },
                         ),
                         const Spacer(),

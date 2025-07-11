@@ -21,7 +21,6 @@ import 'package:frontend/modules/accounting/accounting_module_screen.dart';
 import 'package:frontend/modules/reports/reports_module_screen.dart';
 import 'package:frontend/modules/settings/settings_module_screen.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

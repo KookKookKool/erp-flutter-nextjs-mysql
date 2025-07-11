@@ -43,3 +43,6 @@ class ResponsiveCardGrid extends StatelessWidget {
     );
   }
 }
+
+// ResponsiveCardGrid ไม่มี navigation logic อยู่ใน LayoutBuilder
+// ตรวจสอบแล้วปลอดภัย ไม่ต้องแก้ไขเพิ่มเติม

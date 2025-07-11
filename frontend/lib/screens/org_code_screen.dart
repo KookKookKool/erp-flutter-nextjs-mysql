@@ -148,7 +148,9 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.brown),
           tooltip: localizations.back,
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/language');
+            if (mounted) {
+              Navigator.of(context).pushReplacementNamed('/language');
+            }
           },
         ),
       ),
