@@ -1,3 +1,4 @@
 {
-  "/api/register/route": "app/api/register/route.js"
+  "/api/hrm/employees/route": "app/api/hrm/employees/route.js",
+  "/api/auth/employee-login/route": "app/api/auth/employee-login/route.js"
 }

@@ -51,40 +51,71 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
       // ตรวจสอบสถานะองค์กรกับ backend
       final result = await ApiService.getOrganizationStatus(orgCode);
 
+      String? mappedErrorText;
+      if (result['body'] is Map && result['body']['error'] != null) {
+        switch (result['body']['error']) {
+          case 'REQUIRED_FIELDS':
+            mappedErrorText = localizations.errorRequiredFields;
+            break;
+          case 'ORG_NOT_FOUND':
+            mappedErrorText = localizations.errorOrgNotFound;
+            break;
+          case 'ORG_NOT_APPROVED':
+            mappedErrorText = localizations.errorOrgNotApproved;
+            break;
+          case 'ORG_SUSPENDED':
+            mappedErrorText = localizations.errorOrgSuspended;
+            break;
+          case 'ORG_EXPIRED':
+            mappedErrorText = localizations.errorOrgExpired;
+            break;
+          case 'USER_SUSPENDED':
+            mappedErrorText = localizations.errorUserSuspended;
+            break;
+          case 'INVALID_CREDENTIALS':
+            mappedErrorText = localizations.errorInvalidCredentials;
+            break;
+          case 'LOGIN_ERROR':
+            mappedErrorText = localizations.errorLoginError;
+            break;
+          default:
+            mappedErrorText = null;
+        }
+      }
+
       if (result['statusCode'] == 200) {
         final data = result['body'];
-
         if (data['status'] == 'APPROVED' && data['canLogin'] == true) {
-          // Save org code to SharedPreferences
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('org_code', orgCode.toUpperCase());
-
           setState(() {
             _isLoading = false;
           });
-
-          // ไปหน้า login
           if (mounted) {
             Navigator.of(context).pushReplacementNamed('/login');
           }
         } else {
           setState(() {
             _isLoading = false;
-            _errorText = data['message'] ?? localizations.orgNotApproved;
+            _errorText =
+                mappedErrorText ??
+                data['message'] ??
+                localizations.orgNotApproved;
           });
         }
-      } else if (result['statusCode'] == 404) {
-        final error = result['body'];
+      } else if (result['statusCode'] == 404 ||
+          result['statusCode'] == 403 ||
+          result['statusCode'] == 401) {
         setState(() {
           _isLoading = false;
-          _errorText = error['message'] ?? localizations.orgNotFound;
+          _errorText = mappedErrorText ?? localizations.orgCheckError;
         });
       } else if (result['statusCode'] == 500 &&
           result['body'] is Map &&
           result['body']['error'] != null) {
         setState(() {
           _isLoading = false;
-          _errorText = result['body']['error'];
+          _errorText = mappedErrorText ?? localizations.orgCheckError;
         });
       } else {
         setState(() {
@@ -95,7 +126,7 @@ class _OrgCodeScreenState extends State<OrgCodeScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorText = e.toString(); // แสดง error ที่เกิดขึ้นจริง
+        _errorText = e.toString();
       });
     }
   }

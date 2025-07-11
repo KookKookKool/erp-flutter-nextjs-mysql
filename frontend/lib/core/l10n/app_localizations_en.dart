@@ -75,6 +75,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPassword => 'Forgot password?';
 
   @override
+  String get forgotPasswordDialogContent =>
+      'Please contact HR or the system administrator for password reset assistance.';
+
+  @override
   String get employeeName => 'Employee Name';
 
   @override
@@ -1028,4 +1032,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressSummary => 'Address';
+
+  @override
+  String get errorRequiredFields => 'Please fill in all required fields.';
+
+  @override
+  String get errorOrgNotFound => 'Organization code not found.';
+
+  @override
+  String get errorOrgNotApproved => 'Organization is not approved yet.';
+
+  @override
+  String get errorOrgSuspended => 'Organization is suspended.';
+
+  @override
+  String get errorOrgExpired => 'Organization subscription has expired.';
+
+  @override
+  String get errorUserSuspended => 'User account is suspended.';
+
+  @override
+  String get errorInvalidCredentials =>
+      'Invalid email/employee ID or password.';
+
+  @override
+  String get errorLoginError => 'An error occurred during login.';
 }

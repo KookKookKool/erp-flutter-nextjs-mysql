@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!orgCode || !(email || employeeId) || !password) {
-      return NextResponse.json(
-        { error: "กรุณากรอกข้อมูลให้ครบถ้วน" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "REQUIRED_FIELDS" }, { status: 400 });
     }
 
     // สร้าง where เฉพาะ field ที่มีค่า
@@ -27,25 +24,16 @@ export async function POST(request: NextRequest) {
     });
 
     if (!organization) {
-      return NextResponse.json(
-        { error: "ไม่พบรหัสองค์กรในระบบ" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "ORG_NOT_FOUND" }, { status: 404 });
     }
 
     // Check organization status
     if (organization.status !== "APPROVED") {
-      return NextResponse.json(
-        { error: "องค์กรยังไม่ได้รับการอนุมัติ" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "ORG_NOT_APPROVED" }, { status: 403 });
     }
 
     if (!organization.isActive) {
-      return NextResponse.json(
-        { error: "องค์กรถูกระงับการใช้งาน" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "ORG_SUSPENDED" }, { status: 403 });
     }
 
     // Check subscription expiry
@@ -53,10 +41,7 @@ export async function POST(request: NextRequest) {
       organization.subscriptionEnd &&
       new Date() > organization.subscriptionEnd
     ) {
-      return NextResponse.json(
-        { error: "องค์กรหมดอายุการใช้งาน" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "ORG_EXPIRED" }, { status: 403 });
     }
 
     // Try to login with admin credentials first
@@ -122,7 +107,7 @@ export async function POST(request: NextRequest) {
       if (isValidPassword) {
         if (!user.isActive) {
           return NextResponse.json(
-            { error: "บัญชีผู้ใช้ถูกระงับการใช้งาน" },
+            { error: "USER_SUSPENDED" },
             { status: 403 }
           );
         }
@@ -163,15 +148,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Invalid credentials
-    return NextResponse.json(
-      { error: "อีเมล/รหัสพนักงาน หรือรหัสผ่านไม่ถูกต้อง" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "INVALID_CREDENTIALS" }, { status: 401 });
   } catch (error) {
     console.error("❌ Login error:", error);
-    return NextResponse.json(
-      { error: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "LOGIN_ERROR" }, { status: 500 });
   }
 }

@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'Forgot password?'**
   String get forgotPassword;
 
+  /// No description provided for @forgotPasswordDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please contact HR or the system administrator for password reset assistance.'**
+  String get forgotPasswordDialogContent;
+
   /// No description provided for @employeeName.
   ///
   /// In en, this message translates to:
@@ -2047,6 +2053,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Address'**
   String get addressSummary;
+
+  /// No description provided for @errorRequiredFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields.'**
+  String get errorRequiredFields;
+
+  /// No description provided for @errorOrgNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization code not found.'**
+  String get errorOrgNotFound;
+
+  /// No description provided for @errorOrgNotApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization is not approved yet.'**
+  String get errorOrgNotApproved;
+
+  /// No description provided for @errorOrgSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization is suspended.'**
+  String get errorOrgSuspended;
+
+  /// No description provided for @errorOrgExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization subscription has expired.'**
+  String get errorOrgExpired;
+
+  /// No description provided for @errorUserSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'User account is suspended.'**
+  String get errorUserSuspended;
+
+  /// No description provided for @errorInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email/employee ID or password.'**
+  String get errorInvalidCredentials;
+
+  /// No description provided for @errorLoginError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during login.'**
+  String get errorLoginError;
 }
 
 class _AppLocalizationsDelegate

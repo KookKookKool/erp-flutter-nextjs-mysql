@@ -75,6 +75,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get forgotPassword => 'ลืมรหัสผ่าน?';
 
   @override
+  String get forgotPasswordDialogContent =>
+      'โปรดติดต่อฝ่าย HR หรือผู้ดูแลระบบเพื่อขอความช่วยเหลือในการรีเซ็ตรหัสผ่าน';
+
+  @override
   String get employeeName => 'ชื่อพนักงาน';
 
   @override
@@ -1026,4 +1030,29 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get addressSummary => 'ที่อยู่';
+
+  @override
+  String get errorRequiredFields => 'กรุณากรอกข้อมูลให้ครบถ้วน';
+
+  @override
+  String get errorOrgNotFound => 'ไม่พบรหัสองค์กรในระบบ';
+
+  @override
+  String get errorOrgNotApproved => 'องค์กรยังไม่ได้รับการอนุมัติ';
+
+  @override
+  String get errorOrgSuspended => 'องค์กรถูกระงับการใช้งาน';
+
+  @override
+  String get errorOrgExpired => 'องค์กรหมดอายุการใช้งาน';
+
+  @override
+  String get errorUserSuspended => 'บัญชีผู้ใช้ถูกระงับการใช้งาน';
+
+  @override
+  String get errorInvalidCredentials =>
+      'อีเมล/รหัสพนักงาน หรือรหัสผ่านไม่ถูกต้อง';
+
+  @override
+  String get errorLoginError => 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ';
 }

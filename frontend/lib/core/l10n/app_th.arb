@@ -22,6 +22,7 @@
   "orgCodeLabel": "รหัสองค์กร",
   "username": "ชื่อผู้ใช้",
   "forgotPassword": "ลืมรหัสผ่าน?",
+  "forgotPasswordDialogContent": "โปรดติดต่อฝ่าย HR หรือผู้ดูแลระบบเพื่อขอความช่วยเหลือในการรีเซ็ตรหัสผ่าน",
   "employeeName": "ชื่อพนักงาน",
   "employeePosition": "ตำแหน่งงาน",
   "employeeId": "รหัสพนักงาน: {id}",
@@ -357,5 +358,13 @@
   "pleaseEnterTaxIdTh": "กรุณากรอกเลขประจำตัวผู้เสียภาษี",
   "companyRegistrationSummary": "เลขทะเบียน บริษัท / หจก.",
   "taxIdSummary": "เลขประจำตัวผู้เสียภาษี",
-  "addressSummary": "ที่อยู่"
+  "addressSummary": "ที่อยู่",
+  "errorRequiredFields": "กรุณากรอกข้อมูลให้ครบถ้วน",
+  "errorOrgNotFound": "ไม่พบรหัสองค์กรในระบบ",
+  "errorOrgNotApproved": "องค์กรยังไม่ได้รับการอนุมัติ",
+  "errorOrgSuspended": "องค์กรถูกระงับการใช้งาน",
+  "errorOrgExpired": "องค์กรหมดอายุการใช้งาน",
+  "errorUserSuspended": "บัญชีผู้ใช้ถูกระงับการใช้งาน",
+  "errorInvalidCredentials": "อีเมล/รหัสพนักงาน หรือรหัสผ่านไม่ถูกต้อง",
+  "errorLoginError": "เกิดข้อผิดพลาดในการเข้าสู่ระบบ"
 }

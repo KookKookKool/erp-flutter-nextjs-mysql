@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import 'package:frontend/modules/auth/services/employee_auth_service.dart';
+import 'package:frontend/core/auth/services/employee_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/core/services/api_service.dart';
 import 'dart:convert';
@@ -192,10 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelStyle: textTheme.bodyMedium?.copyWith(
                           color: SunTheme.textSecondary,
                         ),
-                        prefixIcon: Icon(
-                          Icons.badge_outlined,
-                          color: SunTheme.textSecondary,
-                        ),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 20,
                           horizontal: 16,
@@ -210,6 +206,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: SunTheme.sunOrange,
                             width: 2,
                           ),
+                        ),
+                        suffixIcon: Icon(
+                          Icons.badge_outlined,
+                          color: SunTheme.sunDeepOrange,
                         ),
                       ),
                     ),
@@ -250,18 +250,23 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 2,
                           ),
                         ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: SunTheme.sunDeepOrange,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: SunTheme.sunDeepOrange,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -340,7 +345,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextButton(
-                      onPressed: _isLoading ? null : () {},
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(localizations.forgotPassword),
+                                  content: Text(
+                                    localizations.forgotPasswordDialogContent,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text('ตกลง'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                       child: Text(
                         localizations.forgotPassword,
                         style: textTheme.bodyMedium?.copyWith(

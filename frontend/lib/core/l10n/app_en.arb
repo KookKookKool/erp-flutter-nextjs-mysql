@@ -21,6 +21,7 @@
   "orgCodeLabel": "Organization Code",
   "username": "Username",
   "forgotPassword": "Forgot password?",
+  "forgotPasswordDialogContent": "Please contact HR or the system administrator for password reset assistance.",
   "employeeName": "Employee Name",
   "employeePosition": "Position",
   "employeeId": "Employee ID: {id}",
@@ -409,5 +410,13 @@
   "companyRegistrationSummary": "Company Registration Number",
   "taxIdSummary": "Tax ID",
   "addressSummary": "Address",
+  "errorRequiredFields": "Please fill in all required fields.",
+  "errorOrgNotFound": "Organization code not found.",
+  "errorOrgNotApproved": "Organization is not approved yet.",
+  "errorOrgSuspended": "Organization is suspended.",
+  "errorOrgExpired": "Organization subscription has expired.",
+  "errorUserSuspended": "User account is suspended.",
+  "errorInvalidCredentials": "Invalid email/employee ID or password.",
+  "errorLoginError": "An error occurred during login.",
   "@@locale": "en"
 }
