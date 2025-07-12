@@ -21,6 +21,8 @@ import 'package:frontend/modules/inventory/inventory_module_screen.dart';
 import 'package:frontend/modules/accounting/accounting_module_screen.dart';
 import 'package:frontend/modules/reports/reports_module_screen.dart';
 import 'package:frontend/modules/settings/settings_module_screen.dart';
+import 'package:frontend/core/auth/bloc/employee_auth_cubit.dart';
+import 'package:frontend/core/auth/models/employee_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isDrawerOpen = false;
   double _lastWidth = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // เรียกโหลดข้อมูล auth จาก SharedPreferences ถ้ามี
+    Future.microtask(() {
+      context.read<EmployeeAuthCubit>().checkStoredAuth();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +151,53 @@ class _HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<EmployeeAuthCubit, EmployeeAuthState>(
+      builder: (context, state) {
+        print('EmployeeAuthCubit state: ' + state.runtimeType.toString());
+        if (state is EmployeeProfileLoaded) {
+          print('Loaded employee: ' + state.employee.toString());
+          return _buildContent(context, state.employee, null);
+        } else if (state is EmployeeAuthSuccess) {
+          print('Loaded employee: ' + state.loginResponse.employee.toString());
+          final employee = state.loginResponse.employee;
+          final permissions = state.loginResponse.permissions;
+          return _buildContent(context, employee, permissions);
+        } else if (state is EmployeeAuthLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is EmployeeAuthError) {
+          return Center(child: Text(state.message));
+        } else {
+          // fallback: แสดง EmployeeCard mock ถ้าไม่มีข้อมูลจริง
+          return SingleChildScrollView(
+            child: Padding(
+              padding: ResponsiveUtils.getScreenPadding(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const UrgentAnnouncementBanner(),
+                  EmployeeCard(employee: EmployeeCard.mock()),
+                  SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
+                  AttendanceButtons(),
+                  SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
+                  LeaveButton(),
+                  SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
+                  TaskList(),
+                  SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
+                  HrAnnouncement(),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    Employee employee,
+    Map<String, dynamic>? permissions,
+  ) {
     return SingleChildScrollView(
       child: Padding(
         padding: ResponsiveUtils.getScreenPadding(context),
@@ -147,7 +205,7 @@ class _HomeContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const UrgentAnnouncementBanner(),
-            EmployeeCard(),
+            EmployeeCard(employee: employee, permissions: permissions),
             SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
             AttendanceButtons(),
             SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),

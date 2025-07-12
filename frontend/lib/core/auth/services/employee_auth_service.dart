@@ -42,7 +42,7 @@ class EmployeeAuthService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
-          'X-Org-Code': orgCode,
+          'x-org-code': orgCode,
         },
       );
 

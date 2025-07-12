@@ -18,6 +18,9 @@ import 'package:frontend/screens/organization_registration_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/language_select_screen.dart';
+import 'package:frontend/core/auth/bloc/employee_auth_cubit.dart';
+import 'package:frontend/core/auth/services/employee_auth_service.dart';
+import 'package:frontend/core/services/api_service.dart';
 
 // Global repository instances
 final globalLeaveRepository = LeaveRepository();
@@ -39,6 +42,11 @@ void main() async {
         ),
         BlocProvider<AnnouncementCubit>(
           create: (_) => AnnouncementCubit(globalAnnouncementRepository),
+        ),
+        BlocProvider<EmployeeAuthCubit>(
+          create: (_) => EmployeeAuthCubit(
+            EmployeeAuthService(baseUrl: ApiService.baseUrl),
+          ),
         ),
       ],
       child: const SunErpApp(),

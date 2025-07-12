@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:frontend/core/auth/models/employee_model.dart';
 import 'package:frontend/core/auth/services/employee_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -99,19 +100,25 @@ class EmployeeAuthCubit extends Cubit<EmployeeAuthState> {
     required String token,
   }) async {
     emit(EmployeeAuthLoading());
-
+    debugPrint(
+      '[fetchEmployeeProfile] orgCode=$orgCode, employeeId=$employeeId, token=$token',
+    );
     try {
       final result = await _authService.fetchEmployeeProfile(
         orgCode: orgCode,
         employeeId: employeeId,
         token: token,
       );
-
+      debugPrint('[fetchEmployeeProfile] API result: ' + result.toString());
       if (result['statusCode'] == 200) {
         final employee = Employee.fromJson(result['body']['employee']);
+        debugPrint(
+          '[fetchEmployeeProfile] Loaded employee: ' + employee.toString(),
+        );
         emit(EmployeeProfileLoaded(employee: employee));
       } else {
         final error = result['body'];
+        debugPrint('[fetchEmployeeProfile] Error: ' + error.toString());
         emit(
           EmployeeAuthError(
             message: error['error'] ?? 'ไม่สามารถโหลดข้อมูลพนักงานได้',
@@ -119,6 +126,7 @@ class EmployeeAuthCubit extends Cubit<EmployeeAuthState> {
         );
       }
     } catch (e) {
+      debugPrint('[fetchEmployeeProfile] Exception: $e');
       emit(EmployeeAuthError(message: 'เกิดข้อผิดพลาดในการโหลดข้อมูล: $e'));
     }
   }
@@ -131,29 +139,52 @@ class EmployeeAuthCubit extends Cubit<EmployeeAuthState> {
       final orgData = prefs.getString('org_data');
       final permissions = prefs.getString('permissions');
       final loginType = prefs.getString('login_type');
+      final orgCode = prefs.getString('org_code');
+
+      debugPrint(
+        '[checkStoredAuth] token=$token, employeeData=$employeeData, orgCode=$orgCode, loginType=$loginType',
+      );
 
       if (token != null &&
           employeeData != null &&
           orgData != null &&
           permissions != null &&
-          loginType == 'employee') {
+          loginType == 'employee' &&
+          orgCode != null) {
+        // ดึงข้อมูล employee ล่าสุดจาก API (หลังจากแก้ไข backend)
         final employee = Employee.fromJson(json.decode(employeeData));
-        final organization = json.decode(orgData);
-        final userPermissions = json.decode(permissions);
-
-        final loginResponse = EmployeeLoginResponse(
-          token: token,
-          employee: employee,
-          organization: organization,
-          permissions: userPermissions,
+        debugPrint(
+          '[checkStoredAuth] Try fetchEmployeeProfile: orgCode=$orgCode, employeeId=${employee.employeeId}, token=$token',
         );
+        try {
+          await fetchEmployeeProfile(
+            orgCode: orgCode,
+            employeeId: employee.employeeId,
+            token: token,
+          );
+          return true;
+        } catch (e) {
+          debugPrint('[checkStoredAuth] fetchEmployeeProfile error: $e');
+          // ถ้า API error ให้ใช้ข้อมูลเก่าจาก SharedPreferences
+          final organization = json.decode(orgData);
+          final userPermissions = json.decode(permissions);
 
-        emit(EmployeeAuthSuccess(loginResponse: loginResponse));
-        return true;
+          final loginResponse = EmployeeLoginResponse(
+            token: token,
+            employee: employee,
+            organization: organization,
+            permissions: userPermissions,
+          );
+
+          emit(EmployeeAuthSuccess(loginResponse: loginResponse));
+          return true;
+        }
       }
 
+      debugPrint('[checkStoredAuth] No valid auth found');
       return false;
     } catch (e) {
+      debugPrint('[checkStoredAuth] Exception: $e');
       return false;
     }
   }

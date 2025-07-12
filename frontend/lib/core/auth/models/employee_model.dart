@@ -1,3 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/core/auth/bloc/employee_auth_cubit.dart';
+import 'package:frontend/widgets/home/employee_card.dart';
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: BlocBuilder<EmployeeAuthCubit, EmployeeAuthState>(
+        builder: (context, state) {
+          if (state is EmployeeProfileLoaded) {
+            return EmployeeCard(employee: state.employee);
+          } else if (state is EmployeeAuthSuccess) {
+            return EmployeeCard(
+              employee: state.loginResponse.employee,
+              permissions: state.loginResponse.permissions,
+            );
+          } else if (state is EmployeeAuthLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is EmployeeAuthError) {
+            return Center(child: Text(state.message));
+          } else {
+            return EmployeeCard(employee: EmployeeCard.mock());
+          }
+        },
+      ),
+    );
+  }
+}
+
+// วิธีใช้งานที่ถูกต้องในหน้า HomeScreen (หรือหน้าที่ต้องการแสดง EmployeeCard)
+// ให้ใช้ BlocBuilder เพื่อดึงข้อมูล employee จาก Bloc แล้วส่งไปยัง EmployeeCard
+// ตัวอย่าง:
+// BlocBuilder<EmployeeAuthCubit, EmployeeAuthState>(
+//   builder: (context, state) {
+//     if (state is EmployeeProfileLoaded) {
+//       return EmployeeCard(employee: state.employee);
+//     } else if (state is EmployeeAuthSuccess) {
+//       return EmployeeCard(employee: state.loginResponse.employee, permissions: state.loginResponse.permissions);
+//     } else if (state is EmployeeAuthLoading) {
+//       return Center(child: CircularProgressIndicator());
+//     } else if (state is EmployeeAuthError) {
+//       return Center(child: Text(state.message));
+//     } else {
+//       return EmployeeCard(employee: EmployeeCard.mock());
+//     }
+//   },
+// )
+
 class Employee {
   final String id;
   final String employeeId;
@@ -34,6 +85,16 @@ class Employee {
   String get fullName => '$firstName $lastName';
 
   factory Employee.fromJson(Map<String, dynamic> json) {
+    // Fix is_active: handle int or bool
+    final isActiveRaw = json['is_active'];
+    bool isActive;
+    if (isActiveRaw is bool) {
+      isActive = isActiveRaw;
+    } else if (isActiveRaw is int) {
+      isActive = isActiveRaw == 1;
+    } else {
+      isActive = true;
+    }
     return Employee(
       id: json['id'] ?? '',
       employeeId: json['employee_id'] ?? '',
@@ -47,7 +108,7 @@ class Employee {
       startDate: DateTime.parse(
         json['start_date'] ?? DateTime.now().toIso8601String(),
       ),
-      isActive: json['is_active'] ?? true,
+      isActive: isActive,
       profileImage: json['profile_image'],
       createdAt: DateTime.parse(
         json['created_at'] ?? DateTime.now().toIso8601String(),
