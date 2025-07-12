@@ -18,33 +18,46 @@ class _OrganizationRegistrationScreenState
   int _currentPage = 0;
   bool _isLoading = false;
 
-  // Organization Info Controllers
+  // Organization Info Controllers & FocusNodes
   final TextEditingController _orgNameController = TextEditingController();
+  final FocusNode _orgNameFocus = FocusNode();
   final TextEditingController _orgCodeController = TextEditingController();
+  final FocusNode _orgCodeFocus = FocusNode();
   final TextEditingController _orgEmailController = TextEditingController();
+  final FocusNode _orgEmailFocus = FocusNode();
   final TextEditingController _orgPhoneController = TextEditingController();
-  final TextEditingController _orgAddressController = TextEditingController();
-  final TextEditingController _orgDescriptionController =
-      TextEditingController();
-  final TextEditingController _websiteController = TextEditingController();
+  final FocusNode _orgPhoneFocus = FocusNode();
   final TextEditingController _companyRegistrationNumberController =
       TextEditingController();
+  final FocusNode _companyRegistrationNumberFocus = FocusNode();
   final TextEditingController _taxIdController = TextEditingController();
+  final FocusNode _taxIdFocus = FocusNode();
+  final String _selectedBusinessType = '';
+  //final FocusNode _businessTypeFocus = FocusNode();
+  final String _selectedEmployeeCount = '';
+  //final FocusNode _employeeCountFocus = FocusNode();
+  final TextEditingController _websiteController = TextEditingController();
+  final FocusNode _websiteFocus = FocusNode();
+  final TextEditingController _orgAddressController = TextEditingController();
+  final FocusNode _orgAddressFocus = FocusNode();
+  final TextEditingController _orgDescriptionController =
+      TextEditingController();
+  final FocusNode _orgDescriptionFocus = FocusNode();
 
-  // Business Info
-  String _selectedBusinessType = '';
-  String _selectedEmployeeCount = '';
-
-  // Admin Info Controllers
+  // Admin Info Controllers & FocusNodes
   final TextEditingController _adminNameController = TextEditingController();
+  final FocusNode _adminNameFocus = FocusNode();
   final TextEditingController _adminEmailController = TextEditingController(
     text: 'admin@sunerp.com',
   );
+  final FocusNode _adminEmailFocus = FocusNode();
   final TextEditingController _adminPasswordController = TextEditingController(
     text: '123456',
   );
+  final FocusNode _adminPasswordFocus = FocusNode();
   final TextEditingController _confirmPasswordController =
       TextEditingController(text: '123456');
+  final FocusNode _confirmPasswordFocus = FocusNode();
 
   @override
   void initState() {
@@ -55,33 +68,45 @@ class _OrganizationRegistrationScreenState
   @override
   void dispose() {
     _orgNameController.dispose();
+    _orgNameFocus.dispose();
     _orgCodeController.dispose();
+    _orgCodeFocus.dispose();
     _orgEmailController.dispose();
+    _orgEmailFocus.dispose();
     _orgPhoneController.dispose();
-    _orgAddressController.dispose();
-    _orgDescriptionController.dispose();
-    _websiteController.dispose();
+    _orgPhoneFocus.dispose();
     _companyRegistrationNumberController.dispose();
+    _companyRegistrationNumberFocus.dispose();
     _taxIdController.dispose();
+    _taxIdFocus.dispose();
+    _websiteController.dispose();
+    _websiteFocus.dispose();
+    _orgAddressController.dispose();
+    _orgAddressFocus.dispose();
+    _orgDescriptionController.dispose();
+    _orgDescriptionFocus.dispose();
     _adminNameController.dispose();
+    _adminNameFocus.dispose();
     _adminEmailController.dispose();
+    _adminEmailFocus.dispose();
     _adminPasswordController.dispose();
+    _adminPasswordFocus.dispose();
     _confirmPasswordController.dispose();
+    _confirmPasswordFocus.dispose();
     _pageController.dispose();
     super.dispose();
   }
 
   void _nextPage() {
     if (_currentPage == 0) {
-      // Validate form before proceeding
-      if (_formKey.currentState!.validate() && _validateOrgInfo()) {
+      if (_formKey.currentState!.validate()) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
     } else if (_currentPage == 1) {
-      // Validate form before proceeding
+      FocusScope.of(context).unfocus();
       if (_formKey.currentState!.validate() && _validateAdminInfo()) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
@@ -103,11 +128,12 @@ class _OrganizationRegistrationScreenState
         _orgCodeController.text.isNotEmpty &&
         _orgEmailController.text.isNotEmpty &&
         _orgPhoneController.text.isNotEmpty &&
-        _orgAddressController.text.isNotEmpty &&
         _companyRegistrationNumberController.text.isNotEmpty &&
         _taxIdController.text.isNotEmpty &&
         _selectedBusinessType.isNotEmpty &&
-        _selectedEmployeeCount.isNotEmpty;
+        _selectedEmployeeCount.isNotEmpty &&
+        _orgAddressController.text.isNotEmpty;
+    // ไม่ต้องเช็ค website, orgDescription
   }
 
   bool _validateAdminInfo() {
@@ -349,6 +375,8 @@ class _OrganizationRegistrationScreenState
                   key: _formKey,
                   child: PageView(
                     controller: _pageController,
+                    physics:
+                        const NeverScrollableScrollPhysics(), // ล็อกไม่ให้ swipe
                     onPageChanged: (page) {
                       setState(() {
                         _currentPage = page;
@@ -449,7 +477,11 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _orgNameController,
+            focusNode: _orgNameFocus,
             label: localizations.orgName,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_orgEmailFocus),
             validator: (value) => value?.isEmpty == true
                 ? localizations.pleaseEnterOrgName
                 : null,
@@ -459,9 +491,13 @@ class _OrganizationRegistrationScreenState
           // รหัสองค์กรพร้อมปุ่มสร้างใหม่ (ปุ่มอยู่ในช่อง input)
           _buildTextField(
             controller: _orgCodeController,
+            focusNode: _orgCodeFocus,
             label: localizations.orgCode,
             helperText: localizations.codeForLogin,
             readOnly: false, // อนุญาตให้แก้ไขได้
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_orgEmailFocus),
             onChanged: (value) {
               // Auto uppercase
               final cursorPosition = _orgCodeController.selection;
@@ -494,8 +530,12 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _orgEmailController,
+            focusNode: _orgEmailFocus,
             label: localizations.orgEmail,
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_orgPhoneFocus),
             validator: (value) {
               if (value?.isEmpty == true) return localizations.pleaseEnterEmail;
               if (!RegExp(
@@ -510,8 +550,13 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _orgPhoneController,
+            focusNode: _orgPhoneFocus,
             label: localizations.orgPhone,
             keyboardType: TextInputType.phone,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => FocusScope.of(
+              context,
+            ).requestFocus(_companyRegistrationNumberFocus),
             validator: (value) {
               if (value?.isEmpty == true) return localizations.pleaseEnterPhone;
               if (value != null &&
@@ -526,9 +571,13 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _companyRegistrationNumberController,
+            focusNode: _companyRegistrationNumberFocus,
             label: localizations.companyRegistrationNumberLabel,
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             helperText: localizations.companyRegistrationNumberHelperText,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_taxIdFocus),
             validator: (value) {
               if (value?.isEmpty == true) {
                 return localizations.pleaseEnterCompanyRegistrationNumberTh;
@@ -543,9 +592,13 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _taxIdController,
+            focusNode: _taxIdFocus,
             label: localizations.taxIdLabel,
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             helperText: localizations.taxIdHelperText,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_websiteFocus),
             validator: (value) {
               if (value?.isEmpty == true) {
                 return localizations.pleaseEnterTaxIdTh;
@@ -558,120 +611,14 @@ class _OrganizationRegistrationScreenState
           ),
           const SizedBox(height: 16),
 
-          // ประเภทธุรกิจ
-          _buildDropdownField(
-            label: localizations.businessTypeLabel,
-            value: _selectedBusinessType.isEmpty ? null : _selectedBusinessType,
-            items: [
-              DropdownMenuItem(
-                value: 'RETAIL',
-                child: Text(localizations.businessTypeRetail),
-              ),
-              DropdownMenuItem(
-                value: 'WHOLESALE',
-                child: Text(localizations.businessTypeWholesale),
-              ),
-              DropdownMenuItem(
-                value: 'MANUFACTURING',
-                child: Text(localizations.businessTypeManufacturing),
-              ),
-              DropdownMenuItem(
-                value: 'SERVICE',
-                child: Text(localizations.businessTypeService),
-              ),
-              DropdownMenuItem(
-                value: 'TECHNOLOGY',
-                child: Text(localizations.businessTypeTechnology),
-              ),
-              DropdownMenuItem(
-                value: 'EDUCATION',
-                child: Text(localizations.businessTypeEducation),
-              ),
-              DropdownMenuItem(
-                value: 'HEALTHCARE',
-                child: Text(localizations.businessTypeHealthcare),
-              ),
-              DropdownMenuItem(
-                value: 'FINANCE',
-                child: Text(localizations.businessTypeFinance),
-              ),
-              DropdownMenuItem(
-                value: 'CONSTRUCTION',
-                child: Text(localizations.businessTypeConstruction),
-              ),
-              DropdownMenuItem(
-                value: 'FOOD',
-                child: Text(localizations.businessTypeFood),
-              ),
-              DropdownMenuItem(
-                value: 'LOGISTICS',
-                child: Text(localizations.businessTypeLogistics),
-              ),
-              DropdownMenuItem(
-                value: 'TOURISM',
-                child: Text(localizations.businessTypeTourism),
-              ),
-              DropdownMenuItem(
-                value: 'OTHER',
-                child: Text(localizations.businessTypeOther),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                _selectedBusinessType = value ?? '';
-              });
-            },
-            validator: (value) =>
-                value == null ? localizations.pleaseSelectBusinessType : null,
-          ),
-          const SizedBox(height: 16),
-
-          // จำนวนพนักงาน
-          _buildDropdownField(
-            label: localizations.employeeCountLabel,
-            value: _selectedEmployeeCount.isEmpty
-                ? null
-                : _selectedEmployeeCount,
-            items: [
-              DropdownMenuItem(
-                value: '1-10',
-                child: Text(localizations.employeeCount_1_10),
-              ),
-              DropdownMenuItem(
-                value: '11-50',
-                child: Text(localizations.employeeCount_11_50),
-              ),
-              DropdownMenuItem(
-                value: '51-100',
-                child: Text(localizations.employeeCount_51_100),
-              ),
-              DropdownMenuItem(
-                value: '101-500',
-                child: Text(localizations.employeeCount_101_500),
-              ),
-              DropdownMenuItem(
-                value: '501-1000',
-                child: Text(localizations.employeeCount_501_1000),
-              ),
-              DropdownMenuItem(
-                value: '1000+',
-                child: Text(localizations.employeeCount_1000plus),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                _selectedEmployeeCount = value ?? '';
-              });
-            },
-            validator: (value) =>
-                value == null ? localizations.pleaseSelectEmployeeCount : null,
-          ),
-          const SizedBox(height: 16),
-
           _buildTextField(
             controller: _websiteController,
+            focusNode: _websiteFocus,
             label: localizations.websiteLabel,
             keyboardType: TextInputType.url,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_orgAddressFocus),
             validator: (value) {
               // ไม่ต้องบังคับ http/https
               return null;
@@ -681,8 +628,12 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _orgAddressController,
+            focusNode: _orgAddressFocus,
             label: localizations.orgAddress,
             maxLines: 3,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_orgDescriptionFocus),
             validator: (value) => value?.isEmpty == true
                 ? localizations.pleaseEnterAddress
                 : null,
@@ -691,8 +642,11 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _orgDescriptionController,
+            focusNode: _orgDescriptionFocus,
             label: localizations.orgDescription,
             maxLines: 3,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
             validator: (value) => null, // ไม่บังคับ
           ),
           const SizedBox(height: 24),
@@ -830,7 +784,11 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _adminNameController,
+            focusNode: _adminNameFocus,
             label: localizations.adminName,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_adminEmailFocus),
             validator: (value) => value?.isEmpty == true
                 ? localizations.pleaseEnterAdminName
                 : null,
@@ -839,8 +797,12 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _adminEmailController,
+            focusNode: _adminEmailFocus,
             label: localizations.adminEmail,
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_adminPasswordFocus),
             validator: (value) {
               if (value?.isEmpty == true) return localizations.pleaseEnterEmail;
               if (!RegExp(
@@ -855,9 +817,13 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _adminPasswordController,
+            focusNode: _adminPasswordFocus,
             label: '${localizations.password} *',
             obscureText: true,
             helperText: localizations.passwordRequirement,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_confirmPasswordFocus),
             validator: (value) {
               if (value?.isEmpty == true) {
                 return localizations.pleaseEnterPassword;
@@ -870,8 +836,11 @@ class _OrganizationRegistrationScreenState
 
           _buildTextField(
             controller: _confirmPasswordController,
+            focusNode: _confirmPasswordFocus,
             label: localizations.confirmPassword,
             obscureText: true,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
             validator: (value) {
               if (value?.isEmpty == true) {
                 return localizations.pleaseConfirmPassword;
@@ -977,6 +946,7 @@ class _OrganizationRegistrationScreenState
 
   Widget _buildTextField({
     required TextEditingController controller,
+    FocusNode? focusNode,
     required String label,
     String? helperText,
     bool obscureText = false,
@@ -985,16 +955,21 @@ class _OrganizationRegistrationScreenState
     int maxLines = 1,
     String? Function(String?)? validator,
     Function(String)? onChanged,
-    Widget? suffixIcon, // เพิ่มพารามิเตอร์นี้
+    Widget? suffixIcon,
+    TextInputAction? textInputAction,
+    void Function(String)? onFieldSubmitted,
   }) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
       maxLines: maxLines,
       validator: validator,
       onChanged: onChanged,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       style: const TextStyle(color: SunTheme.textPrimary),
       decoration: InputDecoration(
         filled: true,
@@ -1014,7 +989,7 @@ class _OrganizationRegistrationScreenState
           vertical: 16,
           horizontal: 16,
         ),
-        suffixIcon: suffixIcon, // เพิ่มตรงนี้
+        suffixIcon: suffixIcon,
       ),
     );
   }
