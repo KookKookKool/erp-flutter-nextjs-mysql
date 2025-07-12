@@ -386,68 +386,66 @@ class _AddLeaveDialogState extends State<AddLeaveDialog> {
             foregroundColor: SunTheme.onPrimary,
           ),
           onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              // ตรวจสอบข้อมูลที่จำเป็น
-              if (_employeeId == null || _employeeId!.isEmpty) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('กรุณาเลือกรหัสพนักงาน')),
-                  );
-                }
-                return;
-              }
-              if (_employeeName == null || _employeeName!.isEmpty) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('กรุณาเลือกชื่อพนักงาน')),
-                  );
-                }
-                return;
-              }
-              if (_startDate == null || _endDate == null) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('กรุณาเลือกวันที่ลา')),
-                  );
-                }
-                return;
-              }
-              if (_leaveType == null || _leaveType!.isEmpty) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('กรุณาเลือกประเภทการลา')),
-                  );
-                }
-                return;
-              }
+            if (_formKey.currentState?.validate() != true) return;
 
-              try {
-                final leave = Leave(
-                  id:
-                      widget.initial?.id ??
-                      'TEMP_ID', // ปล่อยให้ repository สร้าง unique ID
-                  employeeId: _employeeId!,
-                  employeeName: _employeeName!,
-                  startDate: _startDate!,
-                  endDate: _endDate!,
-                  type: _leaveType!,
-                  note: _note ?? '',
-                  status: widget.initial?.status ?? 'pending',
+            // ตรวจสอบข้อมูลที่จำเป็น
+            if (_employeeId == null || _employeeId!.isEmpty) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('กรุณาเลือกรหัสพนักงาน')),
                 );
+              }
+              return;
+            }
+            if (_employeeName == null || _employeeName!.isEmpty) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('กรุณาเลือกชื่อพนักงาน')),
+                );
+              }
+              return;
+            }
+            if (_startDate == null || _endDate == null) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('กรุณาเลือกวันที่ลา')),
+                );
+              }
+              return;
+            }
+            if (_leaveType == null || _leaveType!.isEmpty) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('กรุณาเลือกประเภทการลา')),
+                );
+              }
+              return;
+            }
 
-                await widget.onSave(leave);
+            final leave = Leave(
+              id:
+                  widget.initial?.id ??
+                  'TEMP_ID', // ปล่อยให้ repository สร้าง unique ID
+              employeeId: _employeeId!,
+              employeeName: _employeeName!,
+              startDate: _startDate!,
+              endDate: _endDate!,
+              type: _leaveType!,
+              note: _note ?? '',
+              status: widget.initial?.status ?? 'pending',
+            );
 
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('เกิดข้อผิดพลาด: ${e.toString()}')),
-                  );
-                }
+            try {
+              await widget.onSave(leave);
+            } catch (e, stack) {
+              debugPrint('AddLeaveDialog save error: $e\n$stack');
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('เกิดข้อผิดพลาด: ${e.toString()}')),
+                );
               }
             }
+            // ไม่ต้อง pop dialog ที่นี่ ให้ leave_screen.dart เป็นคน pop
           },
           child: Text(l10n.save, style: TextStyle(color: SunTheme.onPrimary)),
         ),
