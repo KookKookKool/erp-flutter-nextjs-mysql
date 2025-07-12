@@ -46,6 +46,7 @@ class _AnnouncementSearchBarState extends State<AnnouncementSearchBar> {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: SunTheme.sunSearchBoxDecoration,
       child: TextField(
         controller: _controller,
@@ -54,7 +55,7 @@ class _AnnouncementSearchBarState extends State<AnnouncementSearchBar> {
           hintText: l10n.localeName == 'th'
               ? 'ค้นหาประกาศ...'
               : 'Search announcements...',
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: Icon(Icons.search, color: SunTheme.textSecondary),
           suffixIcon: widget.value.isNotEmpty
               ? IconButton(
                   icon: const Icon(Icons.clear),
@@ -65,12 +66,16 @@ class _AnnouncementSearchBarState extends State<AnnouncementSearchBar> {
                   },
                 )
               : null,
+          hintStyle: TextStyle(color: SunTheme.textSecondary, fontSize: 16),
           border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
             vertical: 16,
+            horizontal: 20,
           ),
         ),
+        style: const TextStyle(fontSize: 16),
       ),
     );
   }

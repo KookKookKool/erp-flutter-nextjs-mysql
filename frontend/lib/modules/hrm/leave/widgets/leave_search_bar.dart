@@ -15,7 +15,7 @@ class LeaveSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: SunTheme.sunSearchBoxDecoration,
       child: TextField(
         controller: TextEditingController(text: value),
@@ -26,6 +26,7 @@ class LeaveSearchBar extends StatelessWidget {
           ),
           prefixIcon: Icon(Icons.search, color: SunTheme.textSecondary),
           hintText: l10n.searchHint,
+          hintStyle: TextStyle(color: SunTheme.textSecondary, fontSize: 16),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,

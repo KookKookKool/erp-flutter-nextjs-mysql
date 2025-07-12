@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/utils/responsive_utils.dart';
+import 'package:frontend/core/utils/navigation_utils.dart';
 import 'package:frontend/widgets/sun_app_bar.dart';
 import 'package:frontend/widgets/sun_drawer.dart';
 import 'package:frontend/widgets/home/employee_card.dart';
@@ -47,13 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
         )) {
           _lastWidth = currentWidth;
 
-          // Close drawer when switching from mobile to desktop
+          // Close drawer safely when switching from mobile to desktop
           if (isDesktop && _isDrawerOpen) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (scaffoldKey.currentState?.isDrawerOpen == true) {
-                Navigator.of(context).maybePop();
+              final route = ModalRoute.of(context);
+              if (route?.settings.name == '/home' ||
+                  route?.settings.name == null) {
+                if (scaffoldKey.currentState?.isDrawerOpen == true) {
+                  NavigationUtils.safeCloseDrawer(context);
+                }
+                _isDrawerOpen = false;
               }
-              _isDrawerOpen = false;
             });
           }
         }

@@ -1,7 +1,1 @@
-{
-  "/api/org-status/[orgCode]/route": "app/api/org-status/[orgCode]/route.js",
-  "/api/register/route": "app/api/register/route.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/organizations/[id]/page": "app/admin/organizations/[id]/page.js"
-}
+{}
