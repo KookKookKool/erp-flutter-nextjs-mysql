@@ -162,12 +162,12 @@
   "otApprove": "Approve",
   "otReject": "Reject",
   "otRequest": "OT request(s)",
-  "MultiSelect": "Multi-select",
-  "CancelMultiSelect": "Cancel multi-select",
-  "SelectAll": "Select all",
-  "DeselectAll": "Deselect all",
-  "SelectedCount": "{count} selected",
-  "@SelectedCount": {
+  "multiSelect": "Multi-select",
+  "cancelMultiSelect": "Cancel multi-select",
+  "selectAll": "Select all",
+  "deselectAll": "Deselect all",
+  "selectedCount": "{count} selected",
+  "@selectedCount": {
     "description": "Number of selected OT requests",
     "placeholders": {
       "count": {}

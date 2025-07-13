@@ -163,12 +163,12 @@
   "otApprove": "อนุมัติ",
   "otReject": "ปฏิเสธ",
   "otRequest": "คำขอ OT",
-  "MultiSelect": "เลือกรายการ",
-  "CancelMultiSelect": "ยกเลิก",
-  "SelectAll": "เลือกทั้งหมด",
-  "DeselectAll": "ยกเลิก",
-  "SelectedCount": "เลือกแล้ว {count} ",
-  "@SelectedCount": {
+  "multiSelect": "เลือกรายการ",
+  "cancelMultiSelect": "ยกเลิก",
+  "selectAll": "เลือกทั้งหมด",
+  "deselectAll": "ยกเลิก",
+  "selectedCount": "เลือกแล้ว {count} ",
+  "@selectedCount": {
     "description": "จำนวนรายการ OT ที่เลือก",
     "placeholders": {
       "count": {}

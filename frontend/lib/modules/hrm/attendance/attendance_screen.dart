@@ -167,11 +167,13 @@ class _AttendanceScreenViewState extends State<_AttendanceScreenView>
     with TickerProviderStateMixin {
   String _search = '';
   late TabController _tabController;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _selectedDate = widget.today;
   }
 
   @override
@@ -180,12 +182,68 @@ class _AttendanceScreenViewState extends State<_AttendanceScreenView>
     super.dispose();
   }
 
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(_selectedDate.year - 1),
+      lastDate: DateTime(_selectedDate.year + 1),
+      locale: Localizations.localeOf(context),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(widget.l10n.attendanceTitle),
+        title: Row(
+          children: [
+            Expanded(child: Text(widget.l10n.attendanceTitle)),
+            InkWell(
+              onTap: _pickDate,
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      color: SunTheme.sunOrange,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -239,8 +297,12 @@ class _AttendanceScreenViewState extends State<_AttendanceScreenView>
   Widget _buildAttendanceTab() {
     return AttendanceTab(
       search: _search,
-      todayKey: widget.todayKey,
-      today: widget.today,
+      todayKey: DateTime(
+        _selectedDate.year,
+        _selectedDate.month,
+        _selectedDate.day,
+      ),
+      today: _selectedDate,
     );
   }
 

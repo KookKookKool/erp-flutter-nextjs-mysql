@@ -196,7 +196,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
                 : null,
             icon: Icon(_isMultiSelectMode ? Icons.close : Icons.checklist),
             label: Text(
-              _isMultiSelectMode ? l10n.CancelMultiSelect : l10n.MultiSelect,
+              _isMultiSelectMode ? l10n.cancelMultiSelect : l10n.multiSelect,
             ),
           ),
 
@@ -214,15 +214,15 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
               ),
               label: Text(
                 _selectedIds.length == pendingRequests.length
-                    ? l10n.DeselectAll
-                    : l10n.SelectAll,
+                    ? l10n.deselectAll
+                    : l10n.selectAll,
               ),
             ),
 
             const Spacer(),
 
             // Selected count
-            Text(l10n.SelectedCount(_selectedIds.length)),
+            Text(l10n.selectedCount(_selectedIds.length)),
           ],
         ],
       ),
@@ -252,7 +252,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
               // Selected count
               Expanded(
                 child: Text(
-                  l10n.SelectedCount(_selectedIds.length),
+                  l10n.selectedCount(_selectedIds.length),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
