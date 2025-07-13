@@ -491,7 +491,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get multiSelect => 'Multi-select';
 
   @override
-  String get cancelMultiSelect => 'Cancel multi-select';
+  String get cancelMultiSelect => 'Cancel';
 
   @override
   String get selectAll => 'Select all';

@@ -109,16 +109,16 @@ class EmployeeAuthCubit extends Cubit<EmployeeAuthState> {
         employeeId: employeeId,
         token: token,
       );
-      debugPrint('[fetchEmployeeProfile] API result: ' + result.toString());
+      debugPrint('[fetchEmployeeProfile] API result: $result');
       if (result['statusCode'] == 200) {
         final employee = Employee.fromJson(result['body']['employee']);
         debugPrint(
-          '[fetchEmployeeProfile] Loaded employee: ' + employee.toString(),
+          '[fetchEmployeeProfile] Loaded employee: $employee',
         );
         emit(EmployeeProfileLoaded(employee: employee));
       } else {
         final error = result['body'];
-        debugPrint('[fetchEmployeeProfile] Error: ' + error.toString());
+        debugPrint('[fetchEmployeeProfile] Error: $error');
         emit(
           EmployeeAuthError(
             message: error['error'] ?? 'ไม่สามารถโหลดข้อมูลพนักงานได้',

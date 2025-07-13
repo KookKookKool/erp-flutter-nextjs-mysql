@@ -4,6 +4,8 @@ import 'package:frontend/core/auth/bloc/employee_auth_cubit.dart';
 import 'package:frontend/widgets/home/employee_card.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1040,25 +1040,25 @@ abstract class AppLocalizations {
   /// **'OT request(s)'**
   String get otRequest;
 
-  /// No description provided for @otMultiSelect.
+  /// No description provided for @multiSelect.
   ///
   /// In en, this message translates to:
   /// **'Multi-select'**
   String get multiSelect;
 
-  /// No description provided for @otCancelMultiSelect.
+  /// No description provided for @cancelMultiSelect.
   ///
   /// In en, this message translates to:
-  /// **'Cancel multi-select'**
+  /// **'Cancel'**
   String get cancelMultiSelect;
 
-  /// No description provided for @otSelectAll.
+  /// No description provided for @selectAll.
   ///
   /// In en, this message translates to:
   /// **'Select all'**
   String get selectAll;
 
-  /// No description provided for @otDeselectAll.
+  /// No description provided for @deselectAll.
   ///
   /// In en, this message translates to:
   /// **'Deselect all'**

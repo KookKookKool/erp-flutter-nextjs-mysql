@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/auth/models/employee_model.dart';
-import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
-import 'package:intl/intl.dart';
 
 class EmployeeCard extends StatelessWidget {
   final Employee employee;
@@ -34,7 +32,7 @@ class EmployeeCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final isMock = employee.id == 'mock';
     // Debug: print employee object to console
-    debugPrint('EmployeeCard: employee = ' + employee.toString());
+    debugPrint('EmployeeCard: employee = $employee');
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -76,13 +74,13 @@ class EmployeeCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   // level + position
                   Text(
-                    employee.level + ' ' + employee.position,
+                    '${employee.level} ${employee.position}',
                     style: textTheme.bodySmall,
                   ),
                   if (permissions != null) ...[
                     const SizedBox(height: 8),
                     Text(
-                      'สิทธิ์: ' + permissions.toString(),
+                      'สิทธิ์: $permissions',
                       style: textTheme.bodySmall,
                     ),
                   ],

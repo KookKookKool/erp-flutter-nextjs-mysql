@@ -499,7 +499,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String selectedCount(Object count) {
-    return 'เลือกแล้ว $count';
+    return 'เลือกแล้ว $count ';
   }
 
   @override

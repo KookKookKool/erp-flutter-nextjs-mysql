@@ -153,12 +153,12 @@ class _HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EmployeeAuthCubit, EmployeeAuthState>(
       builder: (context, state) {
-        print('EmployeeAuthCubit state: ' + state.runtimeType.toString());
+        print('EmployeeAuthCubit state: ${state.runtimeType}');
         if (state is EmployeeProfileLoaded) {
-          print('Loaded employee: ' + state.employee.toString());
+          print('Loaded employee: ${state.employee}');
           return _buildContent(context, state.employee, null);
         } else if (state is EmployeeAuthSuccess) {
-          print('Loaded employee: ' + state.loginResponse.employee.toString());
+          print('Loaded employee: ${state.loginResponse.employee}');
           final employee = state.loginResponse.employee;
           final permissions = state.loginResponse.permissions;
           return _buildContent(context, employee, permissions);

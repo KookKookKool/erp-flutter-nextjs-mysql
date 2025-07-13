@@ -163,7 +163,7 @@
   "otReject": "Reject",
   "otRequest": "OT request(s)",
   "multiSelect": "Multi-select",
-  "cancelMultiSelect": "Cancel multi-select",
+  "cancelMultiSelect": "Cancel",
   "selectAll": "Select all",
   "deselectAll": "Deselect all",
   "selectedCount": "{count} selected",
