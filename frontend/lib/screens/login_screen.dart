@@ -107,6 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
 
+        // ลบข้อมูลหน้าเดิมที่เคยเข้าไว้ เพื่อให้ login ใหม่ไปหน้า home เสมอ
+        await prefs.remove('last_visited_route');
+
         // ไปหน้า home
         if (mounted) {
           Navigator.of(context).pushReplacementNamed('/home');

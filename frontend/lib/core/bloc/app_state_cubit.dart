@@ -125,6 +125,9 @@ class AppStateCubit extends Cubit<AppState> {
     DebugUtils.logBlocEvent('AppStateCubit', 'setToken called');
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    await prefs.remove(
+      'last_visited_route',
+    ); // ลบ route ล่าสุดทุกครั้งที่ login
 
     DebugUtils.logStateChange(
       'AppStateCubit',
@@ -183,6 +186,9 @@ class AppStateCubit extends Cubit<AppState> {
     DebugUtils.logBlocEvent('AppStateCubit', 'logout called');
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove(
+      'last_visited_route',
+    ); // ลบ route ล่าสุดทุกครั้งที่ logout
 
     DebugUtils.logStateChange(
       'AppStateCubit',
