@@ -1,6 +1,6 @@
 {
-  "/api/auth/employee-login/route": "app/api/auth/employee-login/route.js",
-  "/api/hrm/employee/profile/route": "app/api/hrm/employee/profile/route.js",
   "/api/org-status/[orgCode]/route": "app/api/org-status/[orgCode]/route.js",
-  "/api/hrm/employees/route": "app/api/hrm/employees/route.js"
+  "/api/hrm/employees/route": "app/api/hrm/employees/route.js",
+  "/api/auth/employee-login/route": "app/api/auth/employee-login/route.js",
+  "/api/hrm/employee/profile/route": "app/api/hrm/employee/profile/route.js"
 }

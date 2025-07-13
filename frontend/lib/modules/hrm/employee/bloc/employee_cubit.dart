@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/modules/hrm/employee/services/employee_service.dart';
+// import Employee model ถ้าไม่ได้ export จาก employee_service.dart
+// import 'package:frontend/modules/hrm/employee/services/employee_service.dart' show Employee;
 
 abstract class EmployeeState {}
 
@@ -19,7 +21,7 @@ class EmployeeError extends EmployeeState {
 
 class EmployeeCubit extends Cubit<EmployeeState> {
   final EmployeeService service;
-  EmployeeCubit(this.service) : super(EmployeeInitial());
+  EmployeeCubit() : service = EmployeeService(), super(EmployeeInitial());
 
   Future<void> fetchEmployees() async {
     emit(EmployeeLoading());

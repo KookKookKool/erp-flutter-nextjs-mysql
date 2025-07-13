@@ -22,9 +22,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   @override
   void initState() {
     super.initState();
-    _service = EmployeeService(
-      baseUrl: 'http://localhost:3000',
-    ); // ปรับ baseUrl ตามจริง
+    _service = EmployeeService();
     _fetchEmployees();
   }
 

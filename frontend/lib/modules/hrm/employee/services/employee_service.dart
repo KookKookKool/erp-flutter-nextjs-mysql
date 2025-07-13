@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
+import 'package:frontend/core/config/environment.dart';
 
 /// คลาสสำหรับส่ง Employee พร้อม password (top-level)
 class EmployeeWithPassword {
@@ -11,12 +13,28 @@ class EmployeeWithPassword {
   EmployeeWithPassword({required this.employee, required this.password});
 }
 
-/// Service สำหรับเรียกใช้งาน API พนักงาน (ดึง, เพิ่ม, ลบ)
 class EmployeeService {
-  final String baseUrl;
-  EmployeeService({required this.baseUrl});
+  String get baseUrl {
+    final apiUrl = Environment.apiUrl;
+    if (apiUrl.isEmpty) {
+      throw Exception(
+        'API base URL is not set. Please check your environment configuration.',
+      );
+    }
+    if (kIsWeb) {
+      return apiUrl;
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      if (apiUrl.contains('localhost')) {
+        return apiUrl.replaceAll('localhost', '10.0.2.2');
+      }
+      return apiUrl;
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return apiUrl;
+    } else {
+      return apiUrl;
+    }
+  }
 
-  /// ดึงข้อมูลพนักงานทั้งหมดจาก API
   Future<List<Employee>> fetchEmployees() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -26,7 +44,7 @@ class EmployeeService {
         throw Exception('กรุณาเข้าสู่ระบบก่อน');
       }
       final response = await http.get(
-        Uri.parse('$baseUrl/api/hrm/employees'),
+        Uri.parse('$baseUrl/hrm/employees'),
         headers: {
           'Authorization': 'Bearer $token',
           'x-org-code': orgCode,
@@ -52,7 +70,6 @@ class EmployeeService {
     }
   }
 
-  /// เพิ่มพนักงานใหม่ผ่าน API
   Future<Map<String, dynamic>> createEmployee(
     Map<String, dynamic> employeeData,
   ) async {
@@ -64,7 +81,7 @@ class EmployeeService {
         throw Exception('กรุณาเข้าสู่ระบบก่อน');
       }
       final response = await http.post(
-        Uri.parse('$baseUrl/api/hrm/employees'),
+        Uri.parse('$baseUrl/hrm/employees'),
         headers: {
           'Authorization': 'Bearer $token',
           'x-org-code': orgCode,
@@ -85,7 +102,6 @@ class EmployeeService {
     }
   }
 
-  /// แก้ไขข้อมูลพนักงานผ่าน API (ใช้ query param ตาม backend)
   Future<Map<String, dynamic>> updateEmployee(
     String employeeId,
     Map<String, dynamic> employeeData,
@@ -98,7 +114,7 @@ class EmployeeService {
         throw Exception('กรุณาเข้าสู่ระบบก่อน');
       }
       final response = await http.put(
-        Uri.parse('$baseUrl/api/hrm/employees?id=$employeeId'),
+        Uri.parse('$baseUrl/hrm/employees?id=$employeeId'),
         headers: {
           'Authorization': 'Bearer $token',
           'x-org-code': orgCode,
@@ -119,7 +135,6 @@ class EmployeeService {
     }
   }
 
-  /// ลบพนักงานผ่าน API (ใช้ query param ตาม backend)
   Future<Map<String, dynamic>> deleteEmployee(String employeeId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -129,7 +144,7 @@ class EmployeeService {
         throw Exception('กรุณาเข้าสู่ระบบก่อน');
       }
       final response = await http.delete(
-        Uri.parse('$baseUrl/api/hrm/employees?id=$employeeId'),
+        Uri.parse('$baseUrl/hrm/employees?id=$employeeId'),
         headers: {
           'Authorization': 'Bearer $token',
           'x-org-code': orgCode,
