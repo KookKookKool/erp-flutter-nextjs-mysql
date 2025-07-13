@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/widget_styles.dart';
 import 'package:frontend/modules/hrm/leave/leave_repository.dart';
 import 'package:frontend/modules/hrm/leave/bloc/leave_cubit.dart';
 import 'package:frontend/modules/hrm/leave/widgets/leave_approval_card.dart';
+import 'package:frontend/core/l10n/app_localizations.dart';
 
 class LeaveApprovalTab extends StatefulWidget {
   final String search;
@@ -134,6 +135,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<LeaveCubit, LeaveState>(
       builder: (context, state) {
         // Filter pending leaves by search term
@@ -159,23 +161,26 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
             Column(
               children: [
                 // Multi-select toggle controls
-                _buildMultiSelectToggle(pendingRequests),
+                _buildMultiSelectToggle(pendingRequests, l10n),
 
                 // Content
-                Expanded(child: _buildContent(pendingRequests)),
+                Expanded(child: _buildContent(pendingRequests, l10n)),
               ],
             ),
 
             // Fixed bottom action bar for multi-select
             if (_isMultiSelectMode && _selectedIds.isNotEmpty)
-              _buildBottomActionBar(),
+              _buildBottomActionBar(l10n),
           ],
         );
       },
     );
   }
 
-  Widget _buildMultiSelectToggle(List<Leave> pendingRequests) {
+  Widget _buildMultiSelectToggle(
+    List<Leave> pendingRequests,
+    AppLocalizations l10n,
+  ) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -190,7 +195,9 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
                 ? _toggleMultiSelectMode
                 : null,
             icon: Icon(_isMultiSelectMode ? Icons.close : Icons.checklist),
-            label: Text(_isMultiSelectMode ? 'ยกเลิก' : 'เลือกหลายรายการ'),
+            label: Text(
+              _isMultiSelectMode ? l10n.CancelMultiSelect : l10n.MultiSelect,
+            ),
           ),
 
           if (_isMultiSelectMode) ...[
@@ -207,22 +214,22 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
               ),
               label: Text(
                 _selectedIds.length == pendingRequests.length
-                    ? 'ยกเลิกทั้งหมด'
-                    : 'เลือกทั้งหมด',
+                    ? l10n.DeselectAll
+                    : l10n.SelectAll,
               ),
             ),
 
             const Spacer(),
 
             // Selected count
-            Text('เลือกแล้ว: ${_selectedIds.length}'),
+            Text(l10n.SelectedCount(_selectedIds.length)),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildBottomActionBar() {
+  Widget _buildBottomActionBar(AppLocalizations l10n) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -245,7 +252,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
               // Selected count
               Expanded(
                 child: Text(
-                  'เลือกแล้ว: ${_selectedIds.length} รายการ',
+                  l10n.SelectedCount(_selectedIds.length),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -267,7 +274,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
                 ),
                 onPressed: () => _showBatchApprovalDialog(context),
                 icon: const Icon(Icons.check),
-                label: const Text('อนุมัติ'),
+                label: Text(l10n.approve),
               ),
 
               const SizedBox(width: 8),
@@ -293,7 +300,7 @@ class _LeaveApprovalTabState extends State<LeaveApprovalTab> {
     );
   }
 
-  Widget _buildContent(List<Leave> filtered) {
+  Widget _buildContent(List<Leave> filtered, AppLocalizations l10n) {
     if (filtered.isEmpty) {
       return Center(
         child: Column(

@@ -259,8 +259,8 @@ class _OtTabState extends State<OtTab> {
             icon: Icon(_isMultiSelectMode ? Icons.close : Icons.checklist),
             label: Text(
               _isMultiSelectMode
-                  ? l10n.otCancelMultiSelect
-                  : l10n.otMultiSelect,
+                  ? l10n.CancelMultiSelect
+                  : l10n.MultiSelect,
             ),
           ),
 
@@ -278,15 +278,15 @@ class _OtTabState extends State<OtTab> {
               ),
               label: Text(
                 _selectedIds.length == pendingRequests.length
-                    ? l10n.otDeselectAll
-                    : l10n.otSelectAll,
+                    ? l10n.DeselectAll
+                    : l10n.SelectAll,
               ),
             ),
 
             const Spacer(),
 
             // Selected count
-            Text(l10n.otSelectedCount(_selectedIds.length)),
+            Text(l10n.SelectedCount(_selectedIds.length)),
           ],
         ],
       ),
@@ -317,7 +317,7 @@ class _OtTabState extends State<OtTab> {
               // Selected count
               Expanded(
                 child: Text(
-                  l10n.otSelectedCount(_selectedIds.length),
+                  l10n.SelectedCount(_selectedIds.length),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

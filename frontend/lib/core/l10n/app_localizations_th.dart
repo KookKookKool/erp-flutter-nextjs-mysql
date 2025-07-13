@@ -486,20 +486,20 @@ class AppLocalizationsTh extends AppLocalizations {
   String get otRequest => 'คำขอ OT';
 
   @override
-  String get otMultiSelect => 'เลือกหลายรายการ';
+  String get MultiSelect => 'เลือกรายการ';
 
   @override
-  String get otCancelMultiSelect => 'ยกเลิกเลือกหลายรายการ';
+  String get CancelMultiSelect => 'ยกเลิก';
 
   @override
-  String get otSelectAll => 'เลือกทั้งหมด';
+  String get SelectAll => 'เลือกทั้งหมด';
 
   @override
-  String get otDeselectAll => 'ยกเลิกเลือกทั้งหมด';
+  String get DeselectAll => 'ยกเลิก';
 
   @override
-  String otSelectedCount(Object count) {
-    return 'เลือกแล้ว $count รายการ';
+  String SelectedCount(Object count) {
+    return 'เลือกแล้ว $count';
   }
 
   @override

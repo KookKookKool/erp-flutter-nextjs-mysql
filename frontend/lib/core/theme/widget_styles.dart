@@ -3,7 +3,7 @@ class WidgetStyles {
   // Card Heights
   static const double cardHeightSmall = 90;
   static const double cardHeightDefault = 110;
-  static const double cardHeightMedium = 120;
+  static const double cardHeightMedium = 140;
   static const double cardHeightLarge = 170;
   static const double cardHeightExtraLarge = 210;
   static const double cardHeightFull = 260;

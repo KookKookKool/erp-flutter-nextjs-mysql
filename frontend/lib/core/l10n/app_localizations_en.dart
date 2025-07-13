@@ -488,19 +488,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otRequest => 'OT request(s)';
 
   @override
-  String get otMultiSelect => 'Multi-select';
+  String get MultiSelect => 'Multi-select';
 
   @override
-  String get otCancelMultiSelect => 'Cancel multi-select';
+  String get CancelMultiSelect => 'Cancel multi-select';
 
   @override
-  String get otSelectAll => 'Select all';
+  String get SelectAll => 'Select all';
 
   @override
-  String get otDeselectAll => 'Deselect all';
+  String get DeselectAll => 'Deselect all';
 
   @override
-  String otSelectedCount(Object count) {
+  String SelectedCount(Object count) {
     return '$count selected';
   }
 
