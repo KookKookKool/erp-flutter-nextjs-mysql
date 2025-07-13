@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/widgets/responsive_card_grid.dart';
@@ -6,31 +5,7 @@ import 'package:frontend/core/theme/widget_styles.dart';
 import 'package:frontend/modules/hrm/employee/widgets/employee_dialog.dart';
 import 'package:frontend/modules/hrm/employee/widgets/employee_search_bar.dart';
 import 'package:frontend/modules/hrm/employee/widgets/employee_card.dart';
-
-class Employee {
-  File? image;
-  String firstName;
-  String lastName;
-  String employeeId;
-  String level;
-  String position;
-  String email;
-  String phone;
-  String startDate;
-  String password;
-  Employee({
-    this.image,
-    required this.firstName,
-    required this.lastName,
-    required this.employeeId,
-    required this.level,
-    required this.position,
-    required this.email,
-    required this.phone,
-    required this.startDate,
-    required this.password,
-  });
-}
+import 'services/employee_service.dart';
 
 class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({super.key});
@@ -39,20 +14,31 @@ class EmployeeListScreen extends StatefulWidget {
 }
 
 class _EmployeeListScreenState extends State<EmployeeListScreen> {
-  final List<Employee> employees = [
-    Employee(
-      firstName: 'สมชาย',
-      lastName: 'ใจดี',
-      employeeId: 'EMP001',
-      level: 'Manager',
-      position: 'HR',
-      email: 'somchai@example.com',
-      phone: '0812345678',
-      startDate: '2023-01-01',
-      password: 'password123',
-    ),
-  ];
+  late EmployeeService _service;
+  List<Employee> employees = [];
   String _search = '';
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _service = EmployeeService(
+      baseUrl: 'http://localhost:3000',
+    ); // ปรับ baseUrl ตามจริง
+    _fetchEmployees();
+  }
+
+  Future<void> _fetchEmployees() async {
+    setState(() => _loading = true);
+    try {
+      employees = await _service.fetchEmployees();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
+    }
+    setState(() => _loading = false);
+  }
 
   List<Employee> get _filteredEmployees {
     if (_search.isEmpty) return employees;
@@ -72,22 +58,63 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       builder: (context) => EmployeeDialog(
         employee: employee,
         onDelete: (employee != null && index != null)
-            ? () {
-                setState(() {
-                  employees.removeAt(index);
-                });
+            ? () async {
+                await _deleteEmployee(employee);
               }
             : null,
       ),
     );
-    if (result != null && result is Employee) {
-      setState(() {
+    if (result != null) {
+      if (result is Employee) {
         if (index != null) {
-          employees[index] = result;
-        } else {
-          employees.add(result);
+          await _updateEmployee(result);
         }
-      });
+      } else if (result is EmployeeWithPassword) {
+        final empJson = result.employee.toJson();
+        empJson['password'] = result.password;
+        await _service.createEmployee(empJson);
+      }
+      await _fetchEmployees();
+    }
+  }
+
+  Future<void> _createEmployee(Employee emp) async {
+    try {
+      await _service.createEmployee(emp.toJson());
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เพิ่มพนักงานสำเร็จ')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เพิ่มพนักงานไม่สำเร็จ: $e')));
+    }
+  }
+
+  Future<void> _updateEmployee(Employee emp) async {
+    try {
+      await _service.updateEmployee(emp.id, emp.toJson());
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('แก้ไขข้อมูลสำเร็จ')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('แก้ไขข้อมูลไม่สำเร็จ: $e')));
+    }
+  }
+
+  Future<void> _deleteEmployee(Employee emp) async {
+    try {
+      await _service.deleteEmployee(emp.id);
+      await _fetchEmployees();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('ลบพนักงานสำเร็จ')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('ลบพนักงานไม่สำเร็จ: $e')));
     }
   }
 
@@ -130,6 +157,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               setState(() {
                 _search = '';
               });
+              _fetchEmployees();
             },
             icon: const Icon(Icons.clear),
             label: const Text('ล้างการค้นหา'),
@@ -215,7 +243,9 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: _filteredEmployees.isEmpty && _search.isNotEmpty
+              child: _loading
+                  ? Center(child: CircularProgressIndicator())
+                  : _filteredEmployees.isEmpty && _search.isNotEmpty
                   ? _buildNoSearchResults()
                   : _filteredEmployees.isEmpty
                   ? _buildEmptyState()

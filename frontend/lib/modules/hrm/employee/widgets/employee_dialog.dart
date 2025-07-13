@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
 import 'package:frontend/modules/hrm/employee/widgets/employee_image_picker.dart';
-import 'package:frontend/modules/hrm/employee//widgets/employee_form_fields.dart';
-import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/employee/widgets/employee_form_fields.dart';
+import 'package:frontend/modules/hrm/employee/services/employee_service.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 
 class EmployeeDialog extends StatefulWidget {
   final Employee? employee;
   final VoidCallback? onDelete;
   const EmployeeDialog({this.employee, this.onDelete, super.key});
+
   @override
   State<EmployeeDialog> createState() => _EmployeeDialogState();
 }
@@ -34,7 +35,7 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
   @override
   void initState() {
     final emp = widget.employee;
-    _image = emp?.image;
+    _image = null; // ไม่ map image จาก backend
     _firstName = TextEditingController(text: emp?.firstName ?? '');
     _lastName = TextEditingController(text: emp?.lastName ?? '');
     _employeeId = TextEditingController(text: emp?.employeeId ?? '');
@@ -42,8 +43,12 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
     _position = TextEditingController(text: emp?.position ?? '');
     _email = TextEditingController(text: emp?.email ?? '');
     _phone = TextEditingController(text: emp?.phone ?? '');
-    _startDate = TextEditingController(text: emp?.startDate ?? '');
-    _password = TextEditingController(text: emp?.password ?? '');
+    _startDate = TextEditingController(
+      text: emp?.startDate != null
+          ? emp!.startDate!.toIso8601String().split('T').first
+          : '',
+    );
+    _password = TextEditingController();
     super.initState();
   }
 
@@ -172,21 +177,55 @@ class _EmployeeDialogState extends State<EmployeeDialog> {
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
-              Navigator.pop(
-                context,
-                Employee(
-                  image: _image,
-                  firstName: _firstName.text,
-                  lastName: _lastName.text,
-                  employeeId: _employeeId.text,
-                  level: _level,
-                  position: _position.text,
-                  email: _email.text,
-                  phone: _phone.text,
-                  startDate: _startDate.text,
-                  password: _password.text,
-                ),
-              );
+              if (widget.employee == null) {
+                // เพิ่มใหม่ ส่ง password กลับไปด้วย
+                Navigator.pop(
+                  context,
+                  EmployeeWithPassword(
+                    employee: Employee(
+                      id: '',
+                      employeeId: _employeeId.text,
+                      firstName: _firstName.text,
+                      lastName: _lastName.text,
+                      email: _email.text,
+                      phone: _phone.text,
+                      position: _position.text,
+                      department: '',
+                      level: _level,
+                      startDate: _startDate.text.isNotEmpty
+                          ? DateTime.tryParse(_startDate.text)
+                          : null,
+                      isActive: true,
+                      profileImage: null,
+                      createdAt: null,
+                      updatedAt: null,
+                    ),
+                    password: _password.text,
+                  ),
+                );
+              } else {
+                Navigator.pop(
+                  context,
+                  Employee(
+                    id: widget.employee?.id ?? '',
+                    employeeId: _employeeId.text,
+                    firstName: _firstName.text,
+                    lastName: _lastName.text,
+                    email: _email.text,
+                    phone: _phone.text,
+                    position: _position.text,
+                    department: '',
+                    level: _level,
+                    startDate: _startDate.text.isNotEmpty
+                        ? DateTime.tryParse(_startDate.text)
+                        : null,
+                    isActive: true,
+                    profileImage: null,
+                    createdAt: widget.employee?.createdAt,
+                    updatedAt: DateTime.now(),
+                  ),
+                );
+              }
             }
           },
           style: ElevatedButton.styleFrom(

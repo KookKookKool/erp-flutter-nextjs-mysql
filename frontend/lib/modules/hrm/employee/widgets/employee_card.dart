@@ -1,6 +1,5 @@
-//import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/employee/services/employee_service.dart';
 import 'package:frontend/core/theme/sun_theme.dart';
 import 'package:frontend/core/theme/widget_styles.dart';
 
@@ -33,30 +32,20 @@ class EmployeeCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, // จัดกึ่งกลางแนวนอน
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                employee.image != null
-                    ? CircleAvatar(
-                        backgroundImage: FileImage(employee.image!),
-                        backgroundColor: SunTheme.sunOrange.withValues(
-                          alpha: 0.1,
-                        ),
-                      )
-                    : CircleAvatar(
-                        backgroundColor: SunTheme.sunOrange.withValues(
-                          alpha: 0.1,
-                        ),
-                        child: Icon(Icons.person, color: SunTheme.sunOrange),
-                      ),
+                CircleAvatar(
+                  backgroundColor: SunTheme.sunOrange.withValues(alpha: 0.1),
+                  child: Icon(Icons.person, color: SunTheme.sunOrange),
+                ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // จัดกึ่งกลางแนวตั้ง
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${employee.firstName} ${employee.lastName}',
+                        employee.fullName,
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: SunTheme.textPrimary,
                           fontWeight: FontWeight.w600,

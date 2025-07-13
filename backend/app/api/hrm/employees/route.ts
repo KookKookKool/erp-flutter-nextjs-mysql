@@ -1,3 +1,19 @@
+// OPTIONS - CORS preflight handler
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get("origin") || "*";
+  const res = new NextResponse(null, { status: 204 });
+  res.headers.set("Access-Control-Allow-Origin", origin);
+  res.headers.set("Vary", "Origin");
+  res.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,DELETE,OPTIONS"
+  );
+  res.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type,Authorization,x-org-code"
+  );
+  return res;
+}
 import { NextRequest, NextResponse } from "next/server";
 import { DatabaseManager } from "@/lib/database-manager";
 import { AuthService } from "@/lib/auth";
@@ -62,7 +78,7 @@ export async function GET(request: NextRequest) {
     const columnNames = (tableColumns as any[]).map((col) => col.Field);
 
     // Build query conditions
-    let whereConditions = ["u.is_active = 1"];
+    let whereConditions = ["u.is_active = 1", "u.level != 'SuperAdmin'"];
     const queryParams: any[] = [];
 
     if (search) {

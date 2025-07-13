@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/l10n/app_localizations.dart';
-import 'package:frontend/modules/hrm/employee/employee_list_screen.dart';
+import 'package:frontend/modules/hrm/employee/services/employee_service.dart';
 import 'package:frontend/modules/hrm/employee/widgets/employee_card.dart';
 
+/// Widget สำหรับแสดงรายการพนักงานแบบ ListView
 class EmployeeList extends StatelessWidget {
   final List<Employee> employees;
   final void Function(Employee emp) onEdit;
