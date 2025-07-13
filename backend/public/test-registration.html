@@ -157,15 +157,27 @@
             </div>
 
             <div class="form-group">
-                <label for="contactName">ชื่อผู้ติดต่อ *</label>
-                <input type="text" id="contactName" name="contactName" required>
-                <div class="field-hint">ชื่อ-นามสกุล ผู้ติดต่อหลัก</div>
+                <label for="adminName">ชื่อผู้ดูแลระบบ *</label>
+                <input type="text" id="adminName" name="adminName" required>
+                <div class="field-hint">ชื่อ-นามสกุล ผู้ดูแลระบบ</div>
             </div>
 
             <div class="form-group">
-                <label for="contactEmail">อีเมลผู้ติดต่อ *</label>
-                <input type="email" id="contactEmail" name="contactEmail" required>
-                <div class="field-hint">อีเมลสำหรับติดต่อและรับข้อมูลการอนุมัติ</div>
+                <label for="adminEmail">อีเมลผู้ดูแล *</label>
+                <input type="email" id="adminEmail" name="adminEmail" required>
+                <div class="field-hint">อีเมลสำหรับเข้าสู่ระบบและรับข้อมูล</div>
+            </div>
+
+            <div class="form-group">
+                <label for="adminPassword">รหัสผ่านผู้ดูแล *</label>
+                <input type="password" id="adminPassword" name="adminPassword" required minlength="6">
+                <div class="field-hint">รหัสผ่านอย่างน้อย 6 ตัวอักษร</div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">ยืนยันรหัสผ่าน *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+                <div class="field-hint">กรอกซ้ำรหัสผ่านอีกครั้ง</div>
             </div>
 
             <div class="form-group">
@@ -316,13 +328,15 @@
             // Generate description
             const description = `องค์กรทดสอบสำหรับการพัฒนาระบบ ERP รหัส ${orgCode} สร้างเมื่อ ${new Date().toLocaleDateString('th-TH')}`;
 
-            // Fill form
+            // Fill form (ทุกช่องที่มีในฟอร์ม)
             document.getElementById('orgName').value = companyName;
             document.getElementById('orgCode').value = orgCode;
             document.getElementById('businessType').value = businessType;
             document.getElementById('employeeCount').value = employeeCount;
-            document.getElementById('contactName').value = contactName;
-            document.getElementById('contactEmail').value = contactEmail;
+            document.getElementById('adminName').value = contactName;
+            document.getElementById('adminEmail').value = contactEmail;
+            document.getElementById('adminPassword').value = 'temp' + Math.floor(Math.random() * 1000000 + 100000).toString();
+            document.getElementById('confirmPassword').value = document.getElementById('adminPassword').value;
             document.getElementById('contactPhone').value = contactPhone;
             document.getElementById('companyRegistrationNumber').value = companyRegistrationNumber;
             document.getElementById('taxId').value = taxId;
@@ -364,22 +378,29 @@
             const formData = new FormData(this);
             const formDataObj = Object.fromEntries(formData.entries());
 
+
+            // Validate password match
+            if (formDataObj.adminPassword !== formDataObj.confirmPassword) {
+                showResult('❌ รหัสผ่านไม่ตรงกัน', 'error');
+                return;
+            }
+
             // Transform form data to match API requirements
             const data = {
                 orgName: formDataObj.orgName,
                 orgCode: formDataObj.orgCode,
-                orgEmail: formDataObj.contactEmail, // ใช้ contactEmail เป็น orgEmail
+                orgEmail: formDataObj.adminEmail, // ใช้ adminEmail เป็น orgEmail
                 orgPhone: formDataObj.contactPhone,
                 orgAddress: formDataObj.address || '',
-                orgDescription: formDataObj.description || '', // ส่งเฉพาะรายละเอียดเพิ่มเติม
+                orgDescription: formDataObj.description || '',
                 businessType: formDataObj.businessType || '',
                 employeeCount: formDataObj.employeeCount || '',
                 website: formDataObj.website || '',
                 companyRegistrationNumber: formDataObj.companyRegistrationNumber,
                 taxId: formDataObj.taxId,
-                adminName: formDataObj.contactName, // ใช้ contactName เป็น adminName
-                adminEmail: formDataObj.contactEmail, // ใช้ contactEmail เป็น adminEmail
-                adminPassword: 'temp123456' // รหัสผ่านชั่วคราว
+                adminName: formDataObj.adminName,
+                adminEmail: formDataObj.adminEmail,
+                adminPassword: formDataObj.adminPassword
             };
 
             showResult('กำลังส่งคำขอสมัคร... ⏳', 'info');
@@ -439,6 +460,25 @@
             e.target.value = e.target.value.replace(/[^0-9]/g, '');
             if (e.target.value.length > 13) {
                 e.target.value = e.target.value.substring(0, 13);
+            }
+        });
+
+        // Password validation: at least 6 chars
+        document.getElementById('adminPassword').addEventListener('input', function (e) {
+            if (e.target.value.length < 6) {
+                e.target.setCustomValidity('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+
+        // Confirm password validation
+        document.getElementById('confirmPassword').addEventListener('input', function (e) {
+            const pw = document.getElementById('adminPassword').value;
+            if (e.target.value !== pw) {
+                e.target.setCustomValidity('รหัสผ่านไม่ตรงกัน');
+            } else {
+                e.target.setCustomValidity('');
             }
         });
     </script>

@@ -41,6 +41,8 @@ interface Organization {
 }
 
 export default function OrganizationDetailPage() {
+  // ช่องค้นหาพนักงาน
+  const [employeeSearch, setEmployeeSearch] = useState("");
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -221,6 +223,7 @@ export default function OrganizationDetailPage() {
         headers: {
           Authorization: `Bearer ${token}`,
           "X-Org-Code": orgCode,
+          "x-admin-panel": "1", // เพิ่ม header นี้เพื่อให้ backend ส่ง SuperAdmin กลับมา
         },
       });
 
@@ -1063,9 +1066,19 @@ export default function OrganizationDetailPage() {
             {/* User Management */}
             <div className="card p-6 mt-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-gray-900">
-                  จัดการพนักงาน ({employees.length})
-                </h2>
+                <div className="flex items-center gap-4">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    จัดการพนักงาน ({employees.length})
+                  </h2>
+                  <input
+                    type="text"
+                    className="border px-3 py-2 rounded text-sm"
+                    style={{ minWidth: 180 }}
+                    placeholder="ค้นหาพนักงาน..."
+                    value={employeeSearch}
+                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                  />
+                </div>
                 <button
                   onClick={handleAddUser}
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
@@ -1099,65 +1112,86 @@ export default function OrganizationDetailPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {employees.map((emp) => (
-                        <tr key={emp.id}>
-                          <td className="font-mono text-sm">
-                            {emp.employee_id}
-                          </td>
-                          <td>{emp.first_name}</td>
-                          <td>{emp.last_name}</td>
-                          <td>{emp.email}</td>
-                          <td>{emp.position}</td>
-                          <td>{emp.level}</td>
-                          <td>
-                            <span
-                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                emp.is_active
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {emp.is_active ? "ใช้งาน" : "ปิดใช้งาน"}
-                            </span>
-                          </td>
-                          <td>
-                            {emp.start_date
-                              ? new Date(emp.start_date).toLocaleDateString(
-                                  "th-TH"
-                                )
-                              : "-"}
-                          </td>
-                          <td>
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={() => handleEditUser(emp)}
-                                disabled={isUserUpdating}
-                                className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                      {employees
+                        .filter((emp) => {
+                          const term = employeeSearch.trim().toLowerCase();
+                          if (!term) return true;
+                          return (
+                            (emp.first_name &&
+                              emp.first_name.toLowerCase().includes(term)) ||
+                            (emp.last_name &&
+                              emp.last_name.toLowerCase().includes(term)) ||
+                            (emp.employee_id &&
+                              emp.employee_id.toLowerCase().includes(term)) ||
+                            (emp.email &&
+                              emp.email.toLowerCase().includes(term))
+                          );
+                        })
+                        .sort((a, b) => {
+                          // เรียง created_at จากน้อยไปมาก (สร้างก่อนอยู่บน)
+                          const dateA = new Date(a.created_at).getTime();
+                          const dateB = new Date(b.created_at).getTime();
+                          return dateA - dateB;
+                        })
+                        .map((emp) => (
+                          <tr key={emp.id}>
+                            <td className="font-mono text-sm">
+                              {emp.employee_id}
+                            </td>
+                            <td>{emp.first_name}</td>
+                            <td>{emp.last_name}</td>
+                            <td>{emp.email}</td>
+                            <td>{emp.position}</td>
+                            <td>{emp.level}</td>
+                            <td>
+                              <span
+                                className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                  emp.is_active
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
                               >
-                                แก้ไข
-                              </button>
-                              {emp.level !== "SuperAdmin" && (
+                                {emp.is_active ? "ใช้งาน" : "ปิดใช้งาน"}
+                              </span>
+                            </td>
+                            <td>
+                              {emp.start_date
+                                ? new Date(emp.start_date).toLocaleDateString(
+                                    "th-TH"
+                                  )
+                                : "-"}
+                            </td>
+                            <td>
+                              <div className="flex space-x-2">
                                 <button
-                                  onClick={() => handleManagePermissions(emp)}
+                                  onClick={() => handleEditUser(emp)}
                                   disabled={isUserUpdating}
-                                  className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+                                  className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
                                 >
-                                  สิทธิ์
+                                  แก้ไข
                                 </button>
-                              )}
-                              {emp.level !== "SuperAdmin" && (
-                                <button
-                                  onClick={() => handleDeleteUser(emp)}
-                                  disabled={isUserUpdating}
-                                  className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
-                                >
-                                  ลบ
-                                </button>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                                {emp.level !== "SuperAdmin" && (
+                                  <button
+                                    onClick={() => handleManagePermissions(emp)}
+                                    disabled={isUserUpdating}
+                                    className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+                                  >
+                                    สิทธิ์
+                                  </button>
+                                )}
+                                {emp.level !== "SuperAdmin" && (
+                                  <button
+                                    onClick={() => handleDeleteUser(emp)}
+                                    disabled={isUserUpdating}
+                                    className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                                  >
+                                    ลบ
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

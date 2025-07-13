@@ -78,7 +78,11 @@ export async function GET(request: NextRequest) {
     const columnNames = (tableColumns as any[]).map((col) => col.Field);
 
     // Build query conditions
-    let whereConditions = ["u.is_active = 1", "u.level != 'SuperAdmin'"];
+    const isAdminPanel = request.headers.get("x-admin-panel") === "1";
+    let whereConditions = ["u.is_active = 1"];
+    if (!isAdminPanel) {
+      whereConditions.push("u.level != 'SuperAdmin'");
+    }
     const queryParams: any[] = [];
 
     if (search) {
