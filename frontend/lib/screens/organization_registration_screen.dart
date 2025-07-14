@@ -674,27 +674,27 @@ class _OrganizationRegistrationScreenState
             items: [
               DropdownMenuItem(
                 value: '1-10',
-                child: Text(localizations.employeeCountOption1_10),
+                child: Text(localizations.employeeCount_1_10),
               ),
               DropdownMenuItem(
                 value: '11-50',
-                child: Text(localizations.employeeCountOption11_50),
+                child: Text(localizations.employeeCount_11_50),
               ),
               DropdownMenuItem(
                 value: '51-100',
-                child: Text(localizations.employeeCountOption51_100),
+                child: Text(localizations.employeeCount_51_100),
               ),
               DropdownMenuItem(
                 value: '101-500',
-                child: Text(localizations.employeeCountOption101_500),
+                child: Text(localizations.employeeCount_101_500),
               ),
               DropdownMenuItem(
                 value: '501-1000',
-                child: Text(localizations.employeeCountOption501_1000),
+                child: Text(localizations.employeeCount_501_1000),
               ),
               DropdownMenuItem(
                 value: '1000+',
-                child: Text(localizations.employeeCountOption1000plus),
+                child: Text(localizations.employeeCount_1000plus),
               ),
             ],
             onChanged: (value) {
