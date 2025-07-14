@@ -46,13 +46,26 @@ if "%choice%"=="0" exit
 goto menu
 
 :run_all
+REM Get local IPv4 address (เลือกเฉพาะ 192. หรือ 10.)
+set MYIP=
+for /f "tokens=2 delims=: " %%a in ('ipconfig ^| findstr /c:"IPv4 Address"') do (
+    set TMPIP=%%a
+    set TMPIP=!TMPIP: =!
+    echo !TMPIP! | findstr /b "192. 10." >nul
+    if !errorlevel! == 0 (
+        set MYIP=!TMPIP!
+        goto ip_found
+    )
+)
+:ip_found
+if "%MYIP%"=="" set MYIP=localhost
 start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\backend && npm run dev"
 timeout /t 5 >nul
-start "" "http://localhost:3000"
-start "" "http://localhost:8080"
-start "" "http://localhost:3000/test-registration.html"
-start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d chrome --dart-define=DEV_API_URL=http://192.168.1.118:3000/api"
-start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d emulator-5554 --dart-define=DEV_API_URL=http://192.168.1.118:3000/api"
+start "" "http://%MYIP%:3000"
+start "" "http://%MYIP%:8080"
+start "" "http://%MYIP%:3000/test-registration.html"
+start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d chrome --dart-define=DEV_API_URL=http://%MYIP%:3000/api"
+start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d emulator-5554 --dart-define=DEV_API_URL=http://%MYIP%:3000/api"
 goto menu
 
 :run_backend
@@ -63,11 +76,35 @@ start "" "http://localhost:3000/test-registration.html"
 goto menu
 
 :run_frontend_web
-start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d chrome --dart-define=DEV_API_URL=http://192.168.1.118:3000/api"
+set MYIP=
+for /f "tokens=2 delims=: " %%a in ('ipconfig ^| findstr /c:"IPv4 Address"') do (
+    set TMPIP=%%a
+    set TMPIP=!TMPIP: =!
+    echo !TMPIP! | findstr /b "192. 10." >nul
+    if !errorlevel! == 0 (
+        set MYIP=!TMPIP!
+        goto ip_found_web
+    )
+)
+:ip_found_web
+if "%MYIP%"=="" set MYIP=localhost
+start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d chrome --dart-define=DEV_API_URL=http://%MYIP%:3000/api"
 goto menu
 
 :run_frontend_emu
-start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d emulator-5554 --dart-define=DEV_API_URL=http://192.168.1.118:3000/api"
+set MYIP=
+for /f "tokens=2 delims=: " %%a in ('ipconfig ^| findstr /c:"IPv4 Address"') do (
+    set TMPIP=%%a
+    set TMPIP=!TMPIP: =!
+    echo !TMPIP! | findstr /b "192. 10." >nul
+    if !errorlevel! == 0 (
+        set MYIP=!TMPIP!
+        goto ip_found_emu
+    )
+)
+:ip_found_emu
+if "%MYIP%"=="" set MYIP=localhost
+start cmd /k "cd /d d:\flutter\erp_fluter_nextjs_mysql\frontend && flutter run -d emulator-5554 --dart-define=DEV_API_URL=http://%MYIP%:3000/api"
 goto menu
 
 :reset_all
