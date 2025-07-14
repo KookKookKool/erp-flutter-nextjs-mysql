@@ -32,9 +32,9 @@ class _OrganizationRegistrationScreenState
   final FocusNode _companyRegistrationNumberFocus = FocusNode();
   final TextEditingController _taxIdController = TextEditingController();
   final FocusNode _taxIdFocus = FocusNode();
-  final String _selectedBusinessType = '';
+  String _selectedBusinessType = '';
   //final FocusNode _businessTypeFocus = FocusNode();
-  final String _selectedEmployeeCount = '';
+  String _selectedEmployeeCount = '';
   //final FocusNode _employeeCountFocus = FocusNode();
   final TextEditingController _websiteController = TextEditingController();
   final FocusNode _websiteFocus = FocusNode();
@@ -121,19 +121,6 @@ class _OrganizationRegistrationScreenState
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-  }
-
-  bool _validateOrgInfo() {
-    return _orgNameController.text.isNotEmpty &&
-        _orgCodeController.text.isNotEmpty &&
-        _orgEmailController.text.isNotEmpty &&
-        _orgPhoneController.text.isNotEmpty &&
-        _companyRegistrationNumberController.text.isNotEmpty &&
-        _taxIdController.text.isNotEmpty &&
-        _selectedBusinessType.isNotEmpty &&
-        _selectedEmployeeCount.isNotEmpty &&
-        _orgAddressController.text.isNotEmpty;
-    // ไม่ต้องเช็ค website, orgDescription
   }
 
   bool _validateAdminInfo() {
@@ -608,6 +595,116 @@ class _OrganizationRegistrationScreenState
               }
               return null;
             },
+          ),
+          const SizedBox(height: 16),
+          // ช่องเลือกประเภทธุรกิจ
+          _buildDropdownField(
+            label: localizations.businessTypeLabel ?? 'Business Type',
+            value: _selectedBusinessType.isEmpty ? null : _selectedBusinessType,
+            items: [
+              DropdownMenuItem(
+                value: 'RETAIL',
+                child: Text(_getBusinessTypeLabel('RETAIL')),
+              ),
+              DropdownMenuItem(
+                value: 'WHOLESALE',
+                child: Text(_getBusinessTypeLabel('WHOLESALE')),
+              ),
+              DropdownMenuItem(
+                value: 'MANUFACTURING',
+                child: Text(_getBusinessTypeLabel('MANUFACTURING')),
+              ),
+              DropdownMenuItem(
+                value: 'SERVICE',
+                child: Text(_getBusinessTypeLabel('SERVICE')),
+              ),
+              DropdownMenuItem(
+                value: 'TECHNOLOGY',
+                child: Text(_getBusinessTypeLabel('TECHNOLOGY')),
+              ),
+              DropdownMenuItem(
+                value: 'EDUCATION',
+                child: Text(_getBusinessTypeLabel('EDUCATION')),
+              ),
+              DropdownMenuItem(
+                value: 'HEALTHCARE',
+                child: Text(_getBusinessTypeLabel('HEALTHCARE')),
+              ),
+              DropdownMenuItem(
+                value: 'FINANCE',
+                child: Text(_getBusinessTypeLabel('FINANCE')),
+              ),
+              DropdownMenuItem(
+                value: 'CONSTRUCTION',
+                child: Text(_getBusinessTypeLabel('CONSTRUCTION')),
+              ),
+              DropdownMenuItem(
+                value: 'FOOD',
+                child: Text(_getBusinessTypeLabel('FOOD')),
+              ),
+              DropdownMenuItem(
+                value: 'LOGISTICS',
+                child: Text(_getBusinessTypeLabel('LOGISTICS')),
+              ),
+              DropdownMenuItem(
+                value: 'TOURISM',
+                child: Text(_getBusinessTypeLabel('TOURISM')),
+              ),
+              DropdownMenuItem(
+                value: 'OTHER',
+                child: Text(_getBusinessTypeLabel('OTHER')),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedBusinessType = value ?? '';
+              });
+            },
+            validator: (value) => (value == null || value.isEmpty)
+                ? localizations.pleaseSelectBusinessType
+                : null,
+          ),
+          const SizedBox(height: 16),
+          // ช่องเลือกจำนวนพนักงาน (รองรับสองภาษา)
+          _buildDropdownField(
+            label: localizations.employeeCountLabel,
+            value: _selectedEmployeeCount.isEmpty
+                ? null
+                : _selectedEmployeeCount,
+            items: [
+              DropdownMenuItem(
+                value: '1-10',
+                child: Text(localizations.employeeCountOption1_10),
+              ),
+              DropdownMenuItem(
+                value: '11-50',
+                child: Text(localizations.employeeCountOption11_50),
+              ),
+              DropdownMenuItem(
+                value: '51-100',
+                child: Text(localizations.employeeCountOption51_100),
+              ),
+              DropdownMenuItem(
+                value: '101-500',
+                child: Text(localizations.employeeCountOption101_500),
+              ),
+              DropdownMenuItem(
+                value: '501-1000',
+                child: Text(localizations.employeeCountOption501_1000),
+              ),
+              DropdownMenuItem(
+                value: '1000+',
+                child: Text(localizations.employeeCountOption1000plus),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedEmployeeCount = value ?? '';
+              });
+            },
+            validator: (value) => value == null || value.isEmpty
+                ? localizations.pleaseSelectEmployeeCount
+                : null,
           ),
           const SizedBox(height: 16),
 
